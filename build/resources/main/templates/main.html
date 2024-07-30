@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climbing Gym Search</title>
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=cxqymlkqx1"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<h1>Climbing Gym Search</h1>
+<div>
+    <input type="text" id="searchKeyword" placeholder="Search for gyms">
+    <button onclick="searchGyms()">Search</button>
+</div>
+<div id="map" style="width:100%;height:400px;"></div>
+
+<script>
+    var map = new naver.maps.Map('map', {
+        center: new naver.maps.LatLng(37.3595704, 127.105399),
+        zoom: 10
+    });
+
+    function searchGyms() {
+        var keyword = $('#searchKeyword').val();
+        $.ajax({
+            url: '/search',
+            data: { query: keyword },
+            success: function(data) {
+                console.log(data);
+
+                if (!data || !data.items || data.items.length === 0) {
+                    console.error("No items found in the response data.");
+                    return;
+                }
+
+                console.log(data.items[0]);
+
+                // 기존 마커 제거
+                if (map.markers) {
+                    for (var marker of map.markers) {
+                        marker.setMap(null);
+                    }
+                }
+
+                // 새로운 마커 추가
+                map.markers = data.items.map(function(gym) {
+                    // TM128 좌표계에서 WGS84로 변환
+                    var point = new naver.maps.Point(gym.mapx, gym.mapy);
+                    var latlng = naver.maps.TransCoord.fromTM128ToLatLng(point);
+
+                    var marker = new naver.maps.Marker({
+                        position: latlng,
+                        map: map,
+                        title: gym.title
+                    });
+
+                    return marker;
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>

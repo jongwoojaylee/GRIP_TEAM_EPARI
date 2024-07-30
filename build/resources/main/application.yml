@@ -3,11 +3,15 @@ spring:
     encoding: UTF-8
   application:
     name: Grip_Demo
+  security:
+    user:
+      name: user
+      password: pass
 
   datasource:
-    url: jdbc:mysql://localhost:3305/gripdbdemo
+    url: jdbc:mysql://localhost:3308/gripdbdemo
     username: root
-    password: root1234
+    password: root1111
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
@@ -22,3 +26,11 @@ spring:
   jwt:
     secretKey: k32h7cOaxVR9BZC6n4GFm2ZPX6aYQ9v3
     refreshKey: k32h7cOaxVR9BZC6n4GFm2ZPX6aYQ9v3
+
+naver:
+  search:
+    client:
+     id: I6jp_gWsih1zkLstF6HS
+     secret: nfeA3uMb62
+
+
