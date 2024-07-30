@@ -6,6 +6,7 @@ public class Post {
     private String id;
     private String title;
     private String content;
+    private String author;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
