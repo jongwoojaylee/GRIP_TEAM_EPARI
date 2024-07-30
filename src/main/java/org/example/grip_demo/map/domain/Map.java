@@ -4,4 +4,5 @@ public class Map {
     private Long id;
     private String name;
     private String description;
+    private String x;
 }
