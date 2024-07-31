@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fd;
+        color: #333;
+    }
+
+    .header {
+        background-color: #fff;
+        padding: 20px 0;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+        margin: 0;
+        font-size: 24px;
+        color: #444;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .new-post {
+        text-align: right;
+        margin-bottom: 20px;
+    }
+
+    .new-post a {
+        background-color: #44c767;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .new-post a:hover {
+        background-color: #5cbf2a;
+    }
+
+    .post-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .post-item {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .post-item:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-title {
+        font-size: 20px;
+        margin: 0 0 10px;
+        color: #333;
+    }
+
+    .post-content {
+        margin: 0 0 20px;
+        color: #666;
+    }
+
+    .post-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .post-actions a {
+        background-color: #44c767;
+        color: white;
+        padding: 8px 12px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .post-actions a:hover {
+        background-color: #5cbf2a;
+    }
+</style>
+<head>
+    <title>게시글 리스트</title>
+</head>
+<body>
+    <header class="header">
+        <h1 class="title">전체 게시글 리스트</h1>
+    </header>
+    <div class="container">
+        <div class="new-post">
+            <a href="/posts/postform">새 게시글 작성</a>
+        </div>
+        <ul class="post-list">
+            <li class="post-item" th:each="post : ${posts}">
+                <h2 th:text="${post.title}">제목</h2>
+                <p th:text="${post.content}">내용</p>
+                <div class="actions">
+                    <a th:href="@{/posts/updatepostform(postid=${post.id})}">수정</a>
+                    <a th:href="@{/posts/deletepost(postid=${post.id})}" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</header>
+</body>
+</html>

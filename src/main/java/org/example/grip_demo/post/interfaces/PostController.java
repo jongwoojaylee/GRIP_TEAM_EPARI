@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -19,6 +20,13 @@ public class PostController {
     @Autowired
     public PostController(PostService postService) {
         this.postService = postService;
+    }
+
+    @GetMapping("/postlist")
+    public String getPostList(Model model) {
+        List<Post> posts = postService.getAllPosts();
+        model.addAttribute("posts", posts);
+        return "posts/postlist";
     }
 
     @GetMapping("/postform")
@@ -75,6 +83,17 @@ public class PostController {
             }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "입력 값 오류가 발생했습니다.");
+            return "redirect:/main";
+        }
+    }
+
+    @DeleteMapping("/deletepost/{postId}")
+    public String deletePost(@PathVariable("postId") Long postId, RedirectAttributes redirectAttributes) {
+        try {
+            postService.deletePost(postId);
+            return "redirect:/main";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
             return "redirect:/main";
         }
     }
