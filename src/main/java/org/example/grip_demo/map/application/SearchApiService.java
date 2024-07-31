@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class MapApiService {
+public class SearchApiService {
     @Value("${naver.search.client.id}")
     private String clientId;
 
@@ -18,7 +18,7 @@ public class MapApiService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String searchLocal(String query) {
-        String url = "https://openapi.naver.com/v1/search/local.json?query=" + query + "&display=5";
+        String url = "https://openapi.naver.com/v1/search/local.json?query=" + query + "&display=10";
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", clientId);
         headers.set("X-Naver-Client-Secret", clientSecret);
