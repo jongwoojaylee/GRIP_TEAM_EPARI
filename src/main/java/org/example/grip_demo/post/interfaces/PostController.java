@@ -30,8 +30,15 @@ public class PostController {
     }
 
     @GetMapping("/postform")
-    public String getPostForm( Model model, RedirectAttributes redirectAttributes){
-        return "posts/postform";
+    public String getPostForm(@RequestParam("climbingid") Long climbingGymId, Model model,
+                              RedirectAttributes redirectAttributes){
+        try {
+            model.addAttribute("climbingGymId", climbingGymId);
+            return "postform";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "잘못된 요청입니다.");
+            return "redirect:/main";
+        }
     }
 
     @PostMapping("/post")
@@ -40,15 +47,20 @@ public class PostController {
                              @RequestParam("climbingid") Long climbingGymId,
                              @RequestParam("userid") Long userId,
                              RedirectAttributes redirectAttributes){
-        PostDto postDto= new PostDto();
-        postDto.setTitle(title);
-        postDto.setContent(content);
-        postDto.setClimbingGymId(climbingGymId);
-        postDto.setUserId(userId);
+        try {
+            PostDto postDto = new PostDto();
+            postDto.setTitle(title);
+            postDto.setContent(content);
+            postDto.setClimbingGymId(climbingGymId);
+            postDto.setUserId(userId);
 
-        Post post = mapToEntity(postDto);
-        Post createdPost = postService.createPost(post);
-        return "redirect:/posts/" + createdPost.getId();
+            Post post = mapToEntity(postDto);
+            Post createdPost = postService.createPost(post);
+            return "redirect:/posts/" + createdPost.getId();
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "입력 값 오류가 발생했습니다.");
+            return "redirect:/main";
+        }
     }
 
     @GetMapping("/updatepostform")
@@ -104,7 +116,6 @@ public class PostController {
         post.setContent(postDto.getContent());
         post.setViewCount(0);
         post.setLikeCount(0);
-        // Set user and climbingGym entities if necessary
         return post;
     }
 
@@ -115,7 +126,6 @@ public class PostController {
         postDto.setContent(post.getContent());
         postDto.setViewCount(post.getView_Count());
         postDto.setLikeCount(post.getLike_Count());
-        // Set userId and climbingGymId if necessary
         return postDto;
     }
 
