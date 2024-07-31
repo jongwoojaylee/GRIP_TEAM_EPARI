@@ -14,7 +14,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @Column(name = "Title", length = 255, nullable = true)
     private String title;
@@ -42,7 +42,21 @@ public class Post {
     @JoinColumn(name = "CLIMBING_GYM_ID", nullable = true)
     private ClimbingGym climbingGym;
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
 
+    public void setViewCount(int view_Count) {
+        this.View_Count = view_Count;
+    }
+
+    public void setLikeCount(int like_Count) {
+        this.Like_Count = like_Count;
+    }
 
 }
+

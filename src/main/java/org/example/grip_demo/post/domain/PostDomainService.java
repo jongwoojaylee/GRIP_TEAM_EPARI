@@ -1,11 +1,16 @@
 package org.example.grip_demo.post.domain;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PostDomainService {
     private final PostRepository postRepository;
 
+    @Autowired
     public PostDomainService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }

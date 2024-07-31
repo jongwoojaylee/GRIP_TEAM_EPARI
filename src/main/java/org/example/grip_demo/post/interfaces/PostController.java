@@ -1,4 +1,104 @@
 package org.example.grip_demo.post.interfaces;
 
+import org.example.grip_demo.post.application.PostService;
+import org.example.grip_demo.post.domain.Post;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
+
+@Controller
+@RequestMapping("/posts")
 public class PostController {
+
+    private final PostService postService;
+
+    @Autowired
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
+
+    @GetMapping("/postform")
+    public String getPostForm( Model model, RedirectAttributes redirectAttributes){
+        return "posts/postform";
+    }
+
+    @PostMapping("/post")
+    public String createPost(@RequestParam("title") String title,
+                             @RequestParam("content") String content,
+                             @RequestParam("climbingid") Long climbingGymId,
+                             @RequestParam("userid") Long userId,
+                             RedirectAttributes redirectAttributes){
+        PostDto postDto= new PostDto();
+        postDto.setTitle(title);
+        postDto.setContent(content);
+        postDto.setClimbingGymId(climbingGymId);
+        postDto.setUserId(userId);
+
+        Post post = mapToEntity(postDto);
+        Post createdPost = postService.createPost(post);
+        return "redirect:/posts/" + createdPost.getId();
+    }
+
+    @GetMapping("/updatepostform")
+    public String getUpdatePostForm(@RequestParam("postid") Long postId, Model model, RedirectAttributes redirectAttributes){
+        Optional<Post> postOptional = postService.getPostById(postId);
+        if(postOptional.isPresent()){
+            model.addAttribute("post", mapToDto(postOptional.get()));
+            return "posts/updatepostform";
+        }else {
+            redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
+            return "redirect:/main";
+        }
+    }
+    // 게시글 수정 과정
+    @PostMapping("/updatepost/{postId}")
+    public String updatePost(@PathVariable("postId") Long postId,
+                             @RequestParam("title") String title,
+                             @RequestParam("content") String content,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            Optional<Post> postOptional = postService.getPostById(postId);
+            if (postOptional.isPresent()) {
+                Post post = postOptional.get();
+                post.setTitle(title);
+                post.setContent(content);
+
+                postService.updatePost(post);
+                return "redirect:/posts/" + postId;
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
+                return "redirect:/main";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "입력 값 오류가 발생했습니다.");
+            return "redirect:/main";
+        }
+    }
+
+    private Post mapToEntity(PostDto postDto) {
+        Post post = new Post();
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setViewCount(0);
+        post.setLikeCount(0);
+        // Set user and climbingGym entities if necessary
+        return post;
+    }
+
+    private PostDto mapToDto(Post post) {
+        PostDto postDto = new PostDto();
+        postDto.setId(post.getId());
+        postDto.setTitle(post.getTitle());
+        postDto.setContent(post.getContent());
+        postDto.setViewCount(post.getView_Count());
+        postDto.setLikeCount(post.getLike_Count());
+        // Set userId and climbingGymId if necessary
+        return postDto;
+    }
+
+
 }
