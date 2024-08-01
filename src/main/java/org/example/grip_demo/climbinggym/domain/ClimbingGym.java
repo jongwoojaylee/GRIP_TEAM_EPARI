@@ -16,7 +16,7 @@ public class ClimbingGym {
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String roadAddress;
 
     @Column(nullable = false)
