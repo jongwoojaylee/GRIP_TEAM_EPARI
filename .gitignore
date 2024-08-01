@@ -1,7 +1,7 @@
 src/main/resources/application.yml
 
-# Created by https://www.toptal.com/developers/gitignore/api/windows,java,intellij,gradle
-# Edit at https://www.toptal.com/developers/gitignore?templates=windows,java,intellij,gradle
+# Created by https://www.toptal.com/developers/gitignore/api/windows,java,gradle,intellij
+# Edit at https://www.toptal.com/developers/gitignore?templates=windows,java,gradle,intellij
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -195,4 +195,4 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,java,intellij,gradle
+# End of https://www.toptal.com/developers/gitignore/api/windows,java,gradle,intellij
