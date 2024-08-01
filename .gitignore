@@ -195,4 +195,4 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,java,gradle,intellij
+# End of https://www.toptal.com/developers/gitignore/api/windows,java,gradle,intellij.DS_Store
