@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>This is Sign up page(need to fix)</h1>
+<form id="signupForm" th:action="@{/registeruser}" th:object="${user}" method="post">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" th:field="${user.username}" required>
+        <button type="button" id="checkUsernameButton">Check Username</button>
+        <span id="usernameFeedback" class="error" style="display: none;"></span>
+        <span th:if="${usernameError}" class="error" th:text="${usernameError}"></span>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" th:field="${user.password}" required>
+    </div>
+    <div>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" required>
+        <span id="passwordFeedback" class="error" style="display: none;">Passwords do not match</span>
+    </div>
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" th:field="${user.name}" required>
+    </div>
+    <div>
+        <label for="phoneNumber">Phone number:</label>
+        <input type="text" id="phoneNumber" th:field="${user.phoneNumber}" required>
+    </div>
+    <div>
+        <label for="address">Address:</label>
+        <input type="text" id="address" th:field="${user.address}" required>
+    </div>
+    <div>
+        <label for="gender">성별:</label>
+        <select id="gender" name="gender" required>
+            <option value="true" th:selected="${user.gender}">남자</option>
+            <option value="false" th:selected="${!user.gender}">여자</option>
+        </select>
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" th:field="${user.email}" required>
+        <button type="button" id="checkEmailButton">Check Email</button>
+        <span id="emailFeedback" class="error" style="display: none;"></span>
+        <span th:if="${emailError}" class="error" th:text="${emailError}"></span>
+    </div>
+    <div>
+        <button type="submit" id="submitButton" disabled>Sign Up</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        var passwordMatch = false;
+        var usernameValid = false;
+        var emailValid = false;
+
+        // Password confirmation
+        $('#confirmPassword').on('input', function () {
+            var password = $('#password').val();
+            var confirmPassword = $('#confirmPassword').val();
+            if (password !== confirmPassword) {
+                $('#passwordFeedback').show();
+                passwordMatch = false;
+            } else {
+                $('#passwordFeedback').hide();
+                passwordMatch = true;
+            }
+            checkFormValidity();
+        });
+
+        // Username check
+        $('#checkUsernameButton').on('click', function() {
+            var username = $('#username').val();
+            $.get('/api/check/username', { username: username }, function(data) {
+                if (data.isAvailable) {
+                    $('#usernameFeedback').removeClass('success').addClass('error').text('Username already exists').show();
+                    usernameValid = false;
+                } else {
+                    $('#usernameFeedback').removeClass('error').addClass('success').text('Username is available').show();
+                    usernameValid = true;
+                }
+                checkFormValidity();
+            });
+        });
+
+        // Email check
+        $('#checkEmailButton').on('click', function() {
+            var email = $('#email').val();
+            $.get('/api/check/email', { email: email }, function(data) {
+                if (data.isAvailable) {
+                    $('#emailFeedback').removeClass('success').addClass('error').text('Email already exists').show();
+                    emailValid = false;
+                } else {
+                    $('#emailFeedback').removeClass('error').addClass('success').text('Email is available').show();
+                    emailValid = true;
+                }
+                checkFormValidity();
+            });
+        });
+
+        // Form submission
+        $('#signupForm').on('submit', function(e) {
+            var password = $('#password').val();
+            var confirmPassword = $('#confirmPassword').val();
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                $('#passwordFeedback').show();
+                passwordMatch = false;
+            } else {
+                passwordMatch = true;
+            }
+            checkFormValidity();
+            if (!usernameValid || !emailValid || !passwordMatch) {
+                e.preventDefault();
+            }
+        });
+
+        function checkFormValidity() {
+            if (usernameValid && emailValid && passwordMatch) {
+                $('#submitButton').prop('disabled', false);
+            } else {
+                $('#submitButton').prop('disabled', true);
+            }
+        }
+
+    });
+</script>
+
+
+</body>
+</html>
