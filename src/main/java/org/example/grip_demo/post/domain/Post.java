@@ -33,9 +33,9 @@ public class Post {
     @Column(name = "Like_Count", nullable = true)
     private int Like_Count;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = true)
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "USER_ID", nullable = true)
+//    private User user;
 
     @ManyToOne
     @JoinColumn(name = "CLIMBING_GYM_ID", nullable = true)
