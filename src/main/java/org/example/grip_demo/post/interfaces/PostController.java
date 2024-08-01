@@ -29,11 +29,14 @@ public class PostController {
     }
 
     @GetMapping("/postform")
-    public String getPostForm(@RequestParam("climbingid") Long climbingGymId, Model model,
+    public String getPostForm(@RequestParam(value="climbingid",required = false) Long climbingGymId, Model model,
                               RedirectAttributes redirectAttributes){
         try {
+            if(climbingGymId == null){
+                climbingGymId=9999L;
+            }
             model.addAttribute("climbingGymId", climbingGymId);
-            return "postform";
+            return "posts/postform";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "잘못된 요청입니다.");
             return "redirect:/main";
