@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
