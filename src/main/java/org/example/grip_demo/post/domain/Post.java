@@ -3,7 +3,6 @@ package org.example.grip_demo.post.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
-import org.example.grip_demo.user.domain.User;
 
 import java.time.LocalDateTime;
 
