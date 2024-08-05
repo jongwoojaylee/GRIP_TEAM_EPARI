@@ -1,8 +1,10 @@
 package org.example.grip_demo.climbinggym.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 @Table(name="Climbing_gyms")
 public class ClimbingGym {
 
@@ -20,10 +22,10 @@ public class ClimbingGym {
     private String roadAddress;
 
     @Column(nullable = false)
-    private Long mapX;
+    private Float mapX;
 
     @Column(nullable = false)
-    private Long mapY;
+    private Float mapY;
 
     @Column(nullable = true)
     private String telephone;
