@@ -5,12 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "REFRESHTOKENS")
+@Table(name = "REFRESH_TOKENS")
 @Getter @Setter
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
-    public String value;
+    private String value;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User user;
 
 }
