@@ -15,13 +15,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    public String username;
-    public String password;
-    public String name;
-    public String email;
-    public String address;
-    public String phoneNumber;
-    public boolean gender;
+    private String username;
+
+    private String password;
+
+    private String name;
+
+    private String email;
+
+    private String address;
+
+    @Column(name = "PHONENUMBER")
+    private String phoneNumber;
+
+    private Boolean gender = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -32,7 +39,12 @@ public class User {
     private Set<Role> roles;
 
     @ManyToOne
+    @JoinColumn(name = "PROFILE_IMAGES_ID")
     private ProfileImage profileImage;
+
+
+    @OneToMany(mappedBy = "user")
+    private Set<RefreshToken> refreshTokens;
 
 
 }

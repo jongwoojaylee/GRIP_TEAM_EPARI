@@ -17,12 +17,12 @@ public class UserRegisterController {
     @GetMapping("/registeruserform")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new User());
-        return "registerForm";
+        return "user/registerForm";
     }
 
     @PostMapping("/registeruser")
     public String processRegisterForm(@ModelAttribute User user) {
         userService.createUser(user);
-        return "/loginform";
+        return "user/loginform";
     }
 }
