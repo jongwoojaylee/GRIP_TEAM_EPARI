@@ -2,8 +2,6 @@ package org.example.grip_demo.climbinggym.domain;
 
 import jakarta.persistence.*;
 
-import jakarta.persistence.*;
-
 @Entity
 @Table(name="Climbing_gyms")
 public class ClimbingGym {
@@ -18,7 +16,7 @@ public class ClimbingGym {
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String roadAddress;
 
     @Column(nullable = false)
@@ -29,5 +27,4 @@ public class ClimbingGym {
 
     @Column(nullable = true)
     private String telephone;
-
 }
