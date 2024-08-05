@@ -30,6 +30,7 @@ public class ClimbingGym {
     @Column(nullable = true)
     private String telephone;
 
-
+    @Column(name="ACCEPTABLE_COUNT", nullable = false)
+    private int acceptableCount;
 }
 

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ClimbingGymDimainService {
+public class ClimbingGymDomainService {
     private final ClimbingGymRepository climbingGymRepository;
 
     @Autowired
-    public ClimbingGymDimainService(ClimbingGymRepository climbingGymRepository) {
+    public ClimbingGymDomainService(ClimbingGymRepository climbingGymRepository) {
         this.climbingGymRepository = climbingGymRepository;
     }
 
