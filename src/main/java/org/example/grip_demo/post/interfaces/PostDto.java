@@ -10,6 +10,6 @@ public class PostDto {
     private String content;
     private Integer viewCount;
     private Integer likeCount;
-    private Long userId;
+    private String username;
     private Long climbingGymId;
 }

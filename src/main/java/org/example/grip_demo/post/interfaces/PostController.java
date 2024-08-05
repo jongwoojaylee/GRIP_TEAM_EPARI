@@ -1,17 +1,24 @@
 package org.example.grip_demo.post.interfaces;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.example.grip_demo.post.application.PostService;
 import org.example.grip_demo.post.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -47,14 +54,31 @@ public class PostController {
     public String createPost(@RequestParam("title") String title,
                              @RequestParam("content") String content,
                              @RequestParam("climbingid") Long climbingGymId,
-                             @RequestParam("userid") Long userId,
+                             @RequestParam("userid") String userid,
+                             HttpServletRequest request,
                              RedirectAttributes redirectAttributes){
+
+        String token = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accessToken")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if (token == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "인증되지 않은 사용자입니다.");
+            return "redirect:/loginform";
+        }
+
         try {
             PostDto postDto = new PostDto();
             postDto.setTitle(title);
             postDto.setContent(content);
             postDto.setClimbingGymId(climbingGymId);
-            postDto.setUserId(userId);
+            postDto.setUsername(userid);//userid가 username임
 
             Post post = mapToEntity(postDto);
             Post createdPost = postService.createPost(post);
@@ -129,6 +153,19 @@ public class PostController {
         postDto.setViewCount(post.getView_Count());
         postDto.setLikeCount(post.getLike_Count());
         return postDto;
+    }
+
+    @GetMapping("/testtest")
+    public String test(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            //redirectAttributes.addFlashAttribute("errorMessage", "인증되지 않은 사용자입니다.");
+            return "redirect:/login";
+        }
+        String token = authorizationHeader.substring(7);
+
+        return "posts/test";
     }
 
 
