@@ -40,7 +40,8 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "PROFILE_IMAGES_ID")
-    private ProfileImage profile_images;
+    private ProfileImage profileImage;
+
 
     @OneToMany(mappedBy = "user")
     private Set<RefreshToken> refreshTokens;

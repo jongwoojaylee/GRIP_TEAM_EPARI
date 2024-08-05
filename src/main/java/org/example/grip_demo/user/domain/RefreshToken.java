@@ -11,6 +11,7 @@ public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
+
     private String value;
 
     @ManyToOne
