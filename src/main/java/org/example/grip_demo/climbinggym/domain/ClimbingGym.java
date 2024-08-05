@@ -27,4 +27,7 @@ public class ClimbingGym {
 
     @Column(nullable = true)
     private String telephone;
+
+
 }
+
