@@ -34,7 +34,6 @@ public class UserService {
             throw new RuntimeException("Role not found");
         user.setRoles(new HashSet<>(Collections.singletonList(role)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println(user);
 
         userRepository.save(user);
 

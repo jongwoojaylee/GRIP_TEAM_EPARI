@@ -6,16 +6,19 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
-@Table(name = "PROFILEIMAGES")
+@Table(name = "PROFILE_IMAGES")
 public class ProfileImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
-    public String path;
+
+    @Column(name = "PATH", length = 512, nullable = false)
+    private String path;
 
     @OneToMany(mappedBy = "profileImage")
-    public List<User> users = new ArrayList<>();
+    private Set<User> users;
 }
