@@ -3,11 +3,9 @@ package org.example.grip_demo.post.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
-import org.example.grip_demo.comment.domain.Comment;
 import org.example.grip_demo.user.domain.User;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Entity
@@ -43,10 +41,6 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "CLIMBING_GYM_ID", nullable = true)
     private ClimbingGym climbingGym_id;
-
-    @OneToMany(mappedBy = "post_id", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @OrderBy("createdAt")
-    private List<Comment> comments;
 
     public void setTitle(String title) {
         this.title = title;
