@@ -4,11 +4,14 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.grip_demo.demo.JwtTokenizer;
+import org.example.grip_demo.demo.Oauth2Util;
 import org.example.grip_demo.user.domain.Role;
 import org.example.grip_demo.user.domain.User;
 import org.example.grip_demo.user.interfaces.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,8 +25,16 @@ public class UserLoginController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenizer jwtTokenizer;
 
+    @Value("${kakao.client_id}")
+    private String clientId;
+
+    @Value("${kakao.redirect_uri}")
+    private String redirectUri;
+
     @GetMapping("/loginform")
-    public String showLoginForm() {
+    public String showLoginForm(Model model) {
+        String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+clientId+"&redirect_uri="+redirectUri;
+        model.addAttribute("link", location);
         return "user/loginform";
     }
 

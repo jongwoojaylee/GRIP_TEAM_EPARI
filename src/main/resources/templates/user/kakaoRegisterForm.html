@@ -9,24 +9,14 @@
 <h1>This is Sign up page(need to fix)</h1>
 <form id="signupForm" th:action="@{/registeruser}" th:object="${user}" method="post">
     <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" th:field="${user.username}" required>
-        <button type="button" id="checkUsernameButton">Check Username</button>
-        <span id="usernameFeedback" class="error" style="display: none;"></span>
-        <span th:if="${usernameError}" class="error" th:text="${usernameError}"></span>
+        <input type="hidden" id="username" th:value="${user.username}" th:field="${user.username}" required>
     </div>
     <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" th:field="${user.password}" required>
-    </div>
-    <div>
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" required>
-        <span id="passwordFeedback" class="error" style="display: none;">Passwords do not match</span>
+        <input type="hidden" id="password" th:value="${user.password}" th:field="${user.password}" required>
     </div>
     <div>
         <label for="name">Name:</label>
-        <input type="text" id="name" th:field="${user.name}" required>
+        <input type="text" id="name" th:value="${user.name}" th:field="${user.name}" required>
     </div>
     <div>
         <label for="phoneNumber">Phone number:</label>
@@ -57,38 +47,7 @@
 
 <script>
     $(document).ready(function () {
-        var passwordMatch = false;
-        var usernameValid = false;
         var emailValid = false;
-
-        // Password confirmation
-        $('#confirmPassword').on('input', function () {
-            var password = $('#password').val();
-            var confirmPassword = $('#confirmPassword').val();
-            if (password !== confirmPassword) {
-                $('#passwordFeedback').show();
-                passwordMatch = false;
-            } else {
-                $('#passwordFeedback').hide();
-                passwordMatch = true;
-            }
-            checkFormValidity();
-        });
-
-        // Username check
-        $('#checkUsernameButton').on('click', function() {
-            var username = $('#username').val();
-            $.get('/api/check/username', { username: username }, function(data) {
-                if (data.isAvailable) {
-                    $('#usernameFeedback').removeClass('success').addClass('error').text('Username already exists').show();
-                    usernameValid = false;
-                } else {
-                    $('#usernameFeedback').removeClass('error').addClass('success').text('Username is available').show();
-                    usernameValid = true;
-                }
-                checkFormValidity();
-            });
-        });
 
         // Email check
         $('#checkEmailButton').on('click', function() {
@@ -107,23 +66,14 @@
 
         // Form submission
         $('#signupForm').on('submit', function(e) {
-            var password = $('#password').val();
-            var confirmPassword = $('#confirmPassword').val();
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                $('#passwordFeedback').show();
-                passwordMatch = false;
-            } else {
-                passwordMatch = true;
-            }
             checkFormValidity();
-            if (!usernameValid || !emailValid || !passwordMatch) {
+            if (!emailValid) {
                 e.preventDefault();
             }
         });
 
         function checkFormValidity() {
-            if (usernameValid && emailValid && passwordMatch) {
+            if (emailValid) {
                 $('#submitButton').prop('disabled', false);
             } else {
                 $('#submitButton').prop('disabled', true);
