@@ -1,41 +1,37 @@
 package org.example.grip_demo.congestion.application;
 
+import lombok.RequiredArgsConstructor;
+import org.example.grip_demo.climbinggym.domain.ClimbingGym;
 import org.example.grip_demo.congestion.domain.Congestion;
 import org.example.grip_demo.congestion.domain.CongestionDomainService;
-import org.example.grip_demo.congestion.domain.CongestionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class CongestionService {
-    private final CongestionRepository congestionRepository;
+
     private final CongestionDomainService congestionDomainService;
 
-    public CongestionService(CongestionRepository congestionRepository, CongestionDomainService congestionDomainService){
-        this.congestionRepository = congestionRepository;
-        this.congestionDomainService = congestionDomainService;
+    //클라이밍장별 현재인원 가져옴
+    public List<Integer> getPresentCountByGymId(Long gymId){
+        List<Congestion> congestion = congestionDomainService.findByGymId(gymId);
+        List<Integer> presentCounts =congestionDomainService.getPresentCountByCongestion(congestion);
+        return presentCounts;
     }
 
-    //혼잡도 데이터
-    public Map<Integer, Integer> getGymCongestionData(Long CLIMBING_GYM_ID){
-        List<Congestion> congestions = congestionRepository.findByClimbingGymId(CLIMBING_GYM_ID);
-        return congestionDomainService.getGymCongestionData(congestions);
-    }
+    //혼잡도 계산
+    public double getCongestionRatio(Congestion congestion){
+        int presentCount = congestion.getPresentCount();
+        ClimbingGym climbingGym = congestion.getClimbingGym();
+        int acceptableCount = climbingGym.getAcceptableCount();
 
-    //지도에 간단한 혼잡도
-    public int getMapCongestionLevel(Long CLIMBING_GYM_ID){
-        List<Congestion> congestions = congestionRepository.findByClimbingGymId(CLIMBING_GYM_ID);
-        if(congestions.isEmpty()){
-            return 0;
+        if(congestion.getPresentCount() == 0){
+            return +0; //이용자가 없으면 혼잡도 계산에 더하지 않음
         }
-        Congestion latestCongestion = congestionDomainService.getLatestCongestion(congestions);
-        try{
-            return congestionDomainService.getMapCongestionLevel(latestCongestion);
-        }catch(IllegalArgumentException e){
-            System.out.println(e.getMessage());
-            return 0;
-        }
+        return (double) (congestion.getPresentCount() / climbingGym.getAcceptableCount() * 100);
+
+        //
     }
 }
