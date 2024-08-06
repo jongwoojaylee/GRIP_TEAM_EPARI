@@ -2,9 +2,14 @@ package org.example.grip_demo.climbinggym.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+import org.example.grip_demo.condemo.CongestionDemo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter
+@Getter@Setter
 @Table(name="Climbing_gyms")
 public class ClimbingGym {
 
@@ -30,6 +35,10 @@ public class ClimbingGym {
     @Column(nullable = true)
     private String telephone;
 
+    @Column(name="ACCEPTABLE_COUNT", nullable = false)
+    private int acceptableCount = 100;
 
+    @OneToMany(mappedBy = "climbingGym", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CongestionDemo> congestions = new ArrayList<>();
 }
 
