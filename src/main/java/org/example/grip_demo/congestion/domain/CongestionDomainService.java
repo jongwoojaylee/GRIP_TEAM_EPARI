@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 @Service
 public class CongestionDomainService {
     //클라이밍짐의 혼잡도와 관련된 도메인 로직을 처리..
