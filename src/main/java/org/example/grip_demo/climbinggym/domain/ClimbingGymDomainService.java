@@ -30,4 +30,6 @@ public class ClimbingGymDomainService {
     public void deleteClimbingGym(Long id) {
         climbingGymRepository.deleteById(id);
     }
+
+
 }

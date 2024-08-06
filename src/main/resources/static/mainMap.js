@@ -3,10 +3,14 @@ $(document).ready(function() {
     loadAllGyms();
 });
 function loadAllGyms() {
-    $.ajax({
-        url: '/api/climbinggyms',
-        dataType: 'json',
-        success: function(data) {
+    fetch('/api/climbinggyms')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
             if (currentLocationInfoWindow) {
                 currentLocationInfoWindow.close();
             }
@@ -18,7 +22,7 @@ function loadAllGyms() {
             }
 
             // 새로운 마커 추가
-            map.markers = data.map(function(gym) {
+            map.markers = data.map(gym => {
                 let position = new naver.maps.LatLng(gym.mapY, gym.mapX);
 
                 let marker = new naver.maps.Marker({
@@ -28,12 +32,13 @@ function loadAllGyms() {
                 });
 
                 let infoWindow = new naver.maps.InfoWindow({
-                    content:
-                        `<div style="width:200px;text-align:center;padding:10px;">
-            <strong>${gym.name}</strong><br>
-            ${gym.address}<br>
-            <a href="/climbinggym?climbingid=${gym.id}" target="_blank">내부 링크</a>
-        </div>`
+                    content: `<div style="width:200px;text-align:center;padding:10px;" xmlns="http://www.w3.org/1999/html">
+                        <strong>${gym.name}</strong><br>
+                        ${gym.address}<br>
+                        수용 인원 : ${gym.acceptableCount}<br>
+                        <div id="congestion-${gym.id}">혼잡도 정보를 불러오는 중...</div>
+                        <a href="/climbinggym?climbingid=${gym.id}" target="_blank">내부 링크</a>
+                    </div>`
                 });
 
                 naver.maps.Event.addListener(marker, "click", function() {
@@ -41,13 +46,31 @@ function loadAllGyms() {
                         infoWindow.close();
                     } else {
                         infoWindow.open(map, marker);
+
+                        let currentHour = new Date().getHours();
+
+                        fetch(`/api/climbinggym/${gym.id}/congestion?hour=${currentHour}`)
+                            .then(reponse => reponse.json())
+                            .then(congestion => {
+                                let congestionElement = document.getElementById(`congestion-${gym.id}`);
+                                if (congestion) {
+                                    congestionElement.innerText = '혼잡도: ${congestionData.presentCount}';
+                                } else {
+                                    congestionElement.innerHTML = "혼잡도 정보 없음";
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error fetching congestion data:", error);
+                            });
                     }
                 });
 
                 return marker;
             });
-        }
-    });
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }
 
 let currentLocationInfoWindow = null;
@@ -87,73 +110,18 @@ function moveToCurrentLocation() {
     }
 }
 
-// function searchGyms() {
-//     let keyword = $('#searchKeyword').val();
-//     if (keyword === '클라이밍') {
-//         keyword = '';
-//     }
-//
-//     $.ajax({
-//         url: '/search',
-//         dataType: 'json',
-//         data: {
-//             query: keyword + "클라이밍",
-//         },
-//         success: function(data) {
-//             if (currentLocationInfoWindow) {
-//                 currentLocationInfoWindow.close();
-//             }
-//             // 기존 마커 제거
-//             if (map.markers) {
-//                 for (let marker of map.markers) {
-//                     marker.setMap(null);
-//                 }
-//             }
-//
-//             console.log(data);
-//             // 새로운 마커 추가
-//             map.markers = data.items.map(function(gym) {
-//                 let lat = parseFloat(gym.mapy) / 1e7; // mapy 값을 10^7로 나누어 위도 계산
-//                 let lng = parseFloat(gym.mapx) / 1e7; // mapx 값을 10^7로 나누어 경도 계산
-//                 console.log(lng, lat);
-//                 let position = new naver.maps.LatLng(lat, lng);
-//
-//                 let marker = new naver.maps.Marker({
-//                     position: position,
-//                     map: map,
-//                     title: gym.title
-//                 });
-//
-//                 let infoWindow = new naver.maps.InfoWindow({
-//                     content:
-//                         `<div style="width:200px;text-align:center;padding:10px;">
-//                                 <strong>${gym.title}</strong><br>
-//                                 ${gym.roadAddress}<br>
-//                                 <a href="/climbinggym/${gym.id}" target="_blank">내부 링크</a><br>
-//                                 <a href="${gym.link}" target="_blank">더보기</a>
-//                               </div>`
-//                 });
-//
-//                 naver.maps.Event.addListener(marker, "click", function() {
-//                     if (infoWindow.getMap()) {
-//                         infoWindow.close();
-//                     } else {
-//                         infoWindow.open(map, marker);
-//                     }
-//                 });
-//
-//                 return marker;
-//             });
-//         }
-//     });
-// }
 function searchGyms() {
     const keyword = document.getElementById("searchKeyword").value;
-    $.ajax({
-        url: `/api/search/climbinggyms`, // URL을 템플릿 리터럴로 수정
-        data: { keyword: keyword },
-        dataType: 'json',
-        success: function(data) {
+    const encodedKeyword = encodeURIComponent(keyword);
+
+    fetch(`/api/search/climbinggyms?keyword=${encodedKeyword}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data =>{
             if (currentLocationInfoWindow) {
                 currentLocationInfoWindow.close();
             }
@@ -163,7 +131,6 @@ function searchGyms() {
                     marker.setMap(null);
                 }
             }
-
             // 새로운 마커 추가
             map.markers = data.map(function(gym) {
                 let position = new naver.maps.LatLng(gym.mapY, gym.mapX);
@@ -193,6 +160,8 @@ function searchGyms() {
 
                 return marker;
             });
-        }
-    });
+        })
+        .catch(error => {
+            console.log(error);
+        })
 }
