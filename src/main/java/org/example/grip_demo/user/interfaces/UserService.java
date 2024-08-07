@@ -41,8 +41,21 @@ public class UserService {
         return user;
     }
 
+    public User updateUser(User user) {
+        Role role = roleService.findRoleByName("ROLE_USER");
+        if(role==null)
+            throw new RuntimeException("Role not found");
+        user.setRoles(new HashSet<>(Collections.singletonList(role)));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
     public Optional<User> findUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
     }
 
 

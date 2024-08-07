@@ -70,4 +70,10 @@ public class JwtTokenizer {
         return parseToken(refreshToken, refreshSecret);
     }
 
+    //accessToken에서 userId 추출
+    public Long getUserIdFromToken(String accessToken){
+        Claims claims = parseAccessToken(accessToken);
+        return claims.get("userId", Long.class);
+    }
+
 }
