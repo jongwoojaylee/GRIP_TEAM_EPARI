@@ -13,9 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -74,5 +76,25 @@ public class UserLoginController {
 
 
         return "redirect:/welcomejay";
+    }
+
+    @GetMapping("/logout")
+    public void logout(HttpServletResponse response) throws IOException {
+        // accessToken, refreshToken 삭제
+        Cookie accessToken = new Cookie("accessToken", null);
+        accessToken.setHttpOnly(true);
+        accessToken.setPath("/");
+        accessToken.setMaxAge(0);
+
+        Cookie refreshToken = new Cookie("refreshToken", null);
+        refreshToken.setHttpOnly(true);
+        refreshToken.setPath("/");
+        refreshToken.setMaxAge(0);
+
+        response.addCookie(accessToken);
+        response.addCookie(refreshToken);
+
+        // loginform으로 리다이렉트
+        response.sendRedirect("/loginform");
     }
 }
