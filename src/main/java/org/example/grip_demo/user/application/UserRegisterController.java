@@ -24,7 +24,7 @@ public class UserRegisterController {
     @PostMapping("/registeruser")
     public String processRegisterForm(@ModelAttribute User user) {
         userService.createUser(user);
-        return "user/loginform";
+        return "redirect:/loginform";
     }
 
     @GetMapping("/registeruserform/kakao")

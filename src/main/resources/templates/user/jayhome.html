@@ -6,10 +6,9 @@
 </head>
 <body>
 <h1>hi</h1>
-<a href="">login</a>
-<a href="">signup</a>
-<a href="">welcome</a>
-
+<a href="/loginform">login</a>
+<a href="/registeruserform">signup</a>
+<a th:href="@{'/userinfo/' + ${userId}}">userinfo</a>
 
 </body>
 </html>
