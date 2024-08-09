@@ -1,7 +1,10 @@
 package org.example.grip_demo.user.application;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.user.domain.User;
 import org.example.grip_demo.user.interfaces.UserService;
 import org.springframework.stereotype.Controller;
@@ -15,9 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class UserInfoController {
     private final UserService userService;
+    private final JwtTokenizer jwtTokenizer;
 
     @GetMapping("/userinfo/{userid}")
     public String showUserInfo(@PathVariable("userid") Long userid,
+                               HttpServletRequest request,
                                HttpServletResponse response,
                                Model model) {
         User user = userService.findUserById(userid).orElse(null);
@@ -26,6 +31,12 @@ public class UserInfoController {
             System.out.println("user null");
             return "redirect:/main";
         }
+        Cookie[] cookies = request.getCookies();
+        Long id = jwtTokenizer.getUserIdFromCookie(request);
+        if(!user.getId().equals(id)) {
+            return "redirect:/main";
+        }
+
         String updateurl = "/updateuserform/" + userid;
 
         model.addAttribute("user", user);

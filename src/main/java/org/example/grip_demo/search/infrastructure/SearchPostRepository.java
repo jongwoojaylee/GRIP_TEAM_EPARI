@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SearchPostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findByTitleContaining(String keyword, Pageable pageable);
+    Page<Post> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword, Pageable pageable);
 
 }

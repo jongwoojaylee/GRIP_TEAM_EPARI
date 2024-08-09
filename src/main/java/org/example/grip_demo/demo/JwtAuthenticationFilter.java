@@ -60,10 +60,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //claim에서 Role 가져와서 authorities에 넣기
         List<GrantedAuthority> authorities = getGrantedAuthorities(claims);
 
-
         CustomUserDetails userDetails = new CustomUserDetails(username,"",name,authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
 
         Authentication authentication = new JwtAuthenticationToken(authorities,userDetails,null);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

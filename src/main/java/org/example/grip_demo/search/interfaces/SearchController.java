@@ -25,7 +25,7 @@ public class SearchController {
                                 @RequestParam(value = "postPage", defaultValue = "0") int postPage,
                                 @RequestParam(value = "climbingGymPage", defaultValue = "0") int climbingGymPage,
                                 Model model){
-        int pageSize = 5;
+        int pageSize = 10;
         model.addAttribute("query", query);
 
         Page<Post> posts = searchService.searchPostContaining(query,postPage,pageSize);

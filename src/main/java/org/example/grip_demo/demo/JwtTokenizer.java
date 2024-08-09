@@ -3,6 +3,8 @@ package org.example.grip_demo.demo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -74,6 +76,20 @@ public class JwtTokenizer {
     public Long getUserIdFromToken(String accessToken){
         Claims claims = parseAccessToken(accessToken);
         return claims.get("userId", Long.class);
+    }
+
+    public Long getUserIdFromCookie(HttpServletRequest request){
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accessToken")) {
+                    String accessToken = cookie.getValue();
+                    return getUserIdFromToken(accessToken);
+                }
+            }
+        }
+        return null;
     }
 
 }
