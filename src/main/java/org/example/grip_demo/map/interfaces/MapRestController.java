@@ -21,6 +21,11 @@ public class MapRestController {
         this.climingGymService = climingGymService;
     }
 
+    @GetMapping("/search")
+    public String search(@RequestParam String query) {
+        return searchApiService.searchLocal(query);
+    }
+
     @GetMapping("/api/climbinggyms")
     public List<ClimbingGymDto> main() {
         List<ClimbingGym> gyms = climingGymService.getAllClimbingGyms();
