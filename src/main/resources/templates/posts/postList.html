@@ -108,17 +108,17 @@
         </div>
         <ul class="post-list">
             <li class="post-item" th:each="post : ${posts}">
-                <h2 th:text="${post.title}" >제목</h2>
-                <a th:text="${post.title}" th:href="@{/post/{climbingid}/{postid}(climbingid=${post.climbingGym_id}, postid=${post.id})}">나와라 링크</a>
+                <a  th:href="@{/post/{climbingid}/{postid}(climbingid=${post.climbingGym_id.id}, postid=${post.id})}">
+                    <h2 th:text="${post.title}" >제목</h2>
+                </a>
                 <a th:text="${post.content}">내용</a>
                 <div class="actions">
-                    <a th:href="@{/posts/updatepostform(postid=${post.id})}">수정</a>
-                    <a th:href="@{/posts/deletepost(postid=${post.id})}" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+                    <a th:href="@{/updatepostform(postid=${post.id})}">수정</a>
+                    <a th:href="@{/deletepost(postid=${post.id})}" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
                 </div>
             </li>
         </ul>
     </div>
-
 </header>
 </body>
 </html>
