@@ -89,6 +89,7 @@ public class CommentController {
         if (token == null) {
             return ResponseEntity.status(401).body("Unauthorized");
         }
+        log.info(commentId.toString());
 
         Claims claims = jwtTokenizer.parseAccessToken(token);
         Long userId = Long.valueOf(claims.get("userId").toString());
