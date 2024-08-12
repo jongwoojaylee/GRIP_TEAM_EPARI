@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.grip_demo.condemo.CongestionDemo;
+import org.example.grip_demo.post.domain.Post;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,5 +41,9 @@ public class ClimbingGym {
 
     @OneToMany(mappedBy = "climbingGym", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CongestionDemo> congestions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "climbingGym_id")
+    private List<Post> posts;
+
 }
 
