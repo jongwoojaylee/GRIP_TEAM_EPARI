@@ -163,16 +163,38 @@ public class PostController {
     }
 
     @GetMapping("/post/{climbingid}/{postid}")
-    public String postDetail(@PathVariable Long postid,@PathVariable Long climbingid, Model model){
+    public String postDetail(@PathVariable Long postid,
+                             @PathVariable Long climbingid,
+                             HttpServletRequest request,
+                             Model model,RedirectAttributes redirectAttributes){
         Post post= postService.getPostById(postid).get();
         String name= post.getUser_id().getName();
         String gymId = climbingid.toString();
+
+        //현재 사용중인 사용자 뽑아보리깅
+        String token = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accessToken")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if (token == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "인증되지 않은 사용자입니다.");
+            return "redirect:/loginform";
+        }
+        Claims claims=jwtTokenizer.parseAccessToken(token);
+        String currentUserName=claims.get("username").toString();
 
         List<Comment> comments = post.getComments();
 
         model.addAttribute("post", post);
         model.addAttribute("name",name);
         model.addAttribute("gymId",gymId);
+        model.addAttribute("currentUserName",currentUserName);
         model.addAttribute("comments",comments);
         log.info("post가 뭔데에 : "+post.toString());
         return "posts/detail";
