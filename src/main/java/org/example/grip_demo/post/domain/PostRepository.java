@@ -9,5 +9,6 @@ public interface PostRepository {
     Optional<Post> findById(Long id);
     List<Post> findAll();
     void deleteById(Long id);
+    List<Post> getPostsByClimbingId(Long climbingId);
 
 }

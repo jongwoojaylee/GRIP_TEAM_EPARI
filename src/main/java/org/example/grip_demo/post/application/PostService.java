@@ -40,4 +40,8 @@ public class PostService {
         postDomainService.deletePost(id);
     }
 
+    public List<Post> getPostsByClimbingId(Long id) {
+        postDomainService.getPostsByClimbingId(id);
+    }
+
 }

@@ -31,6 +31,10 @@ public class PostDomainService {
         return postRepository.save(post);
     }
 
+    public List<Post> getPostsByClimbingId(Long id) {
+        return postRepository.getPostsByClimbingId(id);
+    }
+
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }

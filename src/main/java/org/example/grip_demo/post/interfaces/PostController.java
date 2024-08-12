@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
+import org.example.grip_demo.comment.domain.Comment;
 import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.post.application.PostService;
 import org.example.grip_demo.post.domain.Post;
@@ -115,6 +116,9 @@ public class PostController {
         Optional<Post> postOptional = postService.getPostById(postId);
         if(postOptional.isPresent()){
             model.addAttribute("post", mapToDto(postOptional.get()));
+            String name =postOptional.get().getUser_id().getName();
+            model.addAttribute("postId",postId);
+            model.addAttribute("name", name);
             return "posts/updatepostform";
         }else {
             redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
@@ -135,7 +139,7 @@ public class PostController {
                 post.setContent(content);
 
                 postService.updatePost(post);
-                return "redirect:/post/"+ post.getClimbingGym_id() + postId;
+                return "redirect:/post/"+ post.getClimbingGym_id().getId()+"/"+ postId;
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
                 return "redirect:/main";
@@ -150,7 +154,7 @@ public class PostController {
     public String deletePost(@PathVariable("postId") Long postId, RedirectAttributes redirectAttributes) {
         try {
             postService.deletePost(postId);
-            return "redirect:/main";
+            return "redirect:/postlist";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
             return "redirect:/main";
@@ -158,9 +162,18 @@ public class PostController {
     }
 
     @GetMapping("/post/{climbingid}/{postid}")
-    private String postDetail(@PathVariable Long postId, Model model){
-        Optional<Post> post= postService.getPostById(postId);
+    public String postDetail(@PathVariable Long postid,@PathVariable Long climbingid, Model model){
+        Post post= postService.getPostById(postid).get();
+        String name= post.getUser_id().getName();
+        String gymId = climbingid.toString();
+
+        List<Comment> comments = post.getComments();
+
         model.addAttribute("post", post);
+        model.addAttribute("name",name);
+        model.addAttribute("gymId",gymId);
+        model.addAttribute("comments",comments);
+        log.info("post가 뭔데에 : "+post.toString());
         return "posts/detail";
     }
 
