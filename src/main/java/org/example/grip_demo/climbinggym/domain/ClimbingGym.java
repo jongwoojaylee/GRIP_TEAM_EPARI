@@ -42,7 +42,7 @@ public class ClimbingGym {
     @OneToMany(mappedBy = "climbingGym", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CongestionDemo> congestions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "climbingGym", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "climbingGym_id")
     private List<Post> posts;
 
 }
