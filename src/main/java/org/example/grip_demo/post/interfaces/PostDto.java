@@ -2,6 +2,9 @@ package org.example.grip_demo.post.interfaces;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.grip_demo.climbinggym.domain.ClimbingGym;
+import org.example.grip_demo.user.domain.User;
+
 @Getter
 @Setter
 public class PostDto {
@@ -10,6 +13,7 @@ public class PostDto {
     private String content;
     private Integer viewCount;
     private Integer likeCount;
-    private String username;
-    private Long climbingGymId;
+    private ClimbingGym climbingGym;
+
+    private User user;
 }
