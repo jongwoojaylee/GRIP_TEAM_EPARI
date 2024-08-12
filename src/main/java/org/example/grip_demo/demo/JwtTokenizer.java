@@ -54,6 +54,18 @@ public class JwtTokenizer {
     public String createRefreshToken(Long id, String email, String name, String username, List<String> roles){
         return createToken(id,email,name,username,roles,REFRESH_TOKEN_EXPIRE_COUNT,refreshSecret);
     }
+    //Refresh Token 으로 Access Token 생성
+    public String createAccessTokenFromRefreshToken(String refreshToken){
+        Claims claims = parseRefreshToken(refreshToken);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime()+ACCESS_TOKEN_EXPIRE_COUNT))
+                .signWith(Keys.hmacShaKeyFor(accessSecret))
+                .compact();
+
+    }
 
     public Claims parseToken(String token, byte[] secretKey){
         return Jwts.parserBuilder()

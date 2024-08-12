@@ -28,10 +28,8 @@ public class UserInfoController {
         User user = userService.findUserById(userid).orElse(null);
 
         if (user == null) {
-            System.out.println("user null");
             return "redirect:/main";
         }
-        Cookie[] cookies = request.getCookies();
         Long id = jwtTokenizer.getUserIdFromCookie(request);
         if(!user.getId().equals(id)) {
             return "redirect:/main";
@@ -47,17 +45,23 @@ public class UserInfoController {
 
     @GetMapping("/updateuserform/{userid}")
     public String showUpdateUserForm(@PathVariable Long userid,
-                                     Model model) {
+                                     Model model,
+                                     HttpServletRequest request) {
         User user = userService.findUserById(userid).orElse(null);
         if (user == null) {
+            return "redirect:/main";
+        }
+        Long id = jwtTokenizer.getUserIdFromCookie(request);
+        if(!user.getId().equals(id)) {
             return "redirect:/main";
         }
         model.addAttribute("user", user);
         return "user/updateUserForm";
     }
+
     @PostMapping("/updateuser")
     public String processUpdate (@ModelAttribute User user){
-        userService.updateUser(user);
-        return "redirect:/main";
+        User updatedUser = userService.updateUser(user);
+        return "redirect:/userinfo/"+updatedUser.getId();
     }
 }
