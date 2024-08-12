@@ -7,6 +7,7 @@ import org.example.grip_demo.climbinggym.application.ClimingGymService;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
 import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.post.application.PostService;
+import org.example.grip_demo.post.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,7 +63,8 @@ public class ClimbingGymController {
         }
         Optional<ClimbingGym> climbinggym = climingGymService.getClimbingGym(climbingId);
         model.addAttribute("climbinggym", climbinggym.get());
-//        model.addAttribute("posts", posts);
+        List<Post> posts = climbinggym.get().getPosts();
+        model.addAttribute("posts", posts);
         return "climbinggyms/climbinggym";
     }
 
