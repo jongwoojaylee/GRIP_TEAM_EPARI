@@ -53,11 +53,11 @@ public class MapRestController {
                 ))
                 .collect(Collectors.toList());
     }
-//    @GetMapping("/climbinggym/{gymId}/congestion")
-//    public ResponseEntity<CongestionDemoDto> getCurrentCongestion(@PathVariable Long gymId, @RequestParam int hour) {
-//        Optional<CongestionDemoDto> congestion = conDemoService.get(gymId, hour);
-//        return congestion.map(ResponseEntity::ok)
-//                .orElseGet(() -> ResponseEntity.notFound().build());
-//    }
+    @GetMapping("/api/climbinggym/{gymId}/congestion")
+    public ResponseEntity<CongestionDemoDto> getCurrentCongestion(@PathVariable Long gymId, @RequestParam int hour) {
+        Optional<CongestionDemoDto> congestion = conDemoService.getCongestionDemo(hour, gymId);
+        return congestion.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }

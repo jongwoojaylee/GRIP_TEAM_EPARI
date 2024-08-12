@@ -28,4 +28,12 @@ public class ClimbingGymDto {
         this.acceptableCount = acceptableCount;
         this.congestions = congestions;
     }
+
+    public ClimbingGymDto(Long id, String name, String address, Float mapX, Float mapY) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.mapX = mapX;
+        this.mapY = mapY;
+    }
 }
