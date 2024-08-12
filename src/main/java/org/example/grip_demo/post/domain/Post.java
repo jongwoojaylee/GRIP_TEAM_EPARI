@@ -3,6 +3,7 @@ package org.example.grip_demo.post.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
+import org.example.grip_demo.user.domain.User;
 
 import java.time.LocalDateTime;
 
@@ -33,13 +34,13 @@ public class Post {
     @Column(name = "Like_Count", nullable = true)
     private int Like_Count;
 
-//    @ManyToOne
-//    @JoinColumn(name = "USER_ID", nullable = true)
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = true)
+    private User user_id;
 
     @ManyToOne
     @JoinColumn(name = "CLIMBING_GYM_ID", nullable = true)
-    private ClimbingGym climbingGym;
+    private ClimbingGym climbingGym_id;
 
     public void setTitle(String title) {
         this.title = title;
@@ -55,6 +56,18 @@ public class Post {
 
     public void setLikeCount(int like_Count) {
         this.Like_Count = like_Count;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
+    }
+
+    public void setClimbingGym_id(ClimbingGym climbingGym_id) {
+        this.climbingGym_id = climbingGym_id;
     }
 
 }
