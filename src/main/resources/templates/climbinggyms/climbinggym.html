@@ -19,7 +19,9 @@
     <h2>게시글 목록</h2>
     <ul>
         <li th:each="post : ${posts}">
-            <h3 th:text="${post.title}">게시글 제목</h3>
+            <h3>
+                <a th:text="${post.title}" th:href="@{|/post/${climbinggym.id}/${post.id}|}">게시글 제목</a>
+            </h3>
             <p th:text="${post.content}">게시글 내용</p>
             <p th:text="${post.createdAt}">작성일</p>
         </li>
