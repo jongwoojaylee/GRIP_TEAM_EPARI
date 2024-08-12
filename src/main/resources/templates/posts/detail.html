@@ -168,10 +168,7 @@
                 <strong th:text="${comment.getUser_id().getName()}">작성자</strong>:
                 <span th:text="${comment.commentText}" th:id="'comment-text-' + ${comment.id}">댓글 내용</span>
             </p>
-                <div class="comment-buttons">
-<!--                    <a href="javascript:void(0);" onclick="editComment(${comment.id})">수정</a>-->
-<!--                    <button type="button" onclick="deleteComment(${comment.id})">삭제</button>-->
-                </div>
+
         </div>
     </div>
     <a href="/postlist" class="back-button">목록으로 돌아가기</a>

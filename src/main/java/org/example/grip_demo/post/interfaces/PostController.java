@@ -104,7 +104,7 @@ public class PostController {
             user.setId(userid);
             postDto.setUser(user);
             Post createdPost = postService.createPost(mapToEntity(postDto));
-            return "redirect:/posts/" + createdPost.getId();
+            return "redirect:/post/" + climbingGymId+"/"+createdPost.getId();
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "입력 값 오류가 발생했습니다.");
             return "redirect:/main";
@@ -153,8 +153,9 @@ public class PostController {
     @DeleteMapping("/deletepost/{postId}")
     public String deletePost(@PathVariable("postId") Long postId, RedirectAttributes redirectAttributes) {
         try {
+            log.info(postId.toString());
             postService.deletePost(postId);
-            return "redirect:/postlist";
+            return "/postlist";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
             return "redirect:/main";
