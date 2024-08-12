@@ -169,7 +169,7 @@
                 <span th:text="${comment.commentText}">댓글 내용</span>
             </p>
             <div class="comment-buttons">
-                <button type="button" onclick="editComment(${comment.id})">수정</button>
+                <a type="button" onclick="editComment(${comment.id})">수정</a>
                 <button type="button" onclick="deleteComment(${comment.id})">삭제</button>
             </div>
         </div>

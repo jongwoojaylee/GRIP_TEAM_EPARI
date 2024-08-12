@@ -72,7 +72,7 @@ public class Post {
         this.user_id = user_id;
     }
 
-    public void setClimbingGym_id(ClimbingGym climbingGym_id) {
+    public void setClimbingGymId(ClimbingGym climbingGym_id) {
         this.climbingGym_id = climbingGym_id;
     }
 

@@ -183,7 +183,7 @@ public class PostController {
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
         post.setUser_id(postDto.getUser());
-        post.setClimbingGym_id(postDto.getClimbingGym());
+        post.setClimbingGymId(postDto.getClimbingGym());
         post.setCreatedAt(LocalDateTime.now());
         post.setViewCount(0);
         post.setLikeCount(0);

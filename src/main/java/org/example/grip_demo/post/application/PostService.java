@@ -41,7 +41,7 @@ public class PostService {
     }
 
     public List<Post> getPostsByClimbingId(Long id) {
-        return postDomainService.getPostsByClimbingId(id);
+        return postDomainService.getPostsByClimbingGymId(id);
     }
 
 }
