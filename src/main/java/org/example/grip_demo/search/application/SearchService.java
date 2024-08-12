@@ -18,11 +18,14 @@ public class SearchService {
 
     public Page<Post> searchPostContaining(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return searchPostRepository.findByTitleContaining(keyword, pageable);
+        Page<Post> posts = searchPostRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
+        return posts;
     }
+
     public Page<ClimbingGym> searchClimbingGymContaining(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return searchClimbingGymRepository.findByNameContaining(keyword, pageable);
+        Page<ClimbingGym> climbingGyms = searchClimbingGymRepository.findByNameContaining(keyword, pageable);
+        return climbingGyms;
     }
 
 }

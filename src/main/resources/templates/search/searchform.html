@@ -108,6 +108,16 @@
             background-color: #eee;
             color: #333;
         }
+
+        mark {
+            background-color: #ffff00;
+            color: #000;
+        }
+        .no-results {
+            color: #888;
+            font-style: italic;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -115,18 +125,21 @@
 <div class="search-container">
     <h1>Search Posts</h1>
     <form action="/search" method="get">
-        <input type="text" id="query" name="query" placeholder="Enter your search term..." />
+        <input type="text" id="query" name="query" th:value="${query}" />
         <button type="submit">Search</button>
     </form>
 </div>
 
 <!-- 검색 결과 -->
 <div class="search-results">
-<!--    post 결과-->
+    <!-- post 결과 -->
     <h2>Post Results</h2>
+    <div th:if="${posts == null }" class="no-results">
+        검색 결과가 없습니다.
+    </div>
     <div th:if="${posts != null}">
         <div th:each="post : ${posts}" class="post-item">
-            <a th:href="@{/climbinggym/{climbingGymId}/{postId}(climbingGymId=${post.climbingGym.id}, postId=${post.id})}">
+            <a th:href="@{/climbinggym/{climbingGymId}/{postId}(climbingGymId=${post.getClimbingGym().getId()}, postId=${post.getId()})}">
                 <h3 th:text="${post.title}">Post Title</h3>
             </a>
             <p th:text="${post.content}">Post content</p>
@@ -143,8 +156,11 @@
             <a th:if="${currentPostPage < totalPostPages - 1}" th:href="@{/search(query=${query}, postPage=${currentPostPage + 1}, climbingGymPage=${currentClimbingGymsPage})}">Next</a>
         </div>
     </div>
-<!--    gym 결과-->
+    <!-- gym 결과 -->
     <h2>Climbing Gym Results</h2>
+    <div th:if="${climbingGyms == null}" class="no-results">
+        검색 결과가 없습니다.
+    </div>
     <div th:if="${climbingGyms != null}">
         <div th:each="gym : ${climbingGyms}" class="post-item">
             <a th:href="@{/climbinggym(climbingid=${gym.id})}">
@@ -164,5 +180,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const query = new URLSearchParams(window.location.search).get('query');
+        if (query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            document.querySelectorAll('.post-item p, .post-item h3').forEach(element => {
+                element.innerHTML = element.innerHTML.replace(regex, '<mark>$1</mark>');
+            });
+        }
+    });
+</script>
 </body>
 </html>

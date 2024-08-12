@@ -5,8 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.demo.Oauth2Util;
+import org.example.grip_demo.user.domain.RefreshToken;
 import org.example.grip_demo.user.domain.Role;
 import org.example.grip_demo.user.domain.User;
+import org.example.grip_demo.user.infrastructure.RefreshTokenRepository;
 import org.example.grip_demo.user.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,7 @@ public class UserLoginController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenizer jwtTokenizer;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${kakao.client_id}")
     private String clientId;
@@ -72,6 +75,12 @@ public class UserLoginController {
 
         response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
+
+        RefreshToken token = new RefreshToken();
+        token.setUser(user);
+        token.setValue(refreshToken);
+
+        refreshTokenRepository.save(token);
 
 
 

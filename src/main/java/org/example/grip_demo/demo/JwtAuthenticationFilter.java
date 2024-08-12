@@ -10,6 +10,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.example.grip_demo.user.domain.RefreshToken;
+import org.example.grip_demo.user.infrastructure.RefreshTokenRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,16 +23,43 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
+    private final RefreshTokenRepository refreshTokenRepository;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = getToken(request); //accessToken 얻어냄.
-        if(StringUtils.hasText(token)){
+        //accessToken 있을 경우
+        //accessToken 검증
+        String accessToken = getAccessToken(request);
+
+        //accessToken 없을 경우
+        //refreshToken 조회 후 검증 완료 되면 다시 accessToken 재발급
+        if (!StringUtils.hasText(accessToken)) {
+            String refreshToken = getRefreshToken(request);
+            if (StringUtils.hasText(refreshToken)) {
+                RefreshToken refreshTokenEntity = refreshTokenRepository.findByValue(refreshToken).orElse(null);
+                //쿠키의 refresh token과 db의 토큰 일치 여부 확인
+                if (refreshTokenEntity != null &&  Objects.equals(refreshTokenEntity.getValue(), refreshToken)) {
+                    accessToken = jwtTokenizer.createAccessTokenFromRefreshToken(refreshToken);
+
+                    Cookie accessTokenCookie = new Cookie("accessToken",accessToken);
+                    accessTokenCookie.setHttpOnly(true);
+                    accessTokenCookie.setPath("/");
+                    accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.ACCESS_TOKEN_EXPIRE_COUNT/1000)); //30분 쿠키의 유지시간 단위는 초 ,  JWT의 시간단위는 밀리세컨드
+
+                    response.addCookie(accessTokenCookie);
+
+                }
+            }
+
+        }
+
+        if(StringUtils.hasText(accessToken)){
             try{
-                getAuthentication(token);
+                getAuthentication(accessToken);
             }catch (ExpiredJwtException e){
                 request.setAttribute("exception", JwtExceptionCode.EXPIRED_TOKEN.getCode());
                 throw new BadCredentialsException("Expired token exception", e);
@@ -47,6 +76,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 throw new BadCredentialsException("JWT filter internal exception", e);
             }
         }
+
+
         filterChain.doFilter(request, response);
     }
 
@@ -60,10 +91,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //claim에서 Role 가져와서 authorities에 넣기
         List<GrantedAuthority> authorities = getGrantedAuthorities(claims);
 
-
         CustomUserDetails userDetails = new CustomUserDetails(username,"",name,authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
 
         Authentication authentication = new JwtAuthenticationToken(authorities,userDetails,null);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
@@ -75,7 +106,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return authorities;
     }
-    private String getToken(HttpServletRequest request) {
+    private String getAccessToken(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
         if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
             return authorization.substring(7);
@@ -85,6 +116,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private String getRefreshToken(HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
+            return authorization.substring(7);
+        }
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }

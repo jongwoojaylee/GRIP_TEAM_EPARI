@@ -6,10 +6,13 @@ import com.google.gson.JsonParser;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.example.grip_demo.climbinggym.domain.ClimbingGymRepository;
 import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.demo.Oauth2Util;
+import org.example.grip_demo.user.domain.RefreshToken;
 import org.example.grip_demo.user.domain.Role;
 import org.example.grip_demo.user.domain.User;
+import org.example.grip_demo.user.infrastructure.RefreshTokenRepository;
 import org.example.grip_demo.user.interfaces.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +32,7 @@ public class UserRestController {
     private final UserService userService;
     private final Oauth2Util oauth2Util;
     private final JwtTokenizer jwtTokenizer;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @GetMapping("/login/oauth2/code/kakao")
     public ResponseEntity<?> callback(@RequestParam("code") String code,
@@ -70,6 +74,16 @@ public class UserRestController {
 
             response.addCookie(accessTokenCookie);
             response.addCookie(refreshTokenCookie);
+
+            System.out.println(refreshToken);
+
+            RefreshToken KakaoRefreshToken = new RefreshToken();
+            KakaoRefreshToken.setUser(user);
+            KakaoRefreshToken.setValue(refreshToken);
+
+
+
+            refreshTokenRepository.save(KakaoRefreshToken);
 
             response.sendRedirect("/welcomejay");
             return null;

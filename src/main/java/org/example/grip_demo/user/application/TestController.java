@@ -18,15 +18,8 @@ public class TestController {
     public String welcome(Model model,
                           HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("accessToken")) {
-                    String accessToken = cookie.getValue();
-                    Long userId = jwtTokenizer.getUserIdFromToken(accessToken);
-                    model.addAttribute("userId", userId);
-                }
-            }
-        }
+        Long userId = jwtTokenizer.getUserIdFromCookie(request);
+        model.addAttribute("userId", userId);
         return "user/jayhome";
     }
 }
