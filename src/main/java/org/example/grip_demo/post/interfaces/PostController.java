@@ -1,32 +1,37 @@
 package org.example.grip_demo.post.interfaces;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.grip_demo.climbinggym.domain.ClimbingGym;
+import org.example.grip_demo.comment.domain.Comment;
+import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.post.application.PostService;
 import org.example.grip_demo.post.domain.Post;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.example.grip_demo.user.domain.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class PostController {
+
+    private final JwtTokenizer jwtTokenizer;
 
     private final PostService postService;
 
-    @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
+    @Value("${count.gym.id}")
+    private Long gymId;
 
     @GetMapping("/postlist")
     public String getPostList(Model model) {
@@ -37,12 +42,42 @@ public class PostController {
 
     @GetMapping("/postform")
     public String getPostForm(@RequestParam(value="climbingid",required = false) Long climbingGymId, Model model,
+                              HttpServletRequest request,
                               RedirectAttributes redirectAttributes){
+
         try {
             if(climbingGymId == null){
-                climbingGymId=9999L;
+                climbingGymId=gymId;
             }
+
+            String token = null;
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("accessToken")) {
+                        token = cookie.getValue();
+                        break;
+                    }
+                }
+            }
+            if (token == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "인증되지 않은 사용자입니다.");
+                return "redirect:/loginform";
+            }
+
+
+            Claims claims=jwtTokenizer.parseAccessToken(token);
+            log.info("claims 생성까진 된다? 부럽지?"+claims.toString());
+
+            String name = (String)claims.get("name");
+            log.info("이름 뭔데에에엥ㄷ: "+name);
+
+            String userId = claims.get("userId").toString();
+            Long longuserId=Long.parseLong(userId);
+
             model.addAttribute("climbingGymId", climbingGymId);
+            model.addAttribute("userId", longuserId);
+            model.addAttribute("name", name);
             return "posts/postform";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "잘못된 요청입니다.");
@@ -54,34 +89,21 @@ public class PostController {
     public String createPost(@RequestParam("title") String title,
                              @RequestParam("content") String content,
                              @RequestParam("climbingid") Long climbingGymId,
-                             @RequestParam("userid") String userid,
+                             @RequestParam("userId") Long userid,
                              HttpServletRequest request,
                              RedirectAttributes redirectAttributes){
-
-        String token = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("accessToken")) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        if (token == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "인증되지 않은 사용자입니다.");
-            return "redirect:/loginform";
-        }
 
         try {
             PostDto postDto = new PostDto();
             postDto.setTitle(title);
             postDto.setContent(content);
-            postDto.setClimbingGymId(climbingGymId);
-            postDto.setUsername(userid);//userid가 username임
-
-            Post post = mapToEntity(postDto);
-            Post createdPost = postService.createPost(post);
+            ClimbingGym climbingGym=new ClimbingGym();
+            climbingGym.setId(climbingGymId);
+            postDto.setClimbingGym(climbingGym);
+            User user = new User();
+            user.setId(userid);
+            postDto.setUser(user);
+            Post createdPost = postService.createPost(mapToEntity(postDto));
             return "redirect:/posts/" + createdPost.getId();
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "입력 값 오류가 발생했습니다.");
@@ -94,6 +116,9 @@ public class PostController {
         Optional<Post> postOptional = postService.getPostById(postId);
         if(postOptional.isPresent()){
             model.addAttribute("post", mapToDto(postOptional.get()));
+            String name =postOptional.get().getUser_id().getName();
+            model.addAttribute("postId",postId);
+            model.addAttribute("name", name);
             return "posts/updatepostform";
         }else {
             redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
@@ -114,7 +139,7 @@ public class PostController {
                 post.setContent(content);
 
                 postService.updatePost(post);
-                return "redirect:/posts/" + postId;
+                return "redirect:/post/"+ post.getClimbingGym_id().getId()+"/"+ postId;
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
                 return "redirect:/main";
@@ -129,17 +154,37 @@ public class PostController {
     public String deletePost(@PathVariable("postId") Long postId, RedirectAttributes redirectAttributes) {
         try {
             postService.deletePost(postId);
-            return "redirect:/main";
+            return "redirect:/postlist";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
             return "redirect:/main";
         }
     }
 
+    @GetMapping("/post/{climbingid}/{postid}")
+    public String postDetail(@PathVariable Long postid,@PathVariable Long climbingid, Model model){
+        Post post= postService.getPostById(postid).get();
+        String name= post.getUser_id().getName();
+        String gymId = climbingid.toString();
+
+        List<Comment> comments = post.getComments();
+
+        model.addAttribute("post", post);
+        model.addAttribute("name",name);
+        model.addAttribute("gymId",gymId);
+        model.addAttribute("comments",comments);
+        log.info("post가 뭔데에 : "+post.toString());
+        return "posts/detail";
+    }
+
+
     private Post mapToEntity(PostDto postDto) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
+        post.setUser_id(postDto.getUser());
+        post.setClimbingGymId(postDto.getClimbingGym());
+        post.setCreatedAt(LocalDateTime.now());
         post.setViewCount(0);
         post.setLikeCount(0);
         return post;
@@ -153,19 +198,6 @@ public class PostController {
         postDto.setViewCount(post.getView_Count());
         postDto.setLikeCount(post.getLike_Count());
         return postDto;
-    }
-
-    @GetMapping("/testtest")
-    public String test(HttpServletRequest request) {
-        String authorizationHeader = request.getHeader("Authorization");
-
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            //redirectAttributes.addFlashAttribute("errorMessage", "인증되지 않은 사용자입니다.");
-            return "redirect:/login";
-        }
-        String token = authorizationHeader.substring(7);
-
-        return "posts/test";
     }
 
 
