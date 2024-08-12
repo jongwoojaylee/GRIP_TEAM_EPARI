@@ -32,9 +32,11 @@ public class MapController {
                 Claims claims = jwtTokenizer.parseAccessToken(accessToken);
 
                 if (claims != null) {
+                    Long userId = jwtTokenizer.getUserIdFromToken(accessToken);
                     String username = claims.get("username", String.class);
                     String name = claims.get("name", String.class);
 
+                    model.addAttribute("userId", userId);
                     model.addAttribute("username", username);
                     model.addAttribute("name", name);
                 }
