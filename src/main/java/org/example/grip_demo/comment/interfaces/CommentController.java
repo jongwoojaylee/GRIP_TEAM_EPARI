@@ -74,7 +74,7 @@ public class CommentController {
                 .body(savedComment);
     }
 
-    @PutMapping("/api/updatecomment/{id}")
+    @PostMapping("/api/updatecomment/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO, HttpServletRequest request) {
         String token = null;
         Cookie[] cookies = request.getCookies();
@@ -111,10 +111,6 @@ public class CommentController {
 
         return ResponseEntity.ok(updatedComment);
     }
-
-
-
-
 
 
 }
