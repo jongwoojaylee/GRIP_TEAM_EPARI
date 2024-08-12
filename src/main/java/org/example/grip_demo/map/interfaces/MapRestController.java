@@ -41,4 +41,12 @@ public class MapRestController {
                 .map(gym -> new ClimbingGymDto(gym.getId(), gym.getName(), gym.getAddress(), gym.getMapX(), gym.getMapY()))
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/api/climbinggym/{gymId}/congestion")
+    public ResponseEntity<CongestionDemoDto> getCurrentCongestion(@PathVariable Long gymId, @RequestParam int hour) {
+        Optional<CongestionDemoDto> congestion = conDemoService.getCongestionDemo(hour, gymId);
+        return congestion.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+ 
 }

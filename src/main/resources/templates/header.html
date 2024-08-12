@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header id="header">
+    <img src="GripLogo.png" alt="Grip Logo" class="logo">
+    <ul>
+        <li id="left-nav">
+            <a href="/main">지도</a>
+        </li>
+        <li><a href="/postlist">게시판</a></li>
+    </ul>
+    <ul class="right-nav">
+        <li>
+            <a href="/searchform">검색</a>
+        </li>
+        <li>
+            <!--            <a th:if="${username == null}" href="/loginform">로그인</a>-->
+            <a sec:authorize="isAnonymous()" href="/loginform">로그인</a>
+            <!--            <div th:if="${username != null}">-->
+            <div sec:authorize="isAuthenticated()">
+                <span th:text="${name}">name</span>님
+                <a href="/logout">로그아웃</a>
+            </div>
+        </li>
+    </ul>
+</header>
+</body>
+</html>
