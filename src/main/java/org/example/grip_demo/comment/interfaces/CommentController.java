@@ -18,99 +18,56 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
-@Slf4j
 public class CommentController {
 
-    private final JwtTokenizer jwtTokenizer;
-    private final UserRepository userRepository;
-    private final PostRepository postRepository;
     private final CommentService commentService;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    public final JwtTokenizer jwtTokenizer;
 
-    @PostMapping("/api/postcomment")
-    public ResponseEntity<?> postComment(@RequestParam("commentText") String commentText,
-                                         @RequestParam("postId") Long postId,
-                                         HttpServletRequest request,
-                                         RedirectAttributes redirectAttributes) {
-
-        String token = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("accessToken")) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        if (token == null) {
-            return ResponseEntity.status(401).body("Unauthorized");
-        }
-        Claims claims=jwtTokenizer.parseAccessToken(token);
-        String name = (String)claims.get("name");
-        Long userId = Long.valueOf(claims.get("userId").toString());
-
-        User user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
-            return ResponseEntity.status(404).body("User not found");
-        }
+    @PostMapping("/postcomment")
+    public ResponseEntity<Comment> addComment(@RequestParam Long postId,
+                                              @RequestParam Long userId,
+                                              @RequestParam String commentText,
+                                              HttpServletRequest request) {
         Post post = postRepository.findById(postId).orElse(null);
-        if (post == null) {
-            return ResponseEntity.status(404).body("Post not found");
-        }
+        User user = userRepository.findById(userId).orElse(null);
 
-        Comment comment = new Comment();
-        comment.setUser_id(user);
-        comment.setPost_id(post);
-        comment.setCommentText(commentText);
-        comment.setCreatedAt(LocalDateTime.now());
-        comment.setUpdatedAt(LocalDateTime.now());
+        Comment comment= Comment.builder()
+                .post_id(post)
+                .user_id(user)
+                .commentText(commentText)
+                .createdAt(LocalDateTime.now())
+                .build();
 
         Comment savedComment = commentService.createComment(comment);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(savedComment);
-    }
 
-    @PostMapping("/api/updatecomment/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO, HttpServletRequest request) {
-        String token = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("accessToken")) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        if (token == null) {
-            return ResponseEntity.status(401).body("Unauthorized");
-        }
-        log.info(commentId.toString());
-        log.info(commentId.toString());
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(savedComment.getId());
+        commentDTO.setCommentText(savedComment.getCommentText());
+        commentDTO.setCreatedAt(savedComment.getCreatedAt());
+        commentDTO.setUpdatedAt(savedComment.getUpdatedAt());
+        commentDTO.setUserId(savedComment.getUser_id().getId());
+        commentDTO.setPostId(savedComment.getPost_id().getId());
 
-        Claims claims = jwtTokenizer.parseAccessToken(token);
-        Long userId = Long.valueOf(claims.get("userId").toString());
+        return ResponseEntity.ok(savedComment);
 
-        Optional<Comment> optinalComment = commentService.getCommentById(commentId);
-        Comment existingComment= optinalComment.orElse(null);
-        if (existingComment == null) {
-            return ResponseEntity.status(404).body("Comment not found");
-        }
-
-        if (!existingComment.getUser_id().getId().equals(userId)) {
-            return ResponseEntity.status(403).body("Forbidden");
-        }
-
-        existingComment.setCommentText(commentDTO.getCommentText());
-        existingComment.setUpdatedAt(LocalDateTime.now());
-        Comment updatedComment = commentService.updateComment(existingComment);
-
-        return ResponseEntity.ok(updatedComment);
     }
 
 
+//    @PostMapping("/updatecomment/{commentId}")
+//    public ResponseEntity<Comment> updateComment(@PathVariable Long commentId, @RequestBody Comment comment) {
+//        // 댓글 수정 로직
+//    }
+//
+//    @DeleteMapping("/deletecomment/{commentId}")
+//    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+//        // 댓글 삭제 로직
+//    }
 }
