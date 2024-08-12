@@ -9,6 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class SearchController {
@@ -24,9 +28,10 @@ public class SearchController {
     public String processSearch(@RequestParam(value = "query", required = false) String query,
                                 @RequestParam(value = "postPage", defaultValue = "0") int postPage,
                                 @RequestParam(value = "climbingGymPage", defaultValue = "0") int climbingGymPage,
-                                Model model){
+                                Model model) throws UnsupportedEncodingException {
         int pageSize = 5;
         model.addAttribute("query", query);
+        URLEncoder.encode(query, "UTF-8");
 
         Page<Post> posts = searchService.searchPostContaining(query,postPage,pageSize);
         model.addAttribute("posts", posts);

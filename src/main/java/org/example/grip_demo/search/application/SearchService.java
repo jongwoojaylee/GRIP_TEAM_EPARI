@@ -24,7 +24,8 @@ public class SearchService {
 
     public Page<ClimbingGym> searchClimbingGymContaining(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return searchClimbingGymRepository.findByNameContaining(keyword, pageable);
+        Page<ClimbingGym> climbingGyms = searchClimbingGymRepository.findByNameContaining(keyword, pageable);
+        return climbingGyms;
     }
 
 }
