@@ -1,6 +1,7 @@
 package org.example.grip_demo.comment.domain;
 
 import lombok.RequiredArgsConstructor;
+import org.example.grip_demo.post.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,10 @@ public class CommentDomainService {
     }
     public List<Comment> getComment(Long id) {
         return commentRepository.findAll();
+    }
+
+    public List<Comment> getCommentsByPost(Post post) {
+        return commentRepository.findByPost(post);
     }
 
 
