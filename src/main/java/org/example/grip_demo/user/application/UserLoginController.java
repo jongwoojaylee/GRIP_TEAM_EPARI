@@ -84,7 +84,7 @@ public class UserLoginController {
 
 
 
-        return "redirect:/welcomejay";
+        return "redirect:/main";
     }
 
     @GetMapping("/logout")

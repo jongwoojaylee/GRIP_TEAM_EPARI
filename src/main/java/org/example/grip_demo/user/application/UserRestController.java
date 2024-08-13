@@ -84,7 +84,7 @@ public class UserRestController {
 
             refreshTokenRepository.save(KakaoRefreshToken);
 
-            response.sendRedirect("/welcomejay");
+            response.sendRedirect("/main");
             return null;
         } else {
             //회원 정보가 없을 경우 회원가입 화면으로
