@@ -8,6 +8,6 @@ public interface CongestionRepository{
 
     Optional<Congestion> findById(Long id);
     void save(Congestion congestion);
-    List<Congestion> findByClimbingGymId(Long id);
+    List<Congestion> findByClimbingGymId(Long GymId);
 
 }//실제로는 CongestionRepositoryImpl에서 구현됨.

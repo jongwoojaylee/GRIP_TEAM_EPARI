@@ -19,11 +19,12 @@ public class CongestionDomainService {
     }
 
     //그리고 List타입으로 혼잡도의 현재 인원 가져오기
-    public List<Integer> getPresentCountByCongestion(List<Congestion> congestion){
-        for (Congestion congestion1 : congestion) {
-            congestion1.getPresentCount();
-        }
+    public List<Integer> getPresentCountByCongestion(List<Congestion> congestionList) {
         List<Integer> presentCounts = new ArrayList<>();
+        for (Congestion congestion : congestionList) {
+            presentCounts.add(congestion.getPresentCount());
+        }
+
         return presentCounts;
     }
 

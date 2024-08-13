@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
 
 @Entity
+@Table(name = "congestions")
 public class Congestion {
 
     @Id
