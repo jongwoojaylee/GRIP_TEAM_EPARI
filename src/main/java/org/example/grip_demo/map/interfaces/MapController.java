@@ -31,8 +31,10 @@ public class MapController {
                 String accessToken = accessTokenCookie.get().getValue();
                 Claims claims = jwtTokenizer.parseAccessToken(accessToken);
 
+                System.out.println(claims.get("userId", Long.class));
                 if (claims != null) {
                     Long userId = jwtTokenizer.getUserIdFromToken(accessToken);
+                    userId = claims.get("userId", Long.class);
                     String username = claims.get("username", String.class);
                     String name = claims.get("name", String.class);
 
