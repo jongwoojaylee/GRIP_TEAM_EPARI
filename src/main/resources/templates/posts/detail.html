@@ -194,7 +194,7 @@
                     if (!response.ok) {
                         throw new Error('댓글 작성에 실패했습니다.');
                     }
-                    return response.json(); // 댓글 작성 결과를 JSON으로 반환
+                    // return response.json(); // 댓글 작성 결과를 JSON으로 반환
                 })
                 .then(data => {
                     addCommentToList(data); // 댓글을 목록에 추가
