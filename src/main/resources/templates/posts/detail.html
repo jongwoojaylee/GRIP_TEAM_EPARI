@@ -180,7 +180,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const commentForm = document.getElementById('comment-form');
-        const currentUserName = document.getElementById('currentUserName').value;
         const climbingId = document.getElementById('climbingId').value;
         commentForm.addEventListener('submit', function(e) {
             e.preventDefault(); // 기본 제출 방지
@@ -194,12 +193,14 @@
                     if (!response.ok) {
                         throw new Error('댓글 작성에 실패했습니다.');
                     }
-                    // return response.json(); // 댓글 작성 결과를 JSON으로 반환
+                    return response.json(); // 댓글 작성 결과를 JSON으로 반환
                 })
                 .then(data => {
+                    console.log("1 여기까지 성공.....")
                     addCommentToList(data); // 댓글을 목록에 추가
+                    console.log("2 여기까지 되나용")
                     commentForm.reset(); // 폼 초기화
-
+                    window.location.href = `/post/${climbingId}/${postId}`;
                 })
                 .catch(error => console.error('댓글 작성 중 오류 발생:', error));
         });
@@ -207,15 +208,21 @@
         fetch(`/api/getcomments?postId=${document.querySelector('input[name="postId"]').value}`)
             .then(response => response.json())
             .then(comments => {
-                comments.forEach(comment => addCommentToList(comment));
+                console.log("댓글 목록:", comments); // 디버깅용
+                comments.forEach(comment => {
+                    addCommentToList(comment);
+                    console.log(comment);
+                });
+                console.log("댓글 로딩 성공");
             })
             .catch(error => console.error('댓글 로딩 중 오류 발생:', error));
     });
 
+
     function addCommentToList(comment) {
         console.log('Adding comment:', comment);
         const currentUserName = document.getElementById('currentUserName').value;
-        const commentsList = document.getElementById('comments-list');
+        let commentsList = document.getElementById('comments-list');
 
         const commentElement = document.createElement('div');
         commentElement.className = 'comment';
@@ -223,7 +230,7 @@
 
         const isOwnComment = comment.userId === currentUserName;
         commentElement.innerHTML = `
-            <p><strong>${comment.user.name}</strong>: <span>${comment.commentText}</span></p>
+            <p><strong>${comment.name}</strong>: <span>${comment.commentText}</span></p>
             ${isOwnComment ? `
                 <div class="comment-buttons">
                     <button class="edit-btn" onclick="editComment(${comment.id})">수정</button>
