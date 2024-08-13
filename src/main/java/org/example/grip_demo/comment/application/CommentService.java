@@ -30,4 +30,8 @@ public class CommentService {
     public Comment updateComment(Comment comment) {
         return commentRepository.save(comment);
     }
+
+    public List<Comment> getCommentsByPost(Post post) {
+        return commentRepository.findByPost(post);
+    }
 }

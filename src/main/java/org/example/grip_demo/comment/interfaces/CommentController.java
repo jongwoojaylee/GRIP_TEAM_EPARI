@@ -20,10 +20,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Slf4j
 public class CommentController {
 
     private final CommentService commentService;
@@ -32,16 +34,17 @@ public class CommentController {
     public final JwtTokenizer jwtTokenizer;
 
     @PostMapping("/postcomment")
-    public ResponseEntity<Comment> addComment(@RequestParam Long postId,
+    public ResponseEntity<CommentDTO> addComment(@RequestParam Long postId,
                                               @RequestParam Long userId,
                                               @RequestParam String commentText,
                                               HttpServletRequest request) {
+
         Post post = postRepository.findById(postId).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
 
         Comment comment= Comment.builder()
-                .post_id(post)
-                .user_id(user)
+                .post(post)
+                .user(user)
                 .commentText(commentText)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -53,10 +56,35 @@ public class CommentController {
         commentDTO.setCommentText(savedComment.getCommentText());
         commentDTO.setCreatedAt(savedComment.getCreatedAt());
         commentDTO.setUpdatedAt(savedComment.getUpdatedAt());
-        commentDTO.setUserId(savedComment.getUser_id().getId());
-        commentDTO.setPostId(savedComment.getPost_id().getId());
+        commentDTO.setName(savedComment.getUser().getName());
+        commentDTO.setUserId(savedComment.getUser().getId());
+        commentDTO.setPostId(savedComment.getPost().getId());
+        log.info(commentDTO.toString());
 
-        return ResponseEntity.ok(savedComment);
+        return ResponseEntity.ok(commentDTO);
+
+    }
+
+    @GetMapping("/getcomments")
+    public ResponseEntity<?> getComments(Long postId) {
+        Post post= postRepository.findById(postId).orElse(null);
+        List<Comment> commentlist=commentService.getCommentsByPost(post);
+
+        List<CommentDTO> commentDTOs = commentlist.stream().map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            commentDTO.setId(comment.getId());
+            commentDTO.setCommentText(comment.getCommentText());
+            commentDTO.setCreatedAt(comment.getCreatedAt());
+            commentDTO.setUpdatedAt(comment.getUpdatedAt());
+            commentDTO.setName(comment.getUser().getName());
+            commentDTO.setUserId(comment.getUser().getId());
+            commentDTO.setPostId(comment.getPost().getId());
+            return commentDTO;
+        }).collect(Collectors.toList());
+
+        log.info("CommentDTOs: " + commentDTOs.toString());
+
+        return ResponseEntity.ok(commentDTOs);
 
     }
 
