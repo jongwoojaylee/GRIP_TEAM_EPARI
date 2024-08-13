@@ -48,7 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     Cookie accessTokenCookie = new Cookie("accessToken",accessToken);
                     accessTokenCookie.setHttpOnly(true);
                     accessTokenCookie.setPath("/");
-                    accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.ACCESS_TOKEN_EXPIRE_COUNT/1000)); //30분 쿠키의 유지시간 단위는 초 ,  JWT의 시간단위는 밀리세컨드
+                    //30분 쿠키의 유지시간 단위 조정
+                    accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.ACCESS_TOKEN_EXPIRE_COUNT/1000));
 
                     response.addCookie(accessTokenCookie);
 

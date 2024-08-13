@@ -9,7 +9,6 @@
             background-color: #f0f0f0;
             margin: 0;
             padding: 0;
-            display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -21,6 +20,10 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             width: 300px;
             text-align: center;
+            position: relative; /* Use absolute positioning */
+            top: 50%; /* Move down from top by 50% of the viewport height */
+            left: 50%; /* Move right from left by 50% of the viewport width */
+            transform: translate(-50%, -50%); /* Center the container */
         }
         h1 {
             margin-bottom: 1rem;
@@ -71,8 +74,12 @@
             text-decoration: underline;
         }
     </style>
+    <link rel="stylesheet" href="main.css">
+
+
 </head>
 <body>
+<header id="header" th:replace="header.html"></header>
 <div class="container">
     <h1>Login Form</h1>
     <form action="/login" method="post">
