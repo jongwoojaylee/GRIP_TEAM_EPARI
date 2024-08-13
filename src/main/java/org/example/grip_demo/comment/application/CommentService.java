@@ -23,11 +23,6 @@ public class CommentService {
         return commentRepository.findAll();
     }
 
-    public List<Comment> getCommentsByPostId(Post post) {
-        return commentRepository.findByPost_id(post);
-    }
-
-
     public Optional<Comment> getCommentById(Long commentId) {
         return commentRepository.findById(commentId);
     }
