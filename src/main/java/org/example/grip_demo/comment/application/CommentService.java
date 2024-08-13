@@ -3,6 +3,7 @@ package org.example.grip_demo.comment.application;
 import lombok.RequiredArgsConstructor;
 import org.example.grip_demo.comment.domain.Comment;
 import org.example.grip_demo.comment.domain.CommentRepository;
+import org.example.grip_demo.post.domain.Post;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public class CommentService {
 
     public List<Comment> getComments() {
         return commentRepository.findAll();
+    }
+
+    public List<Comment> getCommentsByPostId(Post post) {
+        return commentRepository.findByPost_id(post);
     }
 
 
