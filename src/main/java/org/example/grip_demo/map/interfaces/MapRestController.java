@@ -45,19 +45,19 @@ public class MapRestController {
         List<ClimbingGym> gyms = climingGymService.searchClimbingGyms(keyword);
         return gyms.stream()
                 .map(gym -> new ClimbingGymDto(gym.getId(), gym.getName(),
-                gym.getAddress(), gym.getMapX(), gym.getMapY(),
-                gym.getAcceptableCount(),
-                gym.getCongestions().stream()
-                        .map(con -> new CongestionDemoDto(con.getTimeZone(), con.getPresentCount()))
-                        .collect(Collectors.toList())
+                        gym.getAddress(), gym.getMapX(), gym.getMapY(),
+                        gym.getAcceptableCount(),
+                        gym.getCongestions().stream()
+                                .map(con -> new CongestionDemoDto(con.getTimeZone(), con.getPresentCount()))
+                                .collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
     }
-//    @GetMapping("/climbinggym/{gymId}/congestion")
-//    public ResponseEntity<CongestionDemoDto> getCurrentCongestion(@PathVariable Long gymId, @RequestParam int hour) {
-//        Optional<CongestionDemoDto> congestion = conDemoService.get(gymId, hour);
-//        return congestion.map(ResponseEntity::ok)
-//                .orElseGet(() -> ResponseEntity.notFound().build());
-//    }
+    @GetMapping("/api/climbinggym/{gymId}/congestion")
+    public ResponseEntity<CongestionDemoDto> getCurrentCongestion(@PathVariable Long gymId, @RequestParam int hour) {
+        Optional<CongestionDemoDto> congestion = conDemoService.getCongestionDemo(hour, gymId);
+        return congestion.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }

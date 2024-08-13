@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     loadAllGyms();
 });
@@ -32,13 +31,14 @@ function loadAllGyms() {
                 });
 
                 let infoWindow = new naver.maps.InfoWindow({
-                    content: `<div style="width:200px;text-align:center;padding:10px;" xmlns="http://www.w3.org/1999/html">
-                        <strong>${gym.name}</strong><br>
-                        ${gym.address}<br>
-                        수용 인원 : ${gym.acceptableCount}<br>
-                        <div id="congestion-${gym.id}">혼잡도 정보를 불러오는 중...</div>
-                        <a href="/climbinggym?climbingid=${gym.id}" target="_blank">내부 링크</a>
-                    </div>`
+                    content:
+                        `<div style="width:200px;text-align:center;padding:10px;">
+                            <p><strong>${gym.name}</strong></p>
+                            <p>${gym.address}</p>
+                            수용 인원 : ${gym.acceptableCount}
+                            <p>혼잡도 : <span id="congestion-${gym.id}">불러오는 중...</span></p>
+                            <a href="/climbinggym?climbingid=${gym.id}" target="_blank">내부 링크</a>
+                        </div>`
                 });
 
                 naver.maps.Event.addListener(marker, "click", function() {
@@ -50,13 +50,24 @@ function loadAllGyms() {
                         let currentHour = new Date().getHours();
 
                         fetch(`/api/climbinggym/${gym.id}/congestion?hour=${currentHour}`)
-                            .then(reponse => reponse.json())
-                            .then(congestion => {
+                            .then(response => response.json())
+                            .then(congestionData => {
                                 let congestionElement = document.getElementById(`congestion-${gym.id}`);
-                                if (congestion) {
-                                    congestionElement.innerText = '혼잡도: ${congestionData.presentCount}';
+                                if (congestionData) {
+                                    // congestionElement.innerText = `${congestionData.presentCount}`;
+                                    if (congestionData.presentCount/gym.acceptableCount < 0.33) {
+                                        congestionElement.innerText = `여유`;
+                                        congestionElement.style.color = 'green';
+                                    } else if (congestionData.presentCount/gym.acceptableCount < 0.66) {
+                                        congestionElement.innerText = `보통`;
+                                        congestionElement.style.color = 'orange';
+                                    } else {
+                                        congestionElement.innerText = `혼잡`;
+                                        congestionElement.style.color = 'red';
+                                    }
+
                                 } else {
-                                    congestionElement.innerHTML = "혼잡도 정보 없음";
+                                    congestionElement.innerHTML = "정보 없음";
                                 }
                             })
                             .catch(error => {
@@ -144,10 +155,14 @@ function searchGyms() {
                 let infoWindow = new naver.maps.InfoWindow({
                     content:
                         `<div style="width:200px;text-align:center;padding:10px;">
-            <strong>${gym.name}</strong><br>
-            ${gym.address}<br>
-            <a href="/climbinggym?climbingid=${gym.id}" target="_blank">내부 링크</a>
-        </div>`
+                            <p><strong>${gym.name}</strong></p>
+                            <p>${gym.address}</p>
+                            수용 인원 : ${gym.acceptableCount}
+                            <p>혼잡도 : <span id="congestion-${gym.id}">불러오는 중...</span></p>
+                            <mark>
+                                <a href="/climbinggym?climbingid=${gym.id}" target="_blank">내부 링크</a>
+                            </mark>
+                        </div>`
                 });
 
                 naver.maps.Event.addListener(marker, "click", function() {
@@ -155,6 +170,32 @@ function searchGyms() {
                         infoWindow.close();
                     } else {
                         infoWindow.open(map, marker);
+                        let currentHour = new Date().getHours();
+
+                        fetch(`/api/climbinggym/${gym.id}/congestion?hour=${currentHour}`)
+                            .then(response => response.json())
+                            .then(congestionData => {
+                                let congestionElement = document.getElementById(`congestion-${gym.id}`);
+                                if (congestionData) {
+                                    // congestionElement.innerText = `혼잡도: ${congestionData.presentCount}`;
+                                    if (congestionData.presentCount/gym.acceptableCount < 0.33) {
+                                        congestionElement.innerText = `여유`;
+                                        congestionElement.style.color = 'green';
+                                    } else if (congestionData.presentCount/gym.acceptableCount < 0.66) {
+                                        congestionElement.innerText = `보통`;
+                                        congestionElement.style.color = 'orange';
+                                    } else {
+                                        congestionElement.innerText = `혼잡`;
+                                        congestionElement.style.color = 'red';
+                                    }
+
+                                } else {
+                                    congestionElement.innerHTML = "혼잡도 정보 없음";
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error fetching congestion data:", error);
+                            });
                     }
                 });
 

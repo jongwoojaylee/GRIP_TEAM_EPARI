@@ -13,31 +13,33 @@ import java.util.Optional;
 @Service
 public class PostService {
 
-    private final PostRepository postRepository;
+    private final PostDomainService postDomainService;
 
     @Autowired
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
+    public PostService(PostDomainService postDomainService) {
+        this.postDomainService = postDomainService;
     }
 
     public Post createPost(Post post) {
-        return postRepository.save(post);
+        return postDomainService.createPost(post);
     }
 
     public Optional<Post> getPostById(Long id) {
-        return postRepository.findById(id);
+        return postDomainService.getPostById(id);
     }
 
     public List<Post> getAllPosts() {
-        return postRepository.findAll();
+        return postDomainService.getAllPosts();
     }
 
     public Post updatePost(Post post) {
-        return postRepository.save(post);
+        return postDomainService.updatePost(post);
     }
 
     public void deletePost(Long id) {
-        postRepository.deleteById(id);
+        postDomainService.deletePost(id);
     }
+
+
 
 }

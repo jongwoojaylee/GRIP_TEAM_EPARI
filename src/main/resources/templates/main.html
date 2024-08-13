@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,23 +9,7 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
-<header id="header">
-    <img src="GripLogo.png" alt="Grip Logo" class="logo">
-    <ul>
-        <li id="left-nav">
-            <a href="/main">지도</a>
-        </li>
-        <li><a href="/postlist">게시판</a></li>
-    </ul>
-    <ul class="right-nav">
-        <li>
-            <a href="/searchform">검색</a>
-        </li>
-        <li>
-            <a href="/loginform">로그인</a>
-        </li>
-    </ul>
-</header>
+<header id="header" th:replace="header.html"></header>
 <div>
     <div id="search-controls">
         <input type="text" id="searchKeyword" placeholder="Search keyword">
@@ -34,9 +18,7 @@
     </div>
     <div id="map" ></div>
 </div>
-<footer id="footer">
-    <p>© 2024 Grip. All rights reserved.</p>
-</footer>
+<footer id="footer" th:replace="footer.html"></footer>
 <script src="mainMap.js"></script>
 </body>
 </html>

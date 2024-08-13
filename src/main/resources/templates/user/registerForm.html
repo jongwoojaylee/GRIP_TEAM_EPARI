@@ -2,137 +2,221 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Sign Up</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .form-group label {
+            flex-basis: 30%;
+            text-align: left;
+        }
+        .form-group input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group button {
+            background-color: #28a745; /* 녹색 버튼 */
+            color: #fff;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            height: 38px; /* Align button height with input fields */
+        }
+        .form-group button:hover {
+            background-color: #218838; /* 버튼 호버 시 어두운 녹색 */
+        }
+        .error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            display: block;
+            margin-top: 0.5rem;
+        }
+        .success {
+            color: #28a745;
+            font-size: 0.875rem;
+            display: block;
+            margin-top: 0.5rem;
+        }
+        .links {
+            margin-top: 1rem;
+        }
+        .links a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            font-size: 0.9rem;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-<h1>This is Sign up page(need to fix)</h1>
-<form id="signupForm" th:action="@{/registeruser}" th:object="${user}" method="post">
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" th:field="${user.username}" required>
-        <button type="button" id="checkUsernameButton">Check Username</button>
-        <span id="usernameFeedback" class="error" style="display: none;"></span>
-        <span th:if="${usernameError}" class="error" th:text="${usernameError}"></span>
-    </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" th:field="${user.password}" required>
-    </div>
-    <div>
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" required>
-        <span id="passwordFeedback" class="error" style="display: none;">Passwords do not match</span>
-    </div>
-    <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" th:field="${user.name}" required>
-    </div>
-    <div>
-        <label for="phoneNumber">Phone number:</label>
-        <input type="text" id="phoneNumber" th:field="${user.phonenumber}" required>
-    </div>
-    <div>
-        <label for="address">Address:</label>
-        <input type="text" id="address" th:field="${user.address}" required>
-    </div>
-    <div>
-        <label for="gender">성별:</label>
-        <select id="gender" name="gender" required>
-            <option value="true" th:selected="${user.gender}">남자</option>
-            <option value="false" th:selected="${!user.gender}">여자</option>
-        </select>
-    </div>
-    <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" th:field="${user.email}" required>
-        <button type="button" id="checkEmailButton">Check Email</button>
-        <span id="emailFeedback" class="error" style="display: none;"></span>
-        <span th:if="${emailError}" class="error" th:text="${emailError}"></span>
-    </div>
-    <div>
-        <button type="submit" id="submitButton" disabled>Sign Up</button>
-    </div>
-</form>
+<div class="container">
+    <h1>Sign Up</h1>
+    <form id="signupForm" th:action="@{/registeruser}" th:object="${user}" method="post">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" th:field="${user.username}" required>
+            <button type="button" id="checkUsernameButton">Check Username</button>
+            <span id="usernameFeedback" class="error" style="display: none;"></span>
+            <span th:if="${usernameError}" class="error" th:text="${usernameError}"></span>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" th:field="${user.password}" required>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" required>
+            <span id="passwordFeedback" class="error" style="display: none;">Passwords do not match</span>
+        </div>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" th:field="${user.name}" required>
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Phone number:</label>
+            <input type="text" id="phoneNumber" th:field="${user.phoneNumber}" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" id="address" th:field="${user.address}" required>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="true" th:selected="${user.gender}">Male</option>
+                <option value="false" th:selected="${!user.gender}">Female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="${user.email}" required>
+            <button type="button" id="checkEmailButton">Check Email</button>
+            <span id="emailFeedback" class="error" style="display: none;"></span>
+            <span th:if="${emailError}" class="error" th:text="${emailError}"></span>
+        </div>
+        <div>
+            <button type="submit" id="submitButton" disabled>Sign Up</button>
+        </div>
+        <div class="links">
+            <a href="/loginform">Already have an account? Log In</a>
+        </div>
+    </form>
 
-<script>
-    $(document).ready(function () {
-        var passwordMatch = false;
-        var usernameValid = false;
-        var emailValid = false;
+    <script>
+        $(document).ready(function () {
+            var passwordMatch = false;
+            var usernameValid = false;
+            var emailValid = false;
 
-        // Password confirmation
-        $('#confirmPassword').on('input', function () {
-            var password = $('#password').val();
-            var confirmPassword = $('#confirmPassword').val();
-            if (password !== confirmPassword) {
-                $('#passwordFeedback').show();
-                passwordMatch = false;
-            } else {
-                $('#passwordFeedback').hide();
-                passwordMatch = true;
-            }
-            checkFormValidity();
-        });
-
-        // Username check
-        $('#checkUsernameButton').on('click', function() {
-            var username = $('#username').val();
-            $.get('/api/check/username', { username: username }, function(data) {
-                if (data.isAvailable) {
-                    $('#usernameFeedback').removeClass('success').addClass('error').text('Username already exists').show();
-                    usernameValid = false;
+            // Password confirmation
+            $('#confirmPassword').on('input', function () {
+                var password = $('#password').val();
+                var confirmPassword = $('#confirmPassword').val();
+                if (password !== confirmPassword) {
+                    $('#passwordFeedback').show();
+                    passwordMatch = false;
                 } else {
-                    $('#usernameFeedback').removeClass('error').addClass('success').text('Username is available').show();
-                    usernameValid = true;
+                    $('#passwordFeedback').hide();
+                    passwordMatch = true;
                 }
                 checkFormValidity();
             });
-        });
 
-        // Email check
-        $('#checkEmailButton').on('click', function() {
-            var email = $('#email').val();
-            $.get('/api/check/email', { email: email }, function(data) {
-                if (data.isAvailable) {
-                    $('#emailFeedback').removeClass('success').addClass('error').text('Email already exists').show();
-                    emailValid = false;
+            // Username check
+            $('#checkUsernameButton').on('click', function() {
+                var username = $('#username').val();
+                $.get('/api/check/username', { username: username }, function(data) {
+                    if (data.isAvailable) {
+                        $('#usernameFeedback').removeClass('success').addClass('error').text('Username already exists').show();
+                        usernameValid = false;
+                    } else {
+                        $('#usernameFeedback').removeClass('error').addClass('success').text('Username is available').show();
+                        usernameValid = true;
+                    }
+                    checkFormValidity();
+                });
+            });
+
+            // Email check
+            $('#checkEmailButton').on('click', function() {
+                var email = $('#email').val();
+                $.get('/api/check/email', { email: email }, function(data) {
+                    if (data.isAvailable) {
+                        $('#emailFeedback').removeClass('success').addClass('error').text('Email already exists').show();
+                        emailValid = false;
+                    } else {
+                        $('#emailFeedback').removeClass('error').addClass('success').text('Email is available').show();
+                        emailValid = true;
+                    }
+                    checkFormValidity();
+                });
+            });
+
+            // Form submission
+            $('#signupForm').on('submit', function(e) {
+                var password = $('#password').val();
+                var confirmPassword = $('#confirmPassword').val();
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    $('#passwordFeedback').show();
+                    passwordMatch = false;
                 } else {
-                    $('#emailFeedback').removeClass('error').addClass('success').text('Email is available').show();
-                    emailValid = true;
+                    passwordMatch = true;
                 }
                 checkFormValidity();
+                if (!usernameValid || !emailValid || !passwordMatch) {
+                    e.preventDefault();
+                }
             });
+
+            function checkFormValidity() {
+                if (usernameValid && emailValid && passwordMatch) {
+                    $('#submitButton').prop('disabled', false);
+                } else {
+                    $('#submitButton').prop('disabled', true);
+                }
+            }
+
         });
-
-        // Form submission
-        $('#signupForm').on('submit', function(e) {
-            var password = $('#password').val();
-            var confirmPassword = $('#confirmPassword').val();
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                $('#passwordFeedback').show();
-                passwordMatch = false;
-            } else {
-                passwordMatch = true;
-            }
-            checkFormValidity();
-            if (!usernameValid || !emailValid || !passwordMatch) {
-                e.preventDefault();
-            }
-        });
-
-        function checkFormValidity() {
-            if (usernameValid && emailValid && passwordMatch) {
-                $('#submitButton').prop('disabled', false);
-            } else {
-                $('#submitButton').prop('disabled', true);
-            }
-        }
-
-    });
-</script>
-
-
+    </script>
+</div>
 </body>
 </html>

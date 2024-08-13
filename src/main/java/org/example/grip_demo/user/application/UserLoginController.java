@@ -4,15 +4,22 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.grip_demo.demo.JwtTokenizer;
+import org.example.grip_demo.demo.Oauth2Util;
+import org.example.grip_demo.user.domain.RefreshToken;
 import org.example.grip_demo.user.domain.Role;
 import org.example.grip_demo.user.domain.User;
+import org.example.grip_demo.user.infrastructure.RefreshTokenRepository;
 import org.example.grip_demo.user.interfaces.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -21,9 +28,18 @@ public class UserLoginController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenizer jwtTokenizer;
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    @Value("${kakao.client_id}")
+    private String clientId;
+
+    @Value("${kakao.redirect_uri}")
+    private String redirectUri;
 
     @GetMapping("/loginform")
-    public String showLoginForm() {
+    public String showLoginForm(Model model) {
+        String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+clientId+"&redirect_uri="+redirectUri;
+        model.addAttribute("link", location);
         return "user/loginform";
     }
 
@@ -60,8 +76,34 @@ public class UserLoginController {
         response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
 
+        RefreshToken token = new RefreshToken();
+        token.setUser(user);
+        token.setValue(refreshToken);
+
+        refreshTokenRepository.save(token);
+
 
 
         return "redirect:/welcomejay";
+    }
+
+    @GetMapping("/logout")
+    public void logout(HttpServletResponse response) throws IOException {
+        // accessToken, refreshToken 삭제
+        Cookie accessToken = new Cookie("accessToken", null);
+        accessToken.setHttpOnly(true);
+        accessToken.setPath("/");
+        accessToken.setMaxAge(0);
+
+        Cookie refreshToken = new Cookie("refreshToken", null);
+        refreshToken.setHttpOnly(true);
+        refreshToken.setPath("/");
+        refreshToken.setMaxAge(0);
+
+        response.addCookie(accessToken);
+        response.addCookie(refreshToken);
+
+        // loginform으로 리다이렉트
+        response.sendRedirect("/loginform");
     }
 }
