@@ -108,7 +108,7 @@
         </div>
         <ul class="post-list">
             <li class="post-item" th:each="post : ${posts}">
-                <a  th:href="@{/post/{climbingid}/{postid}(climbingid=${post.climbingGym_id.id}, postid=${post.id})}">
+                <a  th:href="@{/post/{climbingid}/{postid}(climbingid=${post.climbingGym.id}, postid=${post.id})}">
                     <h2 th:text="${post.title}" >제목</h2>
                 </a>
                 <a th:text="${post.content}">내용</a>
