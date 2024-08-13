@@ -37,10 +37,11 @@ function loadAllGyms() {
                             <p>${gym.address}</p>
                             수용 인원 : ${gym.acceptableCount}
                             <p>혼잡도 : <span id="congestion-${gym.id}">불러오는 중...</span></p>
-                            <a href="/climbinggym?climbingid=${gym.id}" target="_blank">내부 링크</a>
+                            <mark>
+                                <a href="/climbinggym?climbingid=${gym.id}" target="_parent">내부 링크</a>
+                            </mark>
                         </div>`
                 });
-
                 naver.maps.Event.addListener(marker, "click", function() {
                     if (infoWindow.getMap()) {
                         infoWindow.close();
@@ -160,7 +161,7 @@ function searchGyms() {
                             수용 인원 : ${gym.acceptableCount}
                             <p>혼잡도 : <span id="congestion-${gym.id}">불러오는 중...</span></p>
                             <mark>
-                                <a href="/climbinggym?climbingid=${gym.id}" target="_blank">내부 링크</a>
+                                <a href="/climbinggym?climbingid=${gym.id}" target="_parent">내부 링크</a>
                             </mark>
                         </div>`
                 });

@@ -32,19 +32,19 @@ a:hover {
     height: 100px;
 }
 
-.logo {
+#header .logo {
     height: 75%;
     border-radius: 50%;
     margin-left: 20px;
 }
 
-.left-nav, .right-nav {
+#header .left-nav, #header .right-nav {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
 }
-.right-nav {
+#header .right-nav {
     list-style: none;
     padding: 0;
     margin: 0 10px 0 auto;
