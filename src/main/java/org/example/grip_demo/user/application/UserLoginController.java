@@ -103,7 +103,7 @@ public class UserLoginController {
         response.addCookie(accessToken);
         response.addCookie(refreshToken);
 
-        // loginform으로 리다이렉트
-        response.sendRedirect("/loginform");
+        // main 페이지로 이동
+        response.sendRedirect("/main");
     }
 }

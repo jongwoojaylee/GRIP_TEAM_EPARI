@@ -139,7 +139,7 @@
     </div>
     <div th:if="${posts != null}">
         <div th:each="post : ${posts}" class="post-item">
-            <a th:href="@{/climbinggym/{climbingGymId}/{postId}(climbingGymId=${post.getClimbingGym().getId()}, postId=${post.getId()})}">
+            <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${post.getClimbingGym().getId()}, postId=${post.getId()})}">
                 <h3 th:text="${post.title}">Post Title</h3>
             </a>
             <p th:text="${post.content}">Post content</p>
