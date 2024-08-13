@@ -161,7 +161,7 @@
     <div class="comment-form">
         <h3>댓글 작성</h3>
         <form id="comment-form" action="/api/postcomment" method="post">
-            <input type="hidden" name="postId" th:value="${post.id}">
+            <input type="hidden" id="postId" name="postId" th:value="${post.id}">
             <input type="hidden" id="currentUserName" th:value="${currentUserName}">
             <input type="hidden" id="climbingId" th:value="${post.getClimbingGym().getId()}">
             <input type="hidden" name="userId" th:value="${post.getUser().getId()}">
@@ -181,6 +181,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         const commentForm = document.getElementById('comment-form');
         const climbingId = document.getElementById('climbingId').value;
+        const postId= document.getElementById('postId').value;
         commentForm.addEventListener('submit', function(e) {
             e.preventDefault(); // 기본 제출 방지
             const formData = new FormData(commentForm);
