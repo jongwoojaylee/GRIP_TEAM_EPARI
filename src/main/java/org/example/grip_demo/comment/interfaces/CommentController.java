@@ -91,7 +91,6 @@ public class CommentController {
 
 //    @PostMapping("/updatecomment/{commentId}")
 //    public ResponseEntity<Comment> updateComment(@PathVariable Long commentId, @RequestBody Comment comment) {
-//        // 댓글 수정 로직
 //    }
 //
 //    @DeleteMapping("/deletecomment/{commentId}")
