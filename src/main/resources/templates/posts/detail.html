@@ -163,9 +163,9 @@
         <form id="comment-form" action="/api/postcomment" method="post">
             <input type="hidden" name="postId" th:value="${post.id}">
             <input type="hidden" id="currentUserName" th:value="${currentUserName}">
-            <input type="hidden" id="climbingId" th:value="${post.getClimbingGym_id().getId()}">
-            <input type="hidden" name="userId" th:value="${post.getUser_id().getId()}">
-            <input type="hidden" id="name" th:value="${post.getUser_id().getName()}">
+            <input type="hidden" id="climbingId" th:value="${post.getClimbingGym().getId()}">
+            <input type="hidden" name="userId" th:value="${post.getUser().getId()}">
+            <input type="hidden" id="name" th:value="${post.getUser().getName()}">
             <div class="form-group">
                 <label for="commentText">댓글 내용:</label>
                 <textarea id="commentText" name="commentText" rows="4" required></textarea>

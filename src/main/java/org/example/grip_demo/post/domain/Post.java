@@ -31,18 +31,18 @@ public class Post {
     private LocalDateTime updatedAt;
 
     @Column(name = "View_Count", nullable = true)
-    private int View_Count;
+    private int viewCount;
 
     @Column(name = "Like_Count", nullable = true)
-    private int Like_Count;
+    private int likeCount;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = true)
-    private User user_id;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "CLIMBING_GYM_ID", nullable = true)
-    private ClimbingGym climbingGym_id;
+    private ClimbingGym climbingGym;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("createdAt")
@@ -56,24 +56,24 @@ public class Post {
         this.content = content;
     }
 
-    public void setViewCount(int view_Count) {
-        this.View_Count = view_Count;
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
     }
 
-    public void setLikeCount(int like_Count) {
-        this.Like_Count = like_Count;
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public void setUser_id(User user_id) {
-        this.user_id = user_id;
+    public void setUser_id(User user) {
+        this.user = user;
     }
 
-    public void setClimbingGymId(ClimbingGym climbingGym_id) {
-        this.climbingGym_id = climbingGym_id;
+    public void setClimbingGymId(ClimbingGym climbingGym) {
+        this.climbingGym = climbingGym;
     }
 
 }

@@ -44,7 +44,7 @@ public class CommentController {
 
         Comment comment= Comment.builder()
                 .post(post)
-                .user_id(user)
+                .user(user)
                 .commentText(commentText)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -56,8 +56,8 @@ public class CommentController {
         commentDTO.setCommentText(savedComment.getCommentText());
         commentDTO.setCreatedAt(savedComment.getCreatedAt());
         commentDTO.setUpdatedAt(savedComment.getUpdatedAt());
-        commentDTO.setName(savedComment.getUser_id().getName());
-        commentDTO.setUserId(savedComment.getUser_id().getId());
+        commentDTO.setName(savedComment.getUser().getName());
+        commentDTO.setUserId(savedComment.getUser().getId());
         commentDTO.setPostId(savedComment.getPost().getId());
         log.info(commentDTO.toString());
 
@@ -76,8 +76,8 @@ public class CommentController {
             commentDTO.setCommentText(comment.getCommentText());
             commentDTO.setCreatedAt(comment.getCreatedAt());
             commentDTO.setUpdatedAt(comment.getUpdatedAt());
-            commentDTO.setName(comment.getUser_id().getName());
-            commentDTO.setUserId(comment.getUser_id().getId());
+            commentDTO.setName(comment.getUser().getName());
+            commentDTO.setUserId(comment.getUser().getId());
             commentDTO.setPostId(comment.getPost().getId());
             return commentDTO;
         }).collect(Collectors.toList());

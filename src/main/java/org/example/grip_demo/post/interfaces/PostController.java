@@ -116,7 +116,7 @@ public class PostController {
         Optional<Post> postOptional = postService.getPostById(postId);
         if(postOptional.isPresent()){
             model.addAttribute("post", mapToDto(postOptional.get()));
-            String name =postOptional.get().getUser_id().getName();
+            String name =postOptional.get().getUser().getName();
             model.addAttribute("postId",postId);
             model.addAttribute("name", name);
             return "posts/updatepostform";
@@ -139,7 +139,7 @@ public class PostController {
                 post.setContent(content);
 
                 postService.updatePost(post);
-                return "redirect:/post/"+ post.getClimbingGym_id().getId()+"/"+ postId;
+                return "redirect:/post/"+ post.getClimbingGym().getId()+"/"+ postId;
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
                 return "redirect:/main";
@@ -168,7 +168,7 @@ public class PostController {
                              HttpServletRequest request,
                              Model model,RedirectAttributes redirectAttributes){
         Post post= postService.getPostById(postid).get();
-        String name= post.getUser_id().getName();
+        String name= post.getUser().getName();
         String gymId = climbingid.toString();
 
         //현재 사용중인 사용자 뽑아보리깅
@@ -218,8 +218,8 @@ public class PostController {
         postDto.setId(post.getId());
         postDto.setTitle(post.getTitle());
         postDto.setContent(post.getContent());
-        postDto.setViewCount(post.getView_Count());
-        postDto.setLikeCount(post.getLike_Count());
+        postDto.setViewCount(post.getViewCount());
+        postDto.setLikeCount(post.getLikeCount());
         return postDto;
     }
 
