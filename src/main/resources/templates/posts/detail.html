@@ -162,7 +162,7 @@
         <h3>댓글 작성</h3>
         <form id="comment-form" action="/api/postcomment" method="post">
             <input type="hidden" id="postId" name="postId" th:value="${post.id}">
-            <input type="hidden" id="currentUserName" th:value="${currentUserName}">
+            <input type="hidden" id="currentUserId" th:value="${currentUserId}">
             <input type="hidden" id="climbingId" th:value="${post.getClimbingGym().getId()}">
             <input type="hidden" name="userId" th:value="${post.getUser().getId()}">
             <input type="hidden" id="name" th:value="${post.getUser().getName()}">
@@ -222,14 +222,15 @@
 
     function addCommentToList(comment) {
         console.log('Adding comment:', comment);
-        const currentUserName = document.getElementById('currentUserName').value;
+        const currentUserId = document.getElementById('currentUserId').value;
         let commentsList = document.getElementById('comments-list');
 
         const commentElement = document.createElement('div');
         commentElement.className = 'comment';
         commentElement.id = 'comment-' + comment.id;
 
-        const isOwnComment = comment.userId === currentUserName;
+
+        const isOwnComment = comment.userId === Number(currentUserId);
         commentElement.innerHTML = `
             <p><strong>${comment.name}</strong>: <span>${comment.commentText}</span></p>
             ${isOwnComment ? `

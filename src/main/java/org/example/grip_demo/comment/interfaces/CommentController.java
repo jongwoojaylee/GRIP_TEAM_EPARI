@@ -90,9 +90,23 @@ public class CommentController {
 
 
 //    @PostMapping("/updatecomment/{commentId}")
-//    public ResponseEntity<Comment> updateComment(@PathVariable Long commentId, @RequestBody Comment comment) {
-//    }
+//    public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
 //
+//        Comment updatedComment= commentService.updateComment(comment);
+//
+//
+//
+//
+//        CommentDTO commentDTO = new CommentDTO();
+//        commentDTO.setId(updatedComment.getId());
+//        commentDTO.setCommentText(updatedComment.getCommentText());
+//        commentDTO.setUpdatedAt(updatedComment.getUpdatedAt());
+//        commentDTO.setUserId(updatedComment.getUser().getId());
+//        commentDTO.setPostId(updatedComment.getPost().getId());
+//        return  ResponseEntity.ok(commentDTO);
+//
+//    }
+
 //    @DeleteMapping("/deletecomment/{commentId}")
 //    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
 //        // 댓글 삭제 로직
