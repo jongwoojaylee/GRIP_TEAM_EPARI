@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
 import org.example.grip_demo.comment.domain.Comment;
+import org.example.grip_demo.like.domain.Like;
 import org.example.grip_demo.user.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Entity
@@ -47,6 +49,10 @@ public class Post {
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("createdAt")
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post")
+    private Set<Like> likes;
+
 
     public void setTitle(String title) {
         this.title = title;

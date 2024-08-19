@@ -13,7 +13,7 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="@localhost [2]" uuid="634d5a1a-c9b1-4783-8544-11ccba5148ce">
+    <data-source source="LOCAL" name="gripdbdemo@localhost" uuid="634d5a1a-c9b1-4783-8544-11ccba5148ce">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>

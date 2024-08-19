@@ -238,6 +238,11 @@
                     <button class="edit-btn" onclick="editComment(${comment.id})">수정</button>
                     <button onclick="deleteComment(${comment.id})">삭제</button>
                 </div>
+                <div class="edit-form" id="edit-form-${comment.id}" style="display: none;">
+                    <textarea id="edit-text-${comment.id}" rows="4">${comment.commentText}</textarea>
+                    <button onclick="saveEdit(${comment.id})">저장</button>
+                    <button onclick="cancelEdit(${comment.id})">취소</button>
+                </div>
             ` : ''}
         `;
 
@@ -245,24 +250,32 @@
     }
 
     function editComment(commentId) {
-        const commentElement = document.getElementById('comment-' + commentId);
-        const commentContent = commentElement.querySelector('span').textContent;
-        const newContent = prompt('댓글을 수정하세요:', commentContent);
+        const editForm = document.getElementById(`edit-form-${commentId}`);
+        editForm.style.display = 'block';
 
-        if (newContent) {
-            fetch(`/api/updatecomment/${commentId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ content: newContent })
+    }
+
+    function cancelEdit(commentId) {
+        const editForm = document.getElementById(`edit-form-${commentId}`);
+        editForm.style.display = 'none';
+    }
+
+    function saveEdit(commentId) {
+        const newContent = document.getElementById(`edit-text-${commentId}`).value;
+
+        fetch(`/api/updatecomment/${commentId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ commentText: newContent })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(`comment-${commentId}`).querySelector('span').textContent = newContent;
+                cancelEdit(commentId); // 수정 폼 닫기
             })
-                .then(response => response.json())
-                .then(data => {
-                    commentElement.querySelector('span').textContent = newContent;
-                })
-                .catch(error => console.error('댓글 수정 중 오류 발생:', error));
-        }
+            .catch(error => console.error('댓글 수정 중 오류 발생:', error));
     }
 
     function deleteComment(commentId) {
