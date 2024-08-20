@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/rest/test")
+@RequestMapping("/rest")
 @Slf4j
 public class CongestionRestController {
     private final CongestionService congestionService;
@@ -39,7 +39,7 @@ public class CongestionRestController {
         jsonObj.addProperty("climbingGym", gymId.toString());
 
         JsonArray timeZone = new JsonArray();
-        for(int i = 10; i < 25; i++){
+        for(int i = 10; i < 24; i++){
             JsonObject jsonObj2 = new JsonObject();
             jsonObj2.addProperty("time "+ i, presentCounts.get(i-10));
             timeZone.add(jsonObj2);
@@ -63,26 +63,4 @@ public class CongestionRestController {
 
         return level.toString();
     }
-
-    //특정 시간대의 클라이밍짐 현재인원
-//    @GetMapping("/presentCount/{gymId}/{hour}")
-//    public Integer getPresentCountByGymIdAndHour(@PathVariable Long gymId, @PathVariable int timeZone){
-//        List<Integer> presentCounts = congestionService.getPresentCountByGymId(gymId);
-//
-//        JsonObject specHourCount = new JsonObject();
-//        specHourCount.addProperty("climbingGym", gymId.toString());
-//        specHourCount.addProperty("timeZone", timeZone);
-//
-//        JsonArray timeAndCount = new JsonArray();
-//        timeAndCount.add(presentCounts.get(timeZone));
-//
-//        return specHourCount.get;
-//    }
-
-    // 혼잡도 계산하기
-//    @PostMapping("/congestion")
-//    public double calculateCongestion(@RequestBody Congestion congestion){
-//        return congestionService.getCongestionRatio(congestion);
-//    }
-
 }

@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
     .new-post {
         text-align: right;
         margin-bottom: 20px;
@@ -25,6 +31,44 @@
     .new-post a:hover {
         background-color: #5cbf2a;
     }
+
+    /* Flexbox를 사용하여 지도와 그래프를 나란히 배치 */
+    .map-chart-container {
+        display: flex;
+        align-items: stretch; /* 두 요소를 같은 높이로 맞춤 */
+        justify-content: center; /* 중앙 정렬 */
+        gap: 20px; /* 지도와 그래프 사이의 간격 */
+        width: 100%;
+        max-width: 100vw; /* 전체 화면 너비 설정 */
+        box-sizing: border-box; /* 패딩과 마진이 너비 계산에 포함되도록 설정 */
+    }
+
+    .map-chart-container > div {
+        flex: 1;
+        position: relative;
+        aspect-ratio: 1 / 1; /* 정사각형 비율 유지 */
+    }
+
+    #map {
+        background-color: #e5e5e5; /* 지도 로딩 중 색상 (선택적) */
+    }
+
+    .chart-container {
+        /* 그래프 내부 스타일이 필요할 경우 여기에 추가 */
+    }
+
+    section {
+        margin-top: 20px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
 </style>
 <body>
 <header id="header" th:replace="header.html"></header>
@@ -33,7 +77,10 @@
     <h1 th:text="${climbinggym.name}">클라이밍짐 이름</h1>
     <p th:text="${climbinggym.address}">클라이밍짐 주소</p>
 </div>
-<div id="map" style="width: 80%; height: 300px;"></div>
+<div class="map-chart-container">
+    <div id="map"></div>
+    <div class="chart-container" th:replace="bargraph.html"></div>
+</div>
 <section>
     <h2>게시글 목록</h2>
     <div class="new-post">
@@ -55,34 +102,36 @@
         loadClimbingGym();
     });
 
-    let map = new naver.maps.Map('map', {
-        center: new naver.maps.LatLng(37.5200704, 127.0215399),
-        zoom: 13
-    });
-function loadClimbingGym() {
-    const climbingId = /*[[${climbinggym.id}]]*/ 0;
-    fetch(`/api/climbinggym?climbingid=${climbingId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            let position = new naver.maps.LatLng(data.mapY, data.mapX);
 
-            let marker = new naver.maps.Marker({
-                position: position,
-                map: map,
-                title: data.name
-            });
-
-            map.setCenter(position);
-            map.setZoom(15); // 원하는 줌 레벨 설정
-        })
-        .catch(error => {
-            console.error(error);
+    function loadClimbingGym() {
+        const climbingId = /*[[${climbinggym.id}]]*/ 0;
+        let map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(37.5200704, 127.0215399),
+            zoom: 13
         });
-}
+
+        fetch(`/api/climbinggym?climbingid=${climbingId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                let position = new naver.maps.LatLng(data.mapY, data.mapX);
+
+                let marker = new naver.maps.Marker({
+                    position: position,
+                    map: map,
+                    title: data.name
+                });
+
+                map.setCenter(position);
+                map.setZoom(15); // 원하는 줌 레벨 설정
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 </script>
 </html>
