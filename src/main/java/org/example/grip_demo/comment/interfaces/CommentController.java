@@ -85,7 +85,6 @@ public class CommentController {
 
     }
 
-
     @PostMapping("/updatecomment/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO forCommentText) {
         CommentDTO commentDTO=new CommentDTO();
