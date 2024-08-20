@@ -197,9 +197,7 @@
                     return response.json(); // 댓글 작성 결과를 JSON으로 반환
                 })
                 .then(data => {
-                    console.log("1 여기까지 성공.....")
                     addCommentToList(data); // 댓글을 목록에 추가
-                    console.log("2 여기까지 되나용")
                     commentForm.reset(); // 폼 초기화
                     window.location.href = `/post/${climbingId}/${postId}`;
                 })
