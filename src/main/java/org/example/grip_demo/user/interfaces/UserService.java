@@ -28,6 +28,11 @@ public class UserService {
         return user.isPresent();
     }
 
+    public boolean isUserNickNameExist(String NickName) {
+        Optional<User> user = userRepository.findByNickName(NickName);
+        return user.isPresent();
+    }
+
     public User createUser(User user) {
         Role role = roleService.findRoleByName("ROLE_USER");
         if(role==null)
