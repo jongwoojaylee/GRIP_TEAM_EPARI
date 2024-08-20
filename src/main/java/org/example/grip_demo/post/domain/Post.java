@@ -38,6 +38,7 @@ public class Post {
     @Column(name = "Like_Count", nullable = true)
     private int likeCount;
 
+
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = true)
     private User user;
@@ -50,8 +51,8 @@ public class Post {
     @OrderBy("createdAt")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post")
-    private Set<Like> likes;
+//    @OneToMany(mappedBy = "post")
+//    private Set<Like> likes;
 
 
     public void setTitle(String title) {

@@ -51,14 +51,11 @@ public class CommentController {
 
         Comment savedComment = commentService.createComment(comment);
 
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setId(savedComment.getId());
-        commentDTO.setCommentText(savedComment.getCommentText());
-        commentDTO.setCreatedAt(savedComment.getCreatedAt());
-        commentDTO.setUpdatedAt(savedComment.getUpdatedAt());
-        commentDTO.setName(savedComment.getUser().getName());
-        commentDTO.setUserId(savedComment.getUser().getId());
-        commentDTO.setPostId(savedComment.getPost().getId());
+        CommentDTO commentDTO =
+                new CommentDTO(savedComment.getId(),savedComment.getCommentText(),
+                savedComment.getCreatedAt(), savedComment.getUpdatedAt(),savedComment.getUser().getName(),
+                savedComment.getUser().getId(),savedComment.getPost().getId());
+
         log.info(commentDTO.toString());
 
         return ResponseEntity.ok(commentDTO);
@@ -90,14 +87,24 @@ public class CommentController {
 
 
     @PostMapping("/updatecomment/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO forCommentText) {
+        CommentDTO commentDTO=new CommentDTO();
+        Comment fuckingNewComment=commentService.updateComment(commentId,forCommentText.getCommentText());
+        commentDTO.setId(fuckingNewComment.getId());
+        commentDTO.setCommentText(fuckingNewComment.getCommentText());
+        commentDTO.setCreatedAt(fuckingNewComment.getCreatedAt());
+        commentDTO.setUpdatedAt(fuckingNewComment.getUpdatedAt());
+        commentDTO.setName(fuckingNewComment.getUser().getName());
+        commentDTO.setUserId(fuckingNewComment.getUser().getId());
+        commentDTO.setPostId(fuckingNewComment.getPost().getId());
 
         return  ResponseEntity.ok(commentDTO);
 
     }
 
-//    @DeleteMapping("/deletecomment/{commentId}")
-//    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
-//        // 댓글 삭제 로직
-//    }
+    @DeleteMapping("/deletecomment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.ok().build();
+    }
 }

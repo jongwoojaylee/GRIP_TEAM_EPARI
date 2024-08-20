@@ -22,5 +22,6 @@ public class CommentDTO {
     private Long userId;
     private Long postId;
 
-
 }
+
+

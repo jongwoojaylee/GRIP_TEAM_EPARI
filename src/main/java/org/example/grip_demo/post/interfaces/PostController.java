@@ -184,14 +184,11 @@ public class PostController {
         Claims claims=jwtTokenizer.parseAccessToken(token);
         String currentUserId=claims.get("userId").toString();
 
-        List<Comment> comments = post.getComments();
-
         model.addAttribute("post", post);
         model.addAttribute("name",name);
         model.addAttribute("gymId",gymId);
         model.addAttribute("currentUserId",currentUserId);
-        model.addAttribute("comments",comments);
-        log.info("post가 뭔데에 : "+post.toString());
+
         return "posts/detail";
     }
 
