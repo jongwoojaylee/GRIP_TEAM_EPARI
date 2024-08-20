@@ -19,5 +19,4 @@ public class PostDto {
     private ClimbingGym climbingGym;
 
     private User user;
-    private List<CommentDTO> comments;
 }
