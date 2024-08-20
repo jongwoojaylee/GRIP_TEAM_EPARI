@@ -158,14 +158,13 @@
         </div>
         <div class="post-content" th:text="${post.content}">내용</div>
     </div>
+    <div th:replace="/like/like.html"></div>
     <div class="comment-form">
         <h3>댓글 작성</h3>
         <form id="comment-form" action="/api/postcomment" method="post">
             <input type="hidden" id="postId" name="postId" th:value="${post.id}">
-            <input type="hidden" id="currentUserId" th:value="${currentUserId}">
+            <input type="hidden" name="userId" id="currentUserId" th:value="${currentUserId}">
             <input type="hidden" id="climbingId" th:value="${post.getClimbingGym().getId()}">
-            <input type="hidden" name="userId" th:value="${post.getUser().getId()}">
-            <input type="hidden" id="name" th:value="${post.getUser().getName()}">
             <div class="form-group">
                 <label for="commentText">댓글 내용:</label>
                 <textarea id="commentText" name="commentText" rows="4" required></textarea>
