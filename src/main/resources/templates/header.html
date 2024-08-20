@@ -6,17 +6,19 @@
 </head>
 <body>
 <header id="header">
-    <img src="GripLogo.png" alt="Grip Logo" class="logo">
+    <a href="/main">
+        <img src="/GripLogo.png" alt="Grip Logo" class="logo">
+    </a>
     <ul>
-        <li id="left-nav">
-            <a href="/main">지도</a>
-        </li>
+<!--        <li id="left-nav">-->
+<!--            <a href="/main">지도</a>-->
+<!--        </li>-->
         <li><a href="/postlist">게시판</a></li>
-    </ul>
-    <ul class="right-nav">
         <li>
             <a href="/searchform">검색</a>
         </li>
+    </ul>
+    <ul class="right-nav">
         <li>
             <!--            <a th:if="${username == null}" href="/loginform">로그인</a>-->
             <a sec:authorize="isAnonymous()" href="/loginform">로그인</a>

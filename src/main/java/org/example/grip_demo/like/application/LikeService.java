@@ -10,7 +10,9 @@ import org.example.grip_demo.user.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class LikeService {
@@ -44,5 +46,9 @@ public class LikeService {
 
     public Like getLikeByPostIdAndUserId(Long postId, Long userId) {
         return likeDomainService.getLikeByPostIdAndUserId(postId, userId);
+    }
+
+    public List<Like> getLikesByPostId(Long postId) {
+        return likeDomainService.getLikeByPostId(postId);
     }
 }

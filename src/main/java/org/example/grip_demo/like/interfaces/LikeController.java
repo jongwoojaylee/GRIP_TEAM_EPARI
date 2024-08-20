@@ -19,31 +19,31 @@ public class LikeController {
         this.jwtTokenizer = jwtTokenizer;
     }
 
-    @GetMapping("/like")
-    public String like(HttpServletRequest request, Model model) {
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            Optional<Cookie> accessTokenCookie = Arrays.stream(cookies)
-                    .filter(cookie -> "accessToken".equals(cookie.getName()))
-                    .findFirst();
-
-            if (accessTokenCookie.isPresent()) {
-                String accessToken = accessTokenCookie.get().getValue();
-                Claims claims = jwtTokenizer.parseAccessToken(accessToken);
-
-                if (claims != null) {
-                    Long userId = claims.get("userId", Long.class);
-                    String username = claims.get("username", String.class);
-                    String name = claims.get("name", String.class);
-
-                    model.addAttribute("userId", userId);
-                    model.addAttribute("username", username);
-                    model.addAttribute("name", name);
-                }
-
-            }
-        }
-        return "like/like";
-    }
+//    @GetMapping("/like")
+//    public String like(HttpServletRequest request, Model model) {
+//        Cookie[] cookies = request.getCookies();
+//
+//        if (cookies != null) {
+//            Optional<Cookie> accessTokenCookie = Arrays.stream(cookies)
+//                    .filter(cookie -> "accessToken".equals(cookie.getName()))
+//                    .findFirst();
+//
+//            if (accessTokenCookie.isPresent()) {
+//                String accessToken = accessTokenCookie.get().getValue();
+//                Claims claims = jwtTokenizer.parseAccessToken(accessToken);
+//
+//                if (claims != null) {
+//                    Long userId = claims.get("userId", Long.class);
+//                    String username = claims.get("username", String.class);
+//                    String name = claims.get("name", String.class);
+//
+//                    model.addAttribute("userId", userId);
+//                    model.addAttribute("username", username);
+//                    model.addAttribute("name", name);
+//                }
+//
+//            }
+//        }
+//        return "like/like";
+//    }
 }
