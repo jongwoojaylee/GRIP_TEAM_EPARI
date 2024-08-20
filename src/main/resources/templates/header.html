@@ -22,7 +22,7 @@
             <a sec:authorize="isAnonymous()" href="/loginform">로그인</a>
             <!--            <div th:if="${username != null}">-->
             <div sec:authorize="isAuthenticated()">
-                <a th:text="${name}" th:href="@{'/userinfo/' + ${userId}}">name</a>님
+                <a sec:authentication="principal.username" th:href="@{'/userinfo/' + ${#authentication.principal.userId}}">name</a>님
                 <a href="/logout">로그아웃</a>
             </div>
         </li>
