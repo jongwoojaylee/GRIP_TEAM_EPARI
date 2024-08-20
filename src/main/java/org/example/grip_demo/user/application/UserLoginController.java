@@ -46,27 +46,37 @@ public class UserLoginController {
     @PostMapping("/login")
     public String processLogin(@RequestParam String username,
                                @RequestParam String password,
-                               HttpServletResponse response){
+                               HttpServletResponse response,
+                               Model model){
+        //kakao user의 일반 로그인 방지
+        if(username.startsWith("kakao_")) {
+            model.addAttribute("error", "로그인에 실패하였습니다");
+            return "redirect:/loginform";
+        }
+
         User user =  userService.findUserByUsername(username).orElse(null);
+
         if(user == null){
+            model.addAttribute("error", "로그인에 실패하였습니다");
             return "redirect:/loginform";
         }
         if(!passwordEncoder.matches(password,user.getPassword())){
+            model.addAttribute("error", "로그인에 실패하였습니다");
             return "redirect:/loginform";
         }
 
         List<String> roles = user.getRoles().stream().map(Role::getName).toList();
 
         String accessToken = jwtTokenizer.createAccessToken(
-                user.getId(), user.getEmail(), user.getName(), user.getUsername(), roles);
+                user.getId(), user.getEmail(), user.getNickName(), user.getName(), user.getUsername(), roles);
         String refreshToken = jwtTokenizer.createRefreshToken(
-                user.getId(), user.getEmail(), user.getName(), user.getUsername(), roles);
+                user.getId(), user.getEmail(), user.getNickName(), user.getName(), user.getUsername(), roles);
 
         //쿠키 생성 후 쿠키 전달
         Cookie accessTokenCookie = new Cookie("accessToken",accessToken);
-        accessTokenCookie.setHttpOnly(true);  //보안 (쿠키값을 자바스크립트같은곳에서는 접근할수 없어요.)
+        accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.ACCESS_TOKEN_EXPIRE_COUNT/1000)); //30분 쿠키의 유지시간 단위는 초 ,  JWT의 시간단위는 밀리세컨드
+        accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.ACCESS_TOKEN_EXPIRE_COUNT/1000)); //30분
 
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
