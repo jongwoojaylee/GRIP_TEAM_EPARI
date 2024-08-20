@@ -111,6 +111,13 @@
             <input type="text" id="name" th:field="${user.name}" required>
         </div>
         <div class="form-group">
+            <label for="nickName">Nick name:</label>
+            <input type="text" id="nickName" th:field="${user.nickName}" required>
+            <button type="button" id="checkNickNameButton">Check nick name</button>
+            <span id="nickNameFeedback" class="error" style="display: none;"></span>
+            <span th:if="${nickNameError}" class="error" th:text="${nickNameError}"></span>
+        </div>
+        <div class="form-group">
             <label for="phoneNumber">Phone number:</label>
             <input type="text" id="phoneNumber" th:field="${user.phoneNumber}" required>
         </div>
@@ -145,6 +152,7 @@
             var passwordMatch = false;
             var usernameValid = false;
             var emailValid = false;
+            var nickNameValid = false;
 
             // Password confirmation
             $('#confirmPassword').on('input', function () {
@@ -189,6 +197,20 @@
                     checkFormValidity();
                 });
             });
+            // Nickname check
+            $('#checkNickNameButton').on('click', function() {
+                var nickName = $('#nickName').val();
+                $.get('/api/check/nickname', { nickName: nickName }, function(data) {
+                    if (data.isAvailable) {
+                        $('#nickNameFeedback').removeClass('success').addClass('error').text('Nickname already exists').show();
+                        nickNameValid = false;
+                    } else {
+                        $('#nickNameFeedback').removeClass('error').addClass('success').text('Nickname is available').show();
+                        nickNameValid = true;
+                    }
+                    checkFormValidity();
+                });
+            });
 
             // Form submission
             $('#signupForm').on('submit', function(e) {
@@ -202,13 +224,13 @@
                     passwordMatch = true;
                 }
                 checkFormValidity();
-                if (!usernameValid || !emailValid || !passwordMatch) {
+                if (!usernameValid || !emailValid || !passwordMatch || !nickNameValid) {
                     e.preventDefault();
                 }
             });
 
             function checkFormValidity() {
-                if (usernameValid && emailValid && passwordMatch) {
+                if (usernameValid && emailValid && passwordMatch && nickNameValid) {
                     $('#submitButton').prop('disabled', false);
                 } else {
                     $('#submitButton').prop('disabled', true);

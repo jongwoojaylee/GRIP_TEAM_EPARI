@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
+    private final Long userId;
     private final String username;
     private final String password;
     private final String name;
     private final List<GrantedAuthority> authorities;
 
-    public CustomUserDetails(String username, String password, String name, List<String> roles){
+    public CustomUserDetails(Long userId, String username, String password, String name, List<String> roles){
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.name = name;
@@ -23,6 +25,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     @Override
