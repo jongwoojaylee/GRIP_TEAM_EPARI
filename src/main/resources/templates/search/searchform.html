@@ -4,6 +4,28 @@
     <meta charset="UTF-8">
     <title>Search Form</title>
     <style>
+        .main-content {
+            margin-top: 150px; /* Adjust if header height changes */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+            /* Center content vertically if height is more than viewport */
+            min-height: calc(100vh - 60px);
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -123,63 +145,64 @@
 </head>
 <body>
 <header id="header" th:replace="header.html"></header>
-
+<div class="main-content">
 <!-- 검색창 -->
-<div class="search-container">
-    <h1>Search Posts</h1>
-    <form action="/search" method="get">
-        <input type="text" id="query" name="query" th:value="${query}" />
-        <button type="submit">Search</button>
-    </form>
-</div>
-
-<!-- 검색 결과 -->
-<div class="search-results">
-    <!-- post 결과 -->
-    <h2>Post Results</h2>
-    <div th:if="${posts == null }" class="no-results">
-        검색 결과가 없습니다.
+    <div class="search-container">
+        <h1>Search Posts</h1>
+        <form action="/search" method="get">
+            <input type="text" id="query" name="query" th:value="${query}" />
+            <button type="submit">Search</button>
+        </form>
     </div>
-    <div th:if="${posts != null}">
-        <div th:each="post : ${posts}" class="post-item">
-            <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${post.getClimbingGym().getId()}, postId=${post.getId()})}">
-                <h3 th:text="${post.title}">Post Title</h3>
-            </a>
-            <p th:text="${post.content}">Post content</p>
+
+    <!-- 검색 결과 -->
+    <div class="search-results">
+        <!-- post 결과 -->
+        <h2>Post Results</h2>
+        <div th:if="${posts == null }" class="no-results">
+            검색 결과가 없습니다.
         </div>
+        <div th:if="${posts != null}">
+            <div th:each="post : ${posts}" class="post-item">
+                <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${post.getClimbingGym().getId()}, postId=${post.getId()})}">
+                    <h3 th:text="${post.title}">Post Title</h3>
+                </a>
+                <p th:text="${post.content}">Post content</p>
+            </div>
 
-        <div class="pagination">
-            <!-- Previous button -->
-            <a th:if="${currentPostPage > 0}" th:href="@{/search(query=${query}, postPage=${currentPostPage - 1}, climbingGymPage=${currentClimbingGymsPage})}">Previous</a>
+            <div class="pagination">
+                <!-- Previous button -->
+                <a th:if="${currentPostPage > 0}" th:href="@{/search(query=${query}, postPage=${currentPostPage - 1}, climbingGymPage=${currentClimbingGymsPage})}">Previous</a>
 
-            <!-- Page number display -->
-            <span>Page [[${currentPostPage + 1}]] of [[${totalPostPages}]]</span>
+                <!-- Page number display -->
+                <span>Page [[${currentPostPage + 1}]] of [[${totalPostPages}]]</span>
 
-            <!-- Next button -->
-            <a th:if="${currentPostPage < totalPostPages - 1}" th:href="@{/search(query=${query}, postPage=${currentPostPage + 1}, climbingGymPage=${currentClimbingGymsPage})}">Next</a>
+                <!-- Next button -->
+                <a th:if="${currentPostPage < totalPostPages - 1}" th:href="@{/search(query=${query}, postPage=${currentPostPage + 1}, climbingGymPage=${currentClimbingGymsPage})}">Next</a>
+            </div>
         </div>
-    </div>
-    <!-- gym 결과 -->
-    <h2>Climbing Gym Results</h2>
-    <div th:if="${climbingGyms == null}" class="no-results">
-        검색 결과가 없습니다.
-    </div>
-    <div th:if="${climbingGyms != null}">
-        <div th:each="gym : ${climbingGyms}" class="post-item">
-            <a th:href="@{/climbinggym(climbingid=${gym.id})}">
-                <h3 th:text="${gym.name}">Climbing Gym Name</h3>
-            </a>
+        <!-- gym 결과 -->
+        <h2>Climbing Gym Results</h2>
+        <div th:if="${climbingGyms == null}" class="no-results">
+            검색 결과가 없습니다.
         </div>
+        <div th:if="${climbingGyms != null}">
+            <div th:each="gym : ${climbingGyms}" class="post-item">
+                <a th:href="@{/climbinggym(climbingid=${gym.id})}">
+                    <h3 th:text="${gym.name}">Climbing Gym Name</h3>
+                </a>
+            </div>
 
-        <div class="pagination">
-            <!-- Previous button -->
-            <a th:if="${currentClimbingGymsPage > 0}" th:href="@{/search(query=${query}, postPage=${currentPostPage}, climbingGymPage=${currentClimbingGymsPage - 1})}">Previous</a>
+            <div class="pagination">
+                <!-- Previous button -->
+                <a th:if="${currentClimbingGymsPage > 0}" th:href="@{/search(query=${query}, postPage=${currentPostPage}, climbingGymPage=${currentClimbingGymsPage - 1})}">Previous</a>
 
-            <!-- Page number display -->
-            <span>Page [[${currentClimbingGymsPage + 1}]] of [[${totalClimbingGymsPages}]]</span>
+                <!-- Page number display -->
+                <span>Page [[${currentClimbingGymsPage + 1}]] of [[${totalClimbingGymsPages}]]</span>
 
-            <!-- Next button -->
-            <a th:if="${currentClimbingGymsPage < totalClimbingGymsPages - 1}" th:href="@{/search(query=${query}, postPage=${currentPostPage}, climbingGymPage=${currentClimbingGymsPage + 1})}">Next</a>
+                <!-- Next button -->
+                <a th:if="${currentClimbingGymsPage < totalClimbingGymsPages - 1}" th:href="@{/search(query=${query}, postPage=${currentPostPage}, climbingGymPage=${currentClimbingGymsPage + 1})}">Next</a>
+            </div>
         </div>
     </div>
 </div>

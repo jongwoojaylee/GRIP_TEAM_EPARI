@@ -18,20 +18,15 @@
             <a href="/searchform">검색</a>
         </li>
         <li>
+            <!--            <a th:if="${username == null}" href="/loginform">로그인</a>-->
             <a sec:authorize="isAnonymous()" href="/loginform">로그인</a>
+            <!--            <div th:if="${username != null}">-->
             <div sec:authorize="isAuthenticated()">
-                <!-- 현재 인증된 사용자 이름을 표시하고, userId를 이용해 링크 설정 -->
-                <a th:href="@{'/userinfo/' + ${#authentication.principal.userId}}"
-                   th:text="${#authentication.principal.username}">name</a>님
+                <a sec:authentication="principal.username" th:href="@{'/userinfo/' + ${#authentication.principal.userId}}">name</a>님
                 <a href="/logout">로그아웃</a>
             </div>
         </li>
     </ul>
 </header>
-<h1>hi</h1>
-<a href="/loginform">login</a>
-<a href="/registeruserform">signup</a>
-<a th:href="@{'/userinfo/' + ${userId}}">userinfo</a>
-
 </body>
 </html>
