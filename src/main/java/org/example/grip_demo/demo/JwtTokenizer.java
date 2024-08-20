@@ -26,13 +26,14 @@ public class JwtTokenizer {
 
 
     //jwt 토큰 생성
-    private String createToken(Long id, String email, String name, String username,
+    private String createToken(Long id, String email, String NickName, String name, String username,
                                List<String> roles, Long expire, byte[] secretKey){
 
         Claims claims = Jwts.claims().setSubject(email);
 
         claims.put("userId",id);
         claims.put("username",username);
+        claims.put("nickName",NickName);
         claims.put("name",name);
         claims.put("roles", roles);
 
@@ -47,12 +48,12 @@ public class JwtTokenizer {
     }
 
     //ACCESS Token 생성
-    public String createAccessToken(Long id, String email, String name, String username, List<String> roles){
-        return createToken(id,email,name,username,roles,ACCESS_TOKEN_EXPIRE_COUNT,accessSecret);
+    public String createAccessToken(Long id, String email, String NickName, String name, String username, List<String> roles){
+        return createToken(id,email,NickName,name,username,roles,ACCESS_TOKEN_EXPIRE_COUNT,accessSecret);
     }
     //Refresh Token생성
-    public String createRefreshToken(Long id, String email, String name, String username, List<String> roles){
-        return createToken(id,email,name,username,roles,REFRESH_TOKEN_EXPIRE_COUNT,refreshSecret);
+    public String createRefreshToken(Long id, String email, String NickName, String name, String username, List<String> roles){
+        return createToken(id,email,NickName,name,username,roles,REFRESH_TOKEN_EXPIRE_COUNT,refreshSecret);
     }
     //Refresh Token 으로 Access Token 생성
     public String createAccessTokenFromRefreshToken(String refreshToken){
@@ -90,6 +91,11 @@ public class JwtTokenizer {
         return claims.get("userId", Long.class);
     }
 
+    public String getNickNameFromToken(String accessToken){
+        Claims claims = parseAccessToken(accessToken);
+        return claims.get("nickName", String.class);
+    }
+
     public Long getUserIdFromCookie(HttpServletRequest request){
 
         Cookie[] cookies = request.getCookies();
@@ -103,5 +109,20 @@ public class JwtTokenizer {
         }
         return null;
     }
+
+    public String getNickNameFromCookie(HttpServletRequest request){
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("accessToken")) {
+                    String accessToken = cookie.getValue();
+                    return getNickNameFromToken(accessToken);
+                }
+            }
+        }
+        return null;
+    }
+
 
 }

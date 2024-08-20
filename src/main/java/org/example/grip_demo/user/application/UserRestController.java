@@ -45,8 +45,6 @@ public class UserRestController {
         String username = jsonObject.get("id").getAsString();
         String name = jsonObject.getAsJsonObject("properties").get("nickname").getAsString();
         // 결과 출력 test
-        System.out.println("ID: " + username);
-        System.out.println("Nickname: " + name);
 
         User user = userService.findUserByUsername("kakao_"+username).orElse(null);
 
@@ -56,15 +54,15 @@ public class UserRestController {
             List<String> roles = user.getRoles().stream().map(Role::getName).toList();
 
             String accessToken = jwtTokenizer.createAccessToken(
-                    user.getId(), user.getEmail(), user.getName(), user.getUsername(), roles);
+                    user.getId(), user.getEmail(), user.getNickName(), user.getName(), user.getUsername(), roles);
             String refreshToken = jwtTokenizer.createRefreshToken(
-                    user.getId(), user.getEmail(), user.getName(), user.getUsername(), roles);
+                    user.getId(), user.getEmail(), user.getNickName(), user.getName(), user.getUsername(), roles);
 
             //쿠키 생성 후 쿠키 전달
             Cookie accessTokenCookie = new Cookie("accessToken",accessToken);
             accessTokenCookie.setHttpOnly(true);
             accessTokenCookie.setPath("/");
-            accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.ACCESS_TOKEN_EXPIRE_COUNT/1000)); //30분 쿠키의 유지시간 단위는 초 ,  JWT의 시간단위는 밀리세컨드
+            accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.ACCESS_TOKEN_EXPIRE_COUNT/1000)); //30분
 
             Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
             refreshTokenCookie.setHttpOnly(true);
@@ -74,7 +72,6 @@ public class UserRestController {
             response.addCookie(accessTokenCookie);
             response.addCookie(refreshTokenCookie);
 
-            System.out.println(refreshToken);
 
             RefreshToken KakaoRefreshToken = new RefreshToken();
             KakaoRefreshToken.setUser(user);
