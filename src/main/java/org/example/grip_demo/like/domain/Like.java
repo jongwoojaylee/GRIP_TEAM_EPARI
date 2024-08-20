@@ -1,10 +1,14 @@
 package org.example.grip_demo.like.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.example.grip_demo.post.domain.Post;
 import org.example.grip_demo.user.domain.User;
 
 @Entity(name = "USER_POST_LIKES")
+@Setter
+@Getter
 public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +21,4 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "POST_ID", nullable = false)
     private Post post;
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }
