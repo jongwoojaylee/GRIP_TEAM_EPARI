@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f0f0f0;
             margin: 0;
             padding: 0;
             display: flex;
@@ -34,19 +34,18 @@
         }
         .form-group {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 0.5rem;
-            align-items: flex-start;
         }
-        .form-group input, .form-group select {
-            width: 100%;
+        .form-group label {
+            flex-basis: 30%;
+            text-align: left;
+        }
+        .form-group input {
+            flex: 1;
             padding: 0.5rem;
             border: 1px solid #ccc;
             border-radius: 4px;
-        }
-        .form-group label {
-            text-align: left;
-            font-weight: bold;
         }
         .form-group button {
             background-color: #28a745; /* 녹색 버튼 */
@@ -56,7 +55,7 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 0.875rem;
-            width: auto;
+            height: 38px; /* Align button height with input fields */
         }
         .form-group button:hover {
             background-color: #218838; /* 버튼 호버 시 어두운 녹색 */
@@ -73,6 +72,18 @@
             display: block;
             margin-top: 0.5rem;
         }
+        .links {
+            margin-top: 1rem;
+        }
+        .links a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            font-size: 0.9rem;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -88,6 +99,13 @@
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" id="name" th:value="${user.name}" th:field="${user.name}" required>
+        </div>
+        <div class="form-group">
+            <label for="nickName">Nick name:</label>
+            <input type="text" id="nickName" th:field="${user.nickName}" required>
+            <button type="button" id="checkNickNameButton">Check nick name</button>
+            <span id="nickNameFeedback" class="error" style="display: none;"></span>
+            <span th:if="${nickNameError}" class="error" th:text="${nickNameError}"></span>
         </div>
         <div class="form-group">
             <label for="phoneNumber">Phone number:</label>
@@ -111,7 +129,7 @@
             <span id="emailFeedback" class="error" style="display: none;"></span>
             <span th:if="${emailError}" class="error" th:text="${emailError}"></span>
         </div>
-        <div class="form-group">
+        <div>
             <button type="submit" id="submitButton" disabled>Sign Up</button>
         </div>
     </form>
@@ -120,6 +138,7 @@
 <script>
     $(document).ready(function () {
         var emailValid = false;
+        var nickNameValid = false;
 
         // Email check
         $('#checkEmailButton').on('click', function() {
@@ -136,16 +155,31 @@
             });
         });
 
+        // Nickname check
+        $('#checkNickNameButton').on('click', function() {
+            var nickName = $('#nickName').val();
+            $.get('/api/check/nickname', { nickName: nickName }, function(data) {
+                if (data.isAvailable) {
+                    $('#nickNameFeedback').removeClass('success').addClass('error').text('Nickname already exists').show();
+                    nickNameValid = false;
+                } else {
+                    $('#nickNameFeedback').removeClass('error').addClass('success').text('Nickname is available').show();
+                    nickNameValid = true;
+                }
+                checkFormValidity();
+            });
+        });
+
         // Form submission
         $('#signupForm').on('submit', function(e) {
             checkFormValidity();
-            if (!emailValid) {
+            if (!emailValid || !nickNameValid) {
                 e.preventDefault();
             }
         });
 
         function checkFormValidity() {
-            if (emailValid) {
+            if (emailValid && nickNameValid) {
                 $('#submitButton').prop('disabled', false);
             } else {
                 $('#submitButton').prop('disabled', true);

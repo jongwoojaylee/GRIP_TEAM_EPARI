@@ -104,9 +104,18 @@ public class UserRestController {
     }
 
     @GetMapping("/api/check/email")
-    public ResponseEntity<Map<String, Boolean>> checkUserEmailAvailability(@RequestParam String email) {
+    public ResponseEntity<Map<String, Boolean>> checkEmailAvailability(@RequestParam String email) {
         boolean isAvailable = userService.isUserEmailExist(email);
         Map<String, Boolean> response = new HashMap<>();
+        response.put("isAvailable", isAvailable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/check/nickname")
+    public ResponseEntity<Map<String, Boolean>> checkNickNameAvailability(@RequestParam String nickName) {
+        boolean isAvailable = userService.isUserNickNameExist(nickName);
+        Map<String, Boolean> response = new HashMap<>();
+        System.out.println(isAvailable);
         response.put("isAvailable", isAvailable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

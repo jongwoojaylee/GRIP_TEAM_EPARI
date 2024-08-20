@@ -6,20 +6,25 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
         }
 
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            position: relative; /* Use absolute positioning */
+            top: 50%; /* Move down from top by 50% of the viewport height */
+            left: 50%; /* Move right from left by 50% of the viewport width */
+            transform: translate(-50%, -50%); /* Center the container */
         }
 
         h1 {
@@ -47,13 +52,20 @@
             background-color: #45a049;
         }
     </style>
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
+
+<!-- 헤더를 포함시키는 부분 -->
+<header id="header" th:replace="header.html"></header>
+
+<!-- User Information -->
 <div class="container">
     <h1>User Information</h1>
     <div>
         <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
         <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+        <p><strong>Nick name:</strong> <span th:text="${user.nickName}"></span></p>
         <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
         <p><strong>Phone number:</strong> <span th:text="${user.phoneNumber}"></span></p>
         <p><strong>Gender:</strong> <span th:text="${user.gender ? '남자' : '여자'}"></span></p>
@@ -61,5 +73,6 @@
         <a th:href="${updateurl}" class="update-button">Update</a>
     </div>
 </div>
+
 </body>
 </html>
