@@ -3,11 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Login Form</title>
-    <script>
-        function showError(message) {
-            alert(message);
-        }
-    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -96,12 +91,10 @@
 
         <button type="submit">로그인</button>
     </form>
+    <div class="links">
+        <a href="/registeruserform">Register</a>
+        <a th:href="${link}">Kakao Login</a>
+    </div>
 </div>
-
-
-
-
-
-
 </body>
 </html>
