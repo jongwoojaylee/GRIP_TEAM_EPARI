@@ -17,6 +17,7 @@ public class PostDto {
     private Integer viewCount;
     private Integer likeCount;
     private ClimbingGym climbingGym;
+    private String imageUrl;
 
     private User user;
 }

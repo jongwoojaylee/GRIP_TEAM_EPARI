@@ -44,6 +44,13 @@
             white-space: pre-wrap;
         }
 
+        .post-image img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
         .back-button {
             display: inline-block;
             padding: 0.5em 1em;
@@ -155,6 +162,9 @@
             <span th:text="'작성자: ' + ${name}">작성자 이름</span> |
             <span th:text="'작성일: ' + ${post.CreatedAt}">작성일</span>
             <span th:text="'클라이밍장 아이디: '+${gymId}">클라이밍장 아이디</span>
+        </div>
+        <div class="post-image" th:if="${post.imageUrl}!= null">
+            <img th:src="@{${post.imageUrl}}" alt="Post Image">
         </div>
         <div class="post-content" th:text="${post.content}">내용</div>
     </div>

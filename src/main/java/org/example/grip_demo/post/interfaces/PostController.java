@@ -15,8 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -90,6 +94,7 @@ public class PostController {
                              @RequestParam("content") String content,
                              @RequestParam("climbingid") Long climbingGymId,
                              @RequestParam("userId") Long userid,
+                             @RequestParam("image") MultipartFile image,
                              HttpServletRequest request,
                              RedirectAttributes redirectAttributes){
 
@@ -97,6 +102,13 @@ public class PostController {
             PostDto postDto = new PostDto();
             postDto.setTitle(title);
             postDto.setContent(content);
+            log.info("Image ??" +image.toString());
+            if (!image.isEmpty()) {
+                String imageUrl = saveImage(image);
+                log.info("이미지 Url몬뎅 : "+imageUrl);
+                postDto.setImageUrl(imageUrl);
+            }
+
             ClimbingGym climbingGym=new ClimbingGym();
             climbingGym.setId(climbingGymId);
             postDto.setClimbingGym(climbingGym);
@@ -200,6 +212,7 @@ public class PostController {
         post.setUser_id(postDto.getUser());
         post.setClimbingGymId(postDto.getClimbingGym());
         post.setCreatedAt(LocalDateTime.now());
+        post.setImageUrl(postDto.getImageUrl());
         post.setViewCount(0);
         post.setLikeCount(0);
         return post;
@@ -213,6 +226,21 @@ public class PostController {
         postDto.setViewCount(post.getViewCount());
         postDto.setLikeCount(post.getLikeCount());
         return postDto;
+    }
+
+    private String saveImage(MultipartFile image) throws Exception {
+        String folder = "uploads/";
+        Path uploadPath = Paths.get(folder);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        byte[] bytes = image.getBytes();
+        String imageName = LocalDateTime.now().toString() + "_" + image.getOriginalFilename();
+        Path path = Paths.get(folder + imageName);
+        Files.write(path, bytes);
+        return "/uploads/" + imageName;
     }
 
 
