@@ -38,6 +38,13 @@ public class Post {
     @Column(name = "Like_Count", nullable = true)
     private int likeCount;
 
+    @Column(name="image_url",nullable=true)
+    private String imageUrl; // 이미지 URL을 저장할 필드 추가
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
 
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = true)
@@ -81,6 +88,10 @@ public class Post {
 
     public void setClimbingGymId(ClimbingGym climbingGym) {
         this.climbingGym = climbingGym;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }
