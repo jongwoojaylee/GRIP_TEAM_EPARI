@@ -31,42 +31,32 @@ public class CongestionService {
     //지도표시 혼잡도
     public Map<String, Object> getMapCongestionLevel(Long gymId){
         List<Congestion> congestionList = congestionDomainService.findByGymId(gymId);
-        Optional<ClimbingGym> accCount = climbingGymRepository.findById(gymId);
+        List<Integer> presentCounts =congestionDomainService.getPresentCountByCongestion(congestionList);
 
-//        ClimbingGym climbingGym = accCount.get();
-        ClimbingGym climbingGym = accCount.orElseThrow(() -> new IllegalArgumentException("Climbing gym not found"));
-        LocalTime currentTime = LocalTime.now();
-
-        int totalCount = 0;
-        for(Congestion congestion : congestionList){
-//            LocalTime congestionTime = LocalTime.parse(congestion.getTimeZone());
-            int hour = congestion.getTimeZone();
-            String timeString = String.format("%02d:00", hour);
-            LocalTime congestionTime = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm"));
-
-            if(currentTime.isAfter(congestionTime) && currentTime.isBefore(congestionTime.plusHours(4))){
-                totalCount += congestion.getPresentCount();
-            }
-        }
-
-        //일단 100으로 설정
+        //적정 인원수 100으로 설정
+        ClimbingGym climbingGym = climbingGymRepository.findById(gymId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid gym ID: " + gymId));
+                //-> Optional의 인자가 null일 경우 예외처리
         int acceptableCount = climbingGym.getAcceptableCount();
-        double ratio = (double) totalCount / acceptableCount * 100;
+        int presentCount = presentCounts.get(presentCounts.size()-1);//마지막값. 마지막 시간
+        double ratio = ((double) presentCount / acceptableCount) * 100;
+
+        //확인 -- 완료
+        System.out.println("ratio: " + ratio);
 
         String conLevel;
-        if(ratio < 40.0){
+        if(ratio < 55.0){
             conLevel = "여유";
-        }else if(ratio < 70.0){
+        }else if(ratio < 75.0){
             conLevel = "보통";
         }else{
             conLevel = "혼잡";
         }
 
-        //date타입인 것을 다른 형태로 변환시켜주는 class
-        //format() : 형태 변환시키는 함수
+        //date타입인 것을 다른 형태로 변환시켜주기
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH");
-        String time = simpleDateFormat.format(now);//지금시간대
+        String time = simpleDateFormat.format(now);//지금시간대. 형태 변환시키기
 
         Map<String, Object> level = new HashMap<>();
         level.put("ratio", ratio);
@@ -74,7 +64,6 @@ public class CongestionService {
         level.put("time", time);
 
         return level;
-
     }
 
     //혼잡도 계산
@@ -88,21 +77,4 @@ public class CongestionService {
         }
         return (double) congestion.getPresentCount() / climbingGym.getAcceptableCount() * 100;
     }
-
-//    //특정시간대 현재 인원수
-//    public Integer getPresentCountByGymIdAndTimeZone(Long gymId, int timeZone) {
-//        List<Congestion> congestions = congestionDomainService.findByGymId(gymId);
-//
-//        for (Congestion congestion : congestions){
-//            if(congestion.getTimeZone() == timeZone){
-//                return congestion.getPresentCount();
-//            }
-//        }
-//        //인원 없을때
-//        return 0;
-//    }
-
-    //클라이밈짐별로 현재인원수 불러와야함
-
-    //지도에 간단한 혼잡도 표시 -- 보류
 }
