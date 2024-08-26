@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -19,6 +16,6 @@ public class ProfileImage {
     @Column(name = "PATH", length = 512, nullable = false)
     private String path;
 
-    @OneToMany(mappedBy = "profileImage")
-    private Set<User> users;
+    @OneToOne
+    private User user;
 }

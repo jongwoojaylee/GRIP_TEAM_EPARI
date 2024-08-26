@@ -10,8 +10,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.example.grip_demo.user.domain.RefreshToken;
-import org.example.grip_demo.user.infrastructure.RefreshTokenRepository;
+import org.example.grip_demo.user.domain.RedisRefreshToken;
+import org.example.grip_demo.user.infrastructure.RedisRefreshTokenRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisRefreshTokenRepository redisRefreshTokenRepository;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //accessToken 있을 경우
@@ -40,9 +40,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (!StringUtils.hasText(accessToken)) {
             String refreshToken = getRefreshToken(request);
             if (StringUtils.hasText(refreshToken)) {
-                RefreshToken refreshTokenEntity = refreshTokenRepository.findByValue(refreshToken).orElse(null);
+                Long userId = jwtTokenizer.getUserIdFromToken(refreshToken);
+                RedisRefreshToken redisRefreshToken = redisRefreshTokenRepository.findById(userId).orElse(null);
+
                 //쿠키의 refresh token과 db의 토큰 일치 여부 확인
-                if (refreshTokenEntity != null &&  Objects.equals(refreshTokenEntity.getValue(), refreshToken)) {
+                if (
+                        redisRefreshToken != null &&  Objects.equals(redisRefreshToken.getRefreshToken(), refreshToken)
+                ) {
                     accessToken = jwtTokenizer.createAccessTokenFromRefreshToken(refreshToken);
 
                     Cookie accessTokenCookie = new Cookie("accessToken",accessToken);

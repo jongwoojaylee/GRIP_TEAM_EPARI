@@ -40,11 +40,6 @@ public class User {
     )
     private Set<Role> roles;
 
-    @ManyToOne
-    @JoinColumn(name = "PROFILE_IMAGES_ID")
-    private ProfileImage profileImage;
-
-
     @OneToMany(mappedBy = "user")
     private Set<RefreshToken> refreshTokens;
 

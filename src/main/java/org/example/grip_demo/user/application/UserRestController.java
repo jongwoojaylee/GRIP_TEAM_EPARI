@@ -112,7 +112,6 @@ public class UserRestController {
     public ResponseEntity<Map<String, Boolean>> checkNickNameAvailability(@RequestParam String nickName) {
         boolean isAvailable = userService.isUserNickNameExist(nickName);
         Map<String, Boolean> response = new HashMap<>();
-        System.out.println(isAvailable);
         response.put("isAvailable", isAvailable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

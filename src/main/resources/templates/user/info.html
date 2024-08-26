@@ -9,39 +9,84 @@
             background-color: #f0f0f0;
             margin: 0;
             padding: 0;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            position: sticky;
+            padding: 34px 0;
         }
 
         .container {
+            position: relative;
             background: #fff;
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 500px;
+            margin: 20px auto;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        #information {
+            text-align: left;
+            width: 60%;
+        }
+
+        #profile-image {
             text-align: center;
-            position: relative; /* Use absolute positioning */
-            top: 50%; /* Move down from top by 50% of the viewport height */
-            left: 50%; /* Move right from left by 50% of the viewport width */
-            transform: translate(-50%, -50%); /* Center the container */
+            width: 35%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #profile-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 50%; /* 이미지를 원형으로 만들기 위한 설정 */
+            object-fit: cover; /* 이미지의 비율을 유지하면서 원형으로 자르기 */
+            margin-bottom: 10px; /* 이미지와 버튼 사이의 간격을 추가 */
+        }
+
+        .change-photo-button {
+            display: inline-block;
+            background-color: #45a050;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .change-photo-button:hover {
+            background-color: #45a050;
         }
 
         .update-button {
             display: inline-block;
             background-color: #4CAF50;
             color: white;
-            padding: 5px 10px;
+            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
             border-radius: 5px;
-            margin-top: 20px;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .update-button:hover {
-            background-color: #45a049;
+            background-color: #45a050;
         }
+
     </style>
     <link rel="stylesheet" href="/main.css">
 </head>
@@ -49,16 +94,24 @@
 <header id="header" th:replace="header.html"></header>
 <div class="container">
     <h1>User Information</h1>
-    <div>
-        <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
-        <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
-        <p><strong>Nick name:</strong> <span th:text="${user.nickName}"></span></p>
-        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-        <p><strong>Phone number:</strong> <span th:text="${user.phoneNumber}"></span></p>
-        <p><strong>Gender:</strong> <span th:text="${user.gender ? '남자' : '여자'}"></span></p>
-
-        <a th:href="${updateurl}" class="update-button">Update</a>
+    <div class="user-info">
+        <div id="information">
+            <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
+            <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+            <p><strong>Nickname:</strong> <span th:text="${user.nickName}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+            <p><strong>Phone number:</strong> <span th:text="${user.phoneNumber}"></span></p>
+            <p><strong>Gender:</strong> <span th:text="${user.gender ? '남자' : '여자'}"></span></p>
+        </div>
+        <div id="profile-image">
+            <img src="/GripLogo.png" alt="Grip Logo">
+            <a href="#" class="change-photo-button">Change Photo</a>
+        </div>
     </div>
+    <a th:href="${updateurl}" class="update-button">Update</a>
+</div>
+<div class="container">
+    <h1>Post list</h1>
 </div>
 
 </body>
