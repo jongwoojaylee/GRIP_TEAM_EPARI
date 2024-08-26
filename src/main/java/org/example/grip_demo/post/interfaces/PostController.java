@@ -21,7 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,13 +126,16 @@ public class PostController {
     }
 
     @GetMapping("/updatepostform")
-    public String getUpdatePostForm(@RequestParam("postid") Long postId, Model model, RedirectAttributes redirectAttributes){
+    public String getUpdatePostForm(@RequestParam("postid") Long postId, Model model,
+                                    RedirectAttributes redirectAttributes){
         Optional<Post> postOptional = postService.getPostById(postId);
+
         if(postOptional.isPresent()){
             model.addAttribute("post", mapToDto(postOptional.get()));
             String name =postOptional.get().getUser().getName();
             model.addAttribute("postId",postId);
             model.addAttribute("name", name);
+            model.addAttribute("imageUrl",postOptional.get().getImageUrl());
             return "posts/updatepostform";
         }else {
             redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
@@ -142,6 +147,7 @@ public class PostController {
     public String updatePost(@PathVariable("postId") Long postId,
                              @RequestParam("title") String title,
                              @RequestParam("content") String content,
+                             @RequestParam(value = "image", required = false) MultipartFile image,
                              RedirectAttributes redirectAttributes) {
         try {
             Optional<Post> postOptional = postService.getPostById(postId);
@@ -149,6 +155,11 @@ public class PostController {
                 Post post = postOptional.get();
                 post.setTitle(title);
                 post.setContent(content);
+
+                if (image != null && !image.isEmpty()) {
+                    String imageUrl = saveImage(image);
+                    post.setImageUrl(imageUrl);
+                }
 
                 postService.updatePost(post);
                 return "redirect:/post/"+ post.getClimbingGym().getId()+"/"+ postId;
@@ -237,7 +248,7 @@ public class PostController {
         }
 
         byte[] bytes = image.getBytes();
-        String imageName = LocalDateTime.now().toString() + "_" + image.getOriginalFilename();
+        String imageName = LocalDate.now().toString() + "_" + LocalTime.now().getHour()+"_"+LocalTime.now().getMinute()+"_"+ image.getOriginalFilename();
         Path path = Paths.get(folder + imageName);
         Files.write(path, bytes);
         return "/uploads/" + imageName;
