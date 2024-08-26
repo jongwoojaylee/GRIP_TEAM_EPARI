@@ -1,6 +1,7 @@
 package org.example.grip_demo.user.interfaces;
 
 import lombok.RequiredArgsConstructor;
+import org.example.grip_demo.user.domain.RegisterUserDTO;
 import org.example.grip_demo.user.domain.Role;
 import org.example.grip_demo.user.domain.User;
 import org.example.grip_demo.user.infrastructure.UserRepository;
@@ -39,10 +40,7 @@ public class UserService {
             throw new RuntimeException("Role not found");
         user.setRoles(new HashSet<>(Collections.singletonList(role)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         userRepository.save(user);
-
-
         return user;
     }
 
@@ -61,6 +59,19 @@ public class UserService {
 
     public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
+    }
+
+    public User registerUserDTOToUser(RegisterUserDTO registerUserDTO){
+        User user = new User();
+        user.setUsername(registerUserDTO.getUsername());
+        user.setPassword(registerUserDTO.getPassword());
+        user.setName(registerUserDTO.getName());
+        user.setNickName(registerUserDTO.getNickName());
+        user.setEmail(registerUserDTO.getEmail());
+        user.setAddress(registerUserDTO.getAddress());
+        user.setPhoneNumber(registerUserDTO.getPhoneNumber());
+        user.setGender(registerUserDTO.getGender());
+        return user;
     }
 
 
