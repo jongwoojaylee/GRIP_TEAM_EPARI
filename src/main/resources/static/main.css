@@ -14,12 +14,12 @@ a {
 }
 
 a:visited {
-    color: inherit; /* 방문한 링크의 색상도 상속받음 */
+    /*color: inherit; !* 방문한 링크의 색상도 상속받음 *!*/
 }
 
 a:hover {
     text-decoration: none; /* 호버 시 밑줄 제거 */
-    color: inherit; /* 호버 시 색상 유지 */
+    /*color: inherit; !* 호버 시 색상 유지 *!*/
 }
 
 #header, #footer {
