@@ -195,7 +195,7 @@
 
 </style>
 <body>
-<header id="header" th:replace="header.html"></header>
+<header id="header" th:replace="~{header.html}"></header>
 <div class="gym-info-container">
     <input type="hidden" id="climbingGymId" th:value="${climbinggym.id}"/>
     <h1 class="gym-name" th:text="${climbinggym.name}">클라이밍짐 이름</h1>
@@ -242,6 +242,7 @@
         </li>
     </ul>
 </section>
+<footer id="footer" th:replace="~{footer.html}"></footer>
 </body>
 <script th:inline="javascript">	    // <== 이부분이 인라인기능을 사용할 수 있게 해준다.
     document.addEventListener("DOMContentLoaded", function() {
