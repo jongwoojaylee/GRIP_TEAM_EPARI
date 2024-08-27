@@ -49,6 +49,7 @@ public class ClimingGymService {
     public List<ClimbingGym> searchClimbingGyms(String keyword) {
         return climbingGymRepository.findAll().stream()
                 .filter(gym -> gym.getName().contains(keyword) || gym.getAddress().contains(keyword))
+                .filter(gym -> gym.getId() != 9999)
                 .collect(Collectors.toList());
     }
 
