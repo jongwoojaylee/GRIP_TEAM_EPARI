@@ -14,9 +14,4 @@ public class CongestionDemoDto {
         this.timeZone = timeZone;
         this.presentCount = presentCount;
     }
-//    public CongestionDemoDto(CongestionDemo congestion) {
-//        this.id = congestion.getId();
-//        this.presentCount = congestion.getPresentCount();
-//        this.timeZone = congestion.getTimeZone();
-//    }
 }

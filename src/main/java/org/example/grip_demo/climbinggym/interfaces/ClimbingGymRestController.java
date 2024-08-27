@@ -23,7 +23,4 @@ public class ClimbingGymRestController {
         return climbingGym.map(gym -> new ClimbingGymDto(gym.getId(), gym.getName(), gym.getAddress(), gym.getMapX(), gym.getMapY()))
                 .orElse(null);
     }
-//    public List<ClimbingGymDto> getAllClimbingGyms() {
-//        return climbingGymService.getAllGymsWithCongestion();
-//    }
 }

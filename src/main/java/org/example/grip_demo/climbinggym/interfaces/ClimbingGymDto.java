@@ -40,19 +40,12 @@ public class ClimbingGymDto {
         this.mapY = mapY;
     }
 
-//    public ClimbingGymDto(ClimbingGym gym, List<CongestionDemo> gymCongestions) {
-//        this.id = gym.getId();
-//        this.name = gym.getName();
-//        this.address = gym.getAddress();
-//        this.roadAddress = gym.getRoadAddress();
-//        this.mapX = gym.getMapX();
-//        this.mapY = gym.getMapY();
-//        this.telephone = gym.getTelephone();
-//        this.acceptableCount = gym.getAcceptableCount();
-//
-//        // CongestionDemo 리스트를 CongestionDemoDto로 변환
-//        this.congestions = gymCongestions.stream()
-//                .map(CongestionDemoDto::new)
-//                .collect(Collectors.toList());
-//    }
+    public ClimbingGymDto(Long id, String name, String address, Float mapX, Float mapY, int acceptableCount) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.mapX = mapX;
+        this.mapY = mapY;
+        this.acceptableCount = acceptableCount;
+    }
 }
