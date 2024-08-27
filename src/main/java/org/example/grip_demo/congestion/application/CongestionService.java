@@ -4,14 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
 import org.example.grip_demo.climbinggym.domain.ClimbingGymDomainService;
 import org.example.grip_demo.climbinggym.domain.ClimbingGymRepository;
-import org.example.grip_demo.condemo.CongestionDemoDto;
 import org.example.grip_demo.congestion.domain.Congestion;
 import org.example.grip_demo.congestion.domain.CongestionDomainService;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -21,10 +18,6 @@ public class CongestionService {
     private final CongestionDomainService congestionDomainService;
     private final ClimbingGymDomainService climbingGymDomainService;
     private final ClimbingGymRepository climbingGymRepository;
-
-    public Optional<CongestionDemoDto> getCongestionDemo(int hour, Long gymId) {
-        return climbingGymRepository.findByTimeZoneAndClimbingGym_Id(hour, gymId);
-    }
 
     //클라이밍장별 현재인원 가져옴
     public List<Integer> getPresentCountByGymId(Long gymId){
