@@ -1,5 +1,7 @@
 package org.example.grip_demo.congestion.domain;
 
+import org.example.grip_demo.condemo.CongestionDemoDto;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,5 +11,7 @@ public interface CongestionRepository{
     Optional<Congestion> findById(Long id);
     void save(Congestion congestion);
     List<Congestion> findByClimbingGymId(Long GymId);
+    Optional<CongestionDemoDto> findByTimeZoneAndClimbingGym_Id(Integer hour, Long climbingGym_id);
+
 
 }//실제로는 CongestionRepositoryImpl에서 구현됨.
