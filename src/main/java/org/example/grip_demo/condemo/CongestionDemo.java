@@ -20,4 +20,8 @@ public class CongestionDemo {
     @ManyToOne
     @JoinColumn(name="CLIMBING_GYM_ID", nullable = false)
     private ClimbingGym climbingGym;
+
+//    public Long getClimbingGymId() {
+//        return climbingGym.getId();
+//    }
 }

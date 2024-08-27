@@ -3,6 +3,9 @@ package org.example.grip_demo.climbinggym.application;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
 import org.example.grip_demo.climbinggym.domain.ClimbingGymRepository;
 import org.example.grip_demo.climbinggym.domain.PageablePostRepository;
+import org.example.grip_demo.climbinggym.interfaces.ClimbingGymDto;
+import org.example.grip_demo.condemo.CondemoRepo;
+import org.example.grip_demo.condemo.CongestionDemo;
 import org.example.grip_demo.post.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,11 +21,13 @@ import java.util.stream.Collectors;
 public class ClimingGymService {
     private final ClimbingGymRepository climbingGymRepository;
     private final PageablePostRepository pageablePostRepository;
+    private final CondemoRepo congestionRepository;
 
     @Autowired
-    public ClimingGymService(ClimbingGymRepository climbingGymRepository, PageablePostRepository pageablePostRepository) {
+    public ClimingGymService(ClimbingGymRepository climbingGymRepository, PageablePostRepository pageablePostRepository, CondemoRepo congestionRepository) {
         this.climbingGymRepository = climbingGymRepository;
         this.pageablePostRepository = pageablePostRepository;
+        this.congestionRepository = congestionRepository;
     }
 
     public ClimbingGym createClimbingGym(ClimbingGym climbingGym) {
@@ -57,4 +62,17 @@ public class ClimingGymService {
 
         return byPostPage;
     }
+
+//    public List<ClimbingGymDto> getAllGymsWithCongestion() {
+//        List<ClimbingGym> gyms = climbingGymRepository.findAll();
+//
+//        List<CongestionDemo> congestions = congestionRepository.findAllByClimbingGymIn(gyms);
+//
+//        return gyms.stream().map(gym -> {
+//            List<CongestionDemo> gymCongestions = congestions.stream()
+//                    .filter(congestion -> gym.equals(congestion.getClimbingGym()))
+//                    .collect(Collectors.toList());
+//            return new ClimbingGymDto(gym, gymCongestions);
+//        }).collect(Collectors.toList());
+//    }
 }

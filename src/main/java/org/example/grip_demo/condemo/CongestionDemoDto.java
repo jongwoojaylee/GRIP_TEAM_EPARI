@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CongestionDemoDto {
+    private Long id;
     private Integer timeZone;
     private Integer presentCount;
 
@@ -13,4 +14,9 @@ public class CongestionDemoDto {
         this.timeZone = timeZone;
         this.presentCount = presentCount;
     }
+//    public CongestionDemoDto(CongestionDemo congestion) {
+//        this.id = congestion.getId();
+//        this.presentCount = congestion.getPresentCount();
+//        this.timeZone = congestion.getTimeZone();
+//    }
 }

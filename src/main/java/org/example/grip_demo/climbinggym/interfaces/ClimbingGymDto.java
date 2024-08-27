@@ -2,9 +2,12 @@ package org.example.grip_demo.climbinggym.interfaces;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.grip_demo.climbinggym.domain.ClimbingGym;
+import org.example.grip_demo.condemo.CongestionDemo;
 import org.example.grip_demo.condemo.CongestionDemoDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -36,4 +39,20 @@ public class ClimbingGymDto {
         this.mapX = mapX;
         this.mapY = mapY;
     }
+
+//    public ClimbingGymDto(ClimbingGym gym, List<CongestionDemo> gymCongestions) {
+//        this.id = gym.getId();
+//        this.name = gym.getName();
+//        this.address = gym.getAddress();
+//        this.roadAddress = gym.getRoadAddress();
+//        this.mapX = gym.getMapX();
+//        this.mapY = gym.getMapY();
+//        this.telephone = gym.getTelephone();
+//        this.acceptableCount = gym.getAcceptableCount();
+//
+//        // CongestionDemo 리스트를 CongestionDemoDto로 변환
+//        this.congestions = gymCongestions.stream()
+//                .map(CongestionDemoDto::new)
+//                .collect(Collectors.toList());
+//    }
 }
