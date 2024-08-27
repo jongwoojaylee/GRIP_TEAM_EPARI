@@ -28,7 +28,7 @@ public class CongestionDomainService {
         return presentCounts;
     }
 
-    //클라이밍짐id별로 가져오기?
+    //클라이밍짐id별로 가져오기
     public List<Congestion> findByGymId(Long gymId){
         return congestionRepository.findByClimbingGymId(gymId);
     }
