@@ -3,6 +3,7 @@ package org.example.grip_demo.congestion.infrastructure;
 import org.example.grip_demo.condemo.CongestionDemoDto;
 import org.example.grip_demo.congestion.domain.Congestion;
 import org.example.grip_demo.congestion.domain.CongestionRepository;
+import org.example.grip_demo.congestion.interfaces.CongestionDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class CongestionRepositoryImpl implements CongestionRepository {
     }
 
     @Override
-    public Optional<CongestionDemoDto> findByTimeZoneAndClimbingGym_Id(Integer hour, Long climbingGym_id) {
+    public Optional<CongestionDTO> findByTimeZoneAndClimbingGym_Id(Integer hour, Long climbingGym_id) {
         return Optional.empty();
     }
 
