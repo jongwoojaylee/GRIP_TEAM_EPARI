@@ -32,10 +32,7 @@ public class MapRestController {
         return gyms.stream()
                 .map(gym -> new ClimbingGymDto(gym.getId(), gym.getName(),
                         gym.getAddress(), gym.getMapX(), gym.getMapY(),
-                        gym.getAcceptableCount(),
-                        gym.getCongestions().stream()
-                                .map(con -> new CongestionDemoDto(con.getTimeZone(), con.getPresentCount()))
-                                .collect(Collectors.toList())
+                        gym.getAcceptableCount()
                 ))
                 .collect(Collectors.toList());
     }
@@ -46,10 +43,7 @@ public class MapRestController {
         return gyms.stream()
                 .map(gym -> new ClimbingGymDto(gym.getId(), gym.getName(),
                         gym.getAddress(), gym.getMapX(), gym.getMapY(),
-                        gym.getAcceptableCount(),
-                        gym.getCongestions().stream()
-                                .map(con -> new CongestionDemoDto(con.getTimeZone(), con.getPresentCount()))
-                                .collect(Collectors.toList())
+                        gym.getAcceptableCount()
                 ))
                 .collect(Collectors.toList());
     }
