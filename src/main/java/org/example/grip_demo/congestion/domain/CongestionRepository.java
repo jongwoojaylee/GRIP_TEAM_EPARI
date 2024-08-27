@@ -1,6 +1,7 @@
 package org.example.grip_demo.congestion.domain;
 
-import org.example.grip_demo.congestion.interfaces.CongestionDTO;
+import org.example.grip_demo.condemo.CongestionDemoDto;
+import org.example.grip_demo.congestion.interfaces.CongestionDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,6 @@ public interface CongestionRepository{
     Optional<Congestion> findById(Long id);
     void save(Congestion congestion);
     List<Congestion> findByClimbingGymId(Long GymId);
-    static Optional<CongestionDTO> findByTimeZoneAndClimbingGym_Id(Integer hour, Long climbingGym_id);
+    Optional<CongestionDto> findByTimeZoneAndClimbingGym_Id(int hour, Long climbingGym_id);
 
 }//실제로는 CongestionRepositoryImpl에서 구현됨.

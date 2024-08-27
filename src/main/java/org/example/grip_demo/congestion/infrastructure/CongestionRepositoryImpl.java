@@ -1,9 +1,8 @@
 package org.example.grip_demo.congestion.infrastructure;
 
-import org.example.grip_demo.condemo.CongestionDemoDto;
 import org.example.grip_demo.congestion.domain.Congestion;
 import org.example.grip_demo.congestion.domain.CongestionRepository;
-import org.example.grip_demo.congestion.interfaces.CongestionDTO;
+import org.example.grip_demo.congestion.interfaces.CongestionDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,6 +11,10 @@ import java.util.Optional;
 @Repository
 public class CongestionRepositoryImpl implements CongestionRepository {
     private final CongestionJpaRepository jpaRepository;
+
+    public Optional<CongestionDto> findByTimeZoneAndClimbingGym_Id(int hour, Long climbingGym_id) {
+        return null;
+    }
 
     public CongestionRepositoryImpl(CongestionJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
@@ -31,10 +34,4 @@ public class CongestionRepositoryImpl implements CongestionRepository {
     public List<Congestion> findByClimbingGymId(Long id) {
         return jpaRepository.findByClimbingGymId(id);
     }
-
-    @Override
-    public Optional<CongestionDTO> findByTimeZoneAndClimbingGym_Id(Integer hour, Long climbingGym_id) {
-        return Optional.empty();
-    }
-
 }

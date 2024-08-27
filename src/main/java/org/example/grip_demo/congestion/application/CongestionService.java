@@ -7,7 +7,7 @@ import org.example.grip_demo.climbinggym.domain.ClimbingGymRepository;
 import org.example.grip_demo.congestion.domain.Congestion;
 import org.example.grip_demo.congestion.domain.CongestionDomainService;
 import org.example.grip_demo.congestion.domain.CongestionRepository;
-import org.example.grip_demo.congestion.interfaces.CongestionDTO;
+import org.example.grip_demo.congestion.interfaces.CongestionDto;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -20,10 +20,6 @@ public class CongestionService {
     private final CongestionDomainService congestionDomainService;
     private final ClimbingGymDomainService climbingGymDomainService;
     private final ClimbingGymRepository climbingGymRepository;
-
-    public Optional<CongestionDTO> getCongestion(int hour, Long gymId) {
-        return CongestionRepository.findByTimeZoneAndClimbingGym_Id(hour, gymId);
-    }
 
     //클라이밍장별 현재인원 가져옴
     public List<Integer> getPresentCountByGymId(Long gymId){
