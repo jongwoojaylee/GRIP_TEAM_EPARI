@@ -1,7 +1,5 @@
 package org.example.grip_demo.climbinggym.domain;
 
-import org.example.grip_demo.condemo.CongestionDemoDto;
-
 import java.util.List;
 import java.util.Optional;
 

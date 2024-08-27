@@ -66,7 +66,7 @@ function loadAllGyms() {
                             .then(congestionData => {
                                 let congestionElement = document.getElementById(`congestion-${gym.id}`);
                                 if (congestionData) {
-                                    // congestionElement.innerText = `${congestionData.presentCount}`;
+                                    congestionElement.innerText = `${congestionData.presentCount}`;
                                     if (congestionData.presentCount/gym.acceptableCount < 0.33) {
                                         congestionElement.innerText = `여유`;
                                         congestionElement.style.color = 'green';
