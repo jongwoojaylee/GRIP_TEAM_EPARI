@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CongestionDemoDto {
+    private Long id;
     private Integer timeZone;
     private Integer presentCount;
 

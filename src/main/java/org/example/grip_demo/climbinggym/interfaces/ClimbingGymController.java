@@ -9,6 +9,8 @@ import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.post.application.PostService;
 import org.example.grip_demo.post.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +41,10 @@ public class ClimbingGymController {
     }
 
     @GetMapping("/climbinggym")
-    public String gym(HttpServletRequest request, @RequestParam("climbingid") Long climbingId, Model model) {
+    public String gym(HttpServletRequest request,
+                      @RequestParam("climbingid") Long climbingId,
+                      @RequestParam(defaultValue = "0") int page,
+                      Model model) {
         Cookie[] cookies = request.getCookies();
 
         if (cookies != null) {
@@ -63,12 +68,17 @@ public class ClimbingGymController {
 
             }
         }
+        int pageSize = 9;
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        Page<Post> postsPage = climingGymService.pageClimbingGymPosts(climbingId, page, pageSize);
+
         Optional<ClimbingGym> climbinggym = climingGymService.getClimbingGym(climbingId);
         model.addAttribute("climbinggym", climbinggym.get());
-        List<Post> posts = climbinggym.get().getPosts();
-        model.addAttribute("posts", posts);
+//        List<Post> posts = climbinggym.get().getPosts();
+//        model.addAttribute("posts", posts);
+        model.addAttribute("postsPage", postsPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", postsPage.getTotalPages());
         return "climbinggyms/climbinggym";
     }
-
-
 }
