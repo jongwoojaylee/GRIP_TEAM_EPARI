@@ -6,8 +6,6 @@ import org.example.grip_demo.climbinggym.domain.ClimbingGymDomainService;
 import org.example.grip_demo.climbinggym.domain.ClimbingGymRepository;
 import org.example.grip_demo.congestion.domain.Congestion;
 import org.example.grip_demo.congestion.domain.CongestionDomainService;
-import org.example.grip_demo.congestion.domain.CongestionRepository;
-import org.example.grip_demo.congestion.interfaces.CongestionDto;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;

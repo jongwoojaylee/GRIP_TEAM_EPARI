@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CongestionDto {
-    private Integer timeZone;
-    private Integer presentCount;
+    private int timeZone;
+    private int presentCount;
 
     public CongestionDto(int timeZone, int presentCount) {
         this.timeZone = timeZone;
