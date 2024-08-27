@@ -8,48 +8,241 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <style>
-    .new-post {
-        text-align: right;
-        margin-bottom: 20px;
+    .gym-info-container {
+        margin: 20px auto;
+        max-width: 1200px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
     }
 
-    .new-post a {
+    /* 클라이밍짐 이름 및 주소 스타일 */
+    .gym-name {
+        font-size: 36px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .gym-address {
+        font-size: 18px;
+        color: #666;
+    }
+
+    .map-chart-container {
+        display: flex;
+        align-items: stretch;
+        gap: 20px;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    #map, .chart-container {
+        background-color: #e5e5e5;
+        min-width: 300px;
+        flex: 1;
+    }
+
+    #map {
+        width: 300px;
+        height: 300px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-container {
+        width: 300px;
+        height: 300px;
+    }
+
+    /* 게시글 목록 섹션 스타일 */
+    .post-list-section {
+        /*margin: 40px 0;*/
+        padding: 20px 30px 0 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        /*display: flex;*/
+        /*flex-direction: column;*/
+    }
+
+    /* 게시글 목록 타이틀 스타일 */
+    .post-list-title {
+        font-size: 28px;
+        color: #1E1E1E;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* 새 게시글 작성 버튼 스타일 */
+    .new-post-button {
+        /*display: inline-block;*/
         background-color: #44c767;
         color: white;
         padding: 10px 20px;
         text-decoration: none;
         border-radius: 5px;
-        transition: background-color 0.3s ease;
+        text-align: center;
+        transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
-    .new-post a:hover {
+    .new-post-button:hover {
         background-color: #5cbf2a;
+        transform: translateY(-2px);
     }
+
+    /* 게시글 리스트 스타일 */
+    .post-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 30px 10px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .post-item {
+        /*float: left;*/
+        /*width: 27%;*/
+        width: calc(33% - 38px);
+        height: 130px;
+        margin-bottom: 170px;
+        box-sizing: border-box;
+    }
+
+
+    .post-card {
+        border: 1px solid #ddd;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .post-card:hover {
+        transform: translateY(-5px); /* 호버 시 약간 위로 올라감 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 강조 */
+    }
+    .post-image {
+        width: 100%;
+        height: 100px;
+        min-height: 0;
+    }
+    .post-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    /* 게시글 제목 스타일 */
+    .post-title {
+        height: 45px;
+        font-size: 20px;
+        /*margin-bottom: 10px;*/
+        color: #44c767;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .post-user {
+        height: 15px;
+        margin: 0;
+        text-align: right;
+    }
+
+    /* 게시글 내용 및 작성일 스타일 */
+    .post-content {
+        height: 15px;
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; /* 텍스트를 한 줄로 고정 */
+    }
+
+    .post-date {
+        height: 15px;
+        font-size: 14px;
+        color: #999;
+        text-align: right;
+    }
+
+    .no-post {
+        align-items: center;
+        text-align: center;
+    }
+
+    .pagination-container {
+        width: 100%;
+        display: flex;
+        justify-content: center; /* 가운데 정렬 */
+        align-items: center;
+        margin-bottom: 30px;
+        margin-top: 100px; /* 게시글과 페이징 사이에 충분한 공간을 확보 */
+        /*clear: both; !* 페이징 요소가 게시글 카드 아래로 내려가도록 *!*/
+    }
+
+    .pagination {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
 </style>
 <body>
-<header id="header" th:replace="header.html"></header>
-<div>
+<header id="header" th:replace="~{header.html}"></header>
+<div class="gym-info-container">
     <input type="hidden" id="climbingGymId" th:value="${climbinggym.id}"/>
-    <h1 th:text="${climbinggym.name}">클라이밍짐 이름</h1>
-    <p th:text="${climbinggym.address}">클라이밍짐 주소</p>
+    <h1 class="gym-name" th:text="${climbinggym.name}">클라이밍짐 이름</h1>
+    <p class="gym-address" th:text="${climbinggym.address}">클라이밍짐 주소</p>
 </div>
-<div th:replace="bargraph.html"></div>
-<div id="map" style="width: 50%; height: 200px;"></div>
-<section>
-    <h2>게시글 목록</h2>
+<div class="map-chart-container">
+    <div id="map"></div>
+    <div class="chart-container" th:replace="bargraph.html"></div>
+</div>
+<section class="post-list-section">
+    <h2 class="post-list-title">게시글 목록</h2>
     <div class="new-post">
-        <a  th:href="@{'/postform?climbingid=' + ${climbinggym.id}}">새 게시글 작성</a>
+        <a class="new-post-button" th:href="@{'/postform?climbingid=' + ${climbinggym.id}}">새 게시글 작성</a>
     </div>
-    <ul>
-        <li th:each="post : ${posts}">
-            <h3>
-                <a th:text="${post.title}" th:href="@{'/post/' + ${climbinggym.id} + '/' + ${post.id}}">게시글 제목</a>
-            </h3>
-            <p th:text="${post.content}">게시글 내용</p>
-            <p th:text="${post.createdAt}">작성일</p>
+    <ul class="post-list">
+        <li class="post-item" th:each="post : ${postsPage.content}">
+            <a class="post-link" th:href="@{'/post/' + ${climbinggym.id} + '/' + ${post.id}}">
+                <div class="post-card">
+                    <div class="post-image">
+                        <img th:if="${post.imageUrl}" th:src="@{${post.imageUrl}}" alt="Post Image"/>
+                    </div>
+                    <h3 class="post-title">
+<!--                        <a th:text="${post.title}" th:href="@{'/post/' + ${climbinggym.id} + '/' + ${post.id}}">게시글 제목</a>-->
+                        <p th:text="${post.title}"></p>
+                    </h3>
+                    <p class="post-user" th:text="${post.user.nickName}">작성자 닉네임</p>
+                    <p class="post-content" th:text="${post.content}">게시글 내용</p>
+                    <p class="post-date" th:text="${post.createdAt}">작성일</p>
+                </div>
+            </a>
         </li>
     </ul>
 </section>
+<div class="no-post" th:if="${postsPage.totalElements == 0}">
+    <p>게시글이 없습니다.</p>
+</div>
+<section class="pagination-container" th:if="${postsPage.totalElements > 0}">
+    <ul class="pagination">
+        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+<!--            <a th:href="@{'/climbinggym?climbingid=' + ${climbinggym.id} + '&page=' + ${i}}" th:text="${i + 1}"></a>-->
+            <span th:if="${i == currentPage}" th:text="${i + 1}" style="font-weight: bold; color: black;"></span>
+            <a th:if="${i != currentPage}" th:href="@{'/climbinggym?climbingid=' + ${climbinggym.id} + '&page=' + ${i}}"
+               th:text="${i + 1}"></a>
+        </li>
+    </ul>
+</section>
+<footer id="footer" th:replace="~{footer.html}"></footer>
 </body>
 <script th:inline="javascript">	    // <== 이부분이 인라인기능을 사용할 수 있게 해준다.
     document.addEventListener("DOMContentLoaded", function() {
@@ -60,30 +253,30 @@
         center: new naver.maps.LatLng(37.5200704, 127.0215399),
         zoom: 13
     });
-    function loadClimbingGym() {
-        const climbingId = /*[[${climbinggym.id}]]*/ 0;
-        fetch(`/api/climbinggym?climbingid=${climbingId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                let position = new naver.maps.LatLng(data.mapY, data.mapX);
+function loadClimbingGym() {
+    const climbingId = /*[[${climbinggym.id}]]*/ 0;
+    fetch(`/api/climbinggym?climbingid=${climbingId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            let position = new naver.maps.LatLng(data.mapY, data.mapX);
 
-                let marker = new naver.maps.Marker({
-                    position: position,
-                    map: map,
-                    title: data.name
-                });
-
-                map.setCenter(position);
-                map.setZoom(15); // 원하는 줌 레벨 설정
-            })
-            .catch(error => {
-                console.error(error);
+            let marker = new naver.maps.Marker({
+                position: position,
+                map: map,
+                title: data.name
             });
-    }
+
+            map.setCenter(position);
+            map.setZoom(15); // 원하는 줌 레벨 설정
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
 </script>
 </html>
