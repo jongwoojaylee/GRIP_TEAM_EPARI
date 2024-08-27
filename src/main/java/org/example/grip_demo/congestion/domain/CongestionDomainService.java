@@ -1,6 +1,8 @@
 package org.example.grip_demo.congestion.domain;
 
 import lombok.RequiredArgsConstructor;
+import org.example.grip_demo.congestion.infrastructure.CongestionRepository;
+import org.example.grip_demo.congestion.interfaces.CongestionDto;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -9,6 +11,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CongestionDomainService {
     //Congestion이랑 CongestionRepository를 임플해서 기본적인것 DomainService에 필요한 기본적인것 구현
+    private final CongestionRepository repository;
+
+    public Optional<CongestionDto> getCongestion(int hour, Long gymId) {
+        return repository.findByTimeZoneAndClimbingGym_Id(hour, gymId);
+    }
 
     //데이터 불러옴
     private final CongestionRepository congestionRepository;
