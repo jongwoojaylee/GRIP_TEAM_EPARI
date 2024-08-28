@@ -13,10 +13,12 @@ import org.example.grip_demo.user.domain.RefreshToken;
 import org.example.grip_demo.user.domain.Role;
 import org.example.grip_demo.user.domain.User;
 import org.example.grip_demo.user.infrastructure.RefreshTokenRepository;
+import org.example.grip_demo.user.interfaces.EmailService;
 import org.example.grip_demo.user.interfaces.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +35,7 @@ public class UserRestController {
     private final Oauth2Util oauth2Util;
     private final JwtTokenizer jwtTokenizer;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final EmailService emailService;
 
     @GetMapping("/login/oauth2/code/kakao")
     public ResponseEntity<?> callback(@RequestParam("code") String code,
@@ -94,7 +97,7 @@ public class UserRestController {
 
     @GetMapping("/api/check/username")
     public ResponseEntity<Map<String, Boolean>> checkUsernameAvailability(@RequestParam String username) {
-        boolean isAvailable = userService.isUsernameExist(username);
+        boolean isAvailable = !userService.isUsernameExist(username);
         Map<String, Boolean> response = new HashMap<>();
         response.put("isAvailable", isAvailable);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -102,17 +105,36 @@ public class UserRestController {
 
     @GetMapping("/api/check/email")
     public ResponseEntity<Map<String, Boolean>> checkEmailAvailability(@RequestParam String email) {
-        boolean isAvailable = userService.isUserEmailExist(email);
+        boolean isAvailable = !userService.isUserEmailExist(email);
         Map<String, Boolean> response = new HashMap<>();
         response.put("isAvailable", isAvailable);
+        System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/api/check/nickname")
     public ResponseEntity<Map<String, Boolean>> checkNickNameAvailability(@RequestParam String nickName) {
-        boolean isAvailable = userService.isUserNickNameExist(nickName);
+        boolean isAvailable = !userService.isUserNickNameExist(nickName);
         Map<String, Boolean> response = new HashMap<>();
         response.put("isAvailable", isAvailable);
+        System.out.println(response);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/api/sendVerificationCode")
+    public ResponseEntity<Map<String, Boolean>> sendVerificationCode(@RequestParam String email) {
+        boolean sent = emailService.sendVerificationCode(email);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("sent", sent);
+        System.out.println(response);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/verifyCode")
+    public ResponseEntity<Map<String, Boolean>> verifyCode(@RequestParam String email, @RequestParam String code) {
+        boolean isVerified = emailService.verifyCode(email, code);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isVerified", isVerified);
+        return ResponseEntity.ok(response);
     }
 }

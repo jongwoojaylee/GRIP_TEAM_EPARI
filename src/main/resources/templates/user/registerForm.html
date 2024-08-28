@@ -84,6 +84,10 @@
         .links a:hover {
             text-decoration: underline;
         }
+        input::placeholder {
+            font-size: 0.6rem;
+            color: #999;
+        }
     </style>
 </head>
 <body>
@@ -92,14 +96,14 @@
     <form id="signupForm" th:action="@{/registeruser}" th:object="${userDTO}" method="post">
         <div class="form-group">
             <label for="username">Username:</label>
-            <input type="text" id="username" th:field="${userDTO.username}" required>
+            <input type="text" id="username" th:field="${userDTO.username}" placeholder="특수문자 포함하지 않는 2~10자리" required>
             <button type="button" id="checkUsernameButton">Check Username</button>
             <span id="usernameFeedback" class="error" style="display: none;"></span>
             <span th:if="${usernameError}" class="error" th:text="${usernameError}"></span>
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" th:field="${userDTO.password}" required>
+            <input type="password" id="password" th:field="${userDTO.password}" placeholder="영문 대, 소문자, 숫자와 특수기호 1개이상씩 포함 4~20자리" required>
         </div>
         <div class="form-group">
             <label for="confirmPassword">Confirm Password:</label>
@@ -112,14 +116,14 @@
         </div>
         <div class="form-group">
             <label for="nickName">Nick name:</label>
-            <input type="text" id="nickName" th:field="${userDTO.nickName}" required>
+            <input type="text" id="nickName" th:field="${userDTO.nickName}" placeholder="특수문자를 포함하지 않는 2~10자리" required>
             <button type="button" id="checkNickNameButton">Check nick name</button>
             <span id="nickNameFeedback" class="error" style="display: none;"></span>
             <span th:if="${nickNameError}" class="error" th:text="${nickNameError}"></span>
         </div>
         <div class="form-group">
             <label for="phoneNumber">Phone number:</label>
-            <input type="text" id="phoneNumber" th:field="${userDTO.phoneNumber}" required>
+            <input type="text" id="phoneNumber" th:field="${userDTO.phoneNumber}" placeholder="-를 제외한 숫자 9~11자리" required>
         </div>
         <div class="form-group">
             <label for="address">Address:</label>
@@ -136,8 +140,13 @@
             <label for="email">Email:</label>
             <input type="email" id="email" th:field="${userDTO.email}" required>
             <button type="button" id="checkEmailButton">Check Email</button>
+            <button type="button" id="sendVerificationCodeButton" style="display: none;">Send Verification Code</button>
+        </div>
+        <div class="form-group">
+            <label id="Code" style="display: none;">Code</label>
+            <input type="text" id="verificationCode" placeholder="Enter verification code" style="display: none;">
             <span id="emailFeedback" class="error" style="display: none;"></span>
-            <span th:if="${emailError}" class="error" th:text="${emailError}"></span>
+            <span id="verificationFeedback" class="error" style="display: none;"></span>
         </div>
         <div>
             <button type="submit" id="submitButton" disabled>Sign Up</button>
@@ -153,6 +162,7 @@
             var usernameValid = false;
             var emailValid = false;
             var nickNameValid = false;
+            var emailVerified = false;
 
             // Password confirmation
             $('#confirmPassword').on('input', function () {
@@ -173,11 +183,11 @@
                 var username = $('#username').val();
                 $.get('/api/check/username', { username: username }, function(data) {
                     if (data.isAvailable) {
-                        $('#usernameFeedback').removeClass('success').addClass('error').text('Username already exists').show();
-                        usernameValid = false;
-                    } else {
                         $('#usernameFeedback').removeClass('error').addClass('success').text('Username is available').show();
                         usernameValid = true;
+                    } else {
+                        $('#usernameFeedback').removeClass('success').addClass('error').text('Username already exists').show();
+                        usernameValid = false;
                     }
                     checkFormValidity();
                 });
@@ -188,11 +198,42 @@
                 var email = $('#email').val();
                 $.get('/api/check/email', { email: email }, function(data) {
                     if (data.isAvailable) {
-                        $('#emailFeedback').removeClass('success').addClass('error').text('Email already exists').show();
-                        emailValid = false;
-                    } else {
                         $('#emailFeedback').removeClass('error').addClass('success').text('Email is available').show();
                         emailValid = true;
+                        $('#sendVerificationCodeButton').show();
+                    } else {
+                        $('#emailFeedback').removeClass('success').addClass('error').text('Email already exists').show();
+                        emailValid = false;
+                        $('#sendVerificationCodeButton').hide();
+                    }
+                    checkFormValidity();
+                });
+            });
+            // Send verification code
+            $('#sendVerificationCodeButton').on('click', function() {
+                var email = $('#email').val();
+                $.post('/api/sendVerificationCode', { email: email }, function(data) {
+                    if (data.sent) {
+                        $('#Code').show();
+                        $('#verificationCode').show();
+                        $('#verificationFeedback').hide();
+                    } else {
+                        $('#verificationFeedback').removeClass('success').addClass('error').text('Failed to send verification code').show();
+                    }
+                });
+            });
+
+            // Verify code
+            $('#verificationCode').on('input', function() {
+                var code = $('#verificationCode').val();
+                var email = $('#email').val();
+                $.get('/api/verifyCode', { email: email, code: code }, function(data) {
+                    if (data.isVerified) {
+                        $('#verificationFeedback').removeClass('error').addClass('success').text('Email verified successfully').show();
+                        emailVerified = true;
+                    } else {
+                        $('#verificationFeedback').removeClass('success').addClass('error').text('Invalid verification code').show();
+                        emailVerified = false;
                     }
                     checkFormValidity();
                 });
@@ -202,11 +243,11 @@
                 var nickName = $('#nickName').val();
                 $.get('/api/check/nickname', { nickName: nickName }, function(data) {
                     if (data.isAvailable) {
-                        $('#nickNameFeedback').removeClass('success').addClass('error').text('Nickname already exists').show();
-                        nickNameValid = false;
-                    } else {
                         $('#nickNameFeedback').removeClass('error').addClass('success').text('Nickname is available').show();
                         nickNameValid = true;
+                    } else {
+                        $('#nickNameFeedback').removeClass('success').addClass('error').text('Nickname already exists').show();
+                        nickNameValid = false;
                     }
                     checkFormValidity();
                 });
@@ -224,13 +265,13 @@
                     passwordMatch = true;
                 }
                 checkFormValidity();
-                if (!usernameValid || !emailValid || !passwordMatch || !nickNameValid) {
+                if (!usernameValid || !emailValid || !passwordMatch || !nickNameValid || !emailVerified) {
                     e.preventDefault();
                 }
             });
 
             function checkFormValidity() {
-                if (usernameValid && emailValid && passwordMatch && nickNameValid) {
+                if (usernameValid && emailValid && passwordMatch && nickNameValid && emailVerified) {
                     $('#submitButton').prop('disabled', false);
                 } else {
                     $('#submitButton').prop('disabled', true);
