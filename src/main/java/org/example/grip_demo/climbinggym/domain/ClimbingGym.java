@@ -3,7 +3,7 @@ package org.example.grip_demo.climbinggym.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.grip_demo.condemo.CongestionDemo;
+import org.example.grip_demo.congestion.domain.Congestion;
 import org.example.grip_demo.post.domain.Post;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class ClimbingGym {
     private int acceptableCount = 100;
 
     @OneToMany(mappedBy = "climbingGym", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CongestionDemo> congestions = new ArrayList<>();
+    private List<Congestion> congestions = new ArrayList<>();
 
     @OneToMany(mappedBy = "climbingGym")
     private List<Post> posts;
