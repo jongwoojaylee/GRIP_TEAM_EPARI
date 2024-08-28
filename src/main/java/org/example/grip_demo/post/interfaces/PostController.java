@@ -188,6 +188,8 @@ public class PostController {
         Post post= postService.getPostById(postid).get();
         String name= post.getUser().getName();
         String gymId = climbingid.toString();
+        Long postUserId = post.getUser().getId();
+        String stringPostUserId = postUserId.toString();
 
         //현재 사용중인 사용자 뽑아보리깅
         String token = null;
@@ -211,6 +213,8 @@ public class PostController {
         model.addAttribute("name",name);
         model.addAttribute("gymId",gymId);
         model.addAttribute("currentUserId",currentUserId);
+        model.addAttribute("postUserId",postUserId);
+        model.addAttribute("stringPostUserId",stringPostUserId);
 
         return "posts/detail";
     }
