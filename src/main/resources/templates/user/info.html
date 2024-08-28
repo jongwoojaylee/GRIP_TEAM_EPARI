@@ -110,8 +110,57 @@
     </div>
     <a th:href="${updateurl}" class="update-button">Update</a>
 </div>
+<!--내가 작성한 post 목록-->
 <div class="container">
     <h1>Post list</h1>
+    <div th:if="${posts == null }" >
+        작성 글 없음
+    </div>
+    <div th:if="${posts != null}">
+        <div th:each="post : ${posts}" >
+            <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${post.getClimbingGym().getId()}, postId=${post.getId()})}">
+                <h3 th:text="${post.title}">Post Title</h3>
+            </a>
+            <p th:text="${post.content}">Post content</p>
+        </div>
+
+        <div>
+            <!-- Previous button -->
+            <a th:if="${currentPostPage > 0}" th:href="@{/userinfo/{param1}(param1 = ${user.id}, postPage = ${currentPostPage - 1}, commentPage=${currentCommentPage})}">Previous</a>
+
+            <!-- Page number display -->
+            <span>Page [[${currentPostPage + 1}]] of [[${totalPostPages}]]</span>
+
+            <!-- Next button -->
+            <a th:if="${currentPostPage < totalPostPages - 1}" th:href="@{/userinfo/{param1}(param1 = ${user.id}, postPage = ${currentPostPage + 1}, commentPage=${currentCommentPage})}">next</a>
+        </div>
+    </div>
+</div>
+<!--내가 작성한 댓글 목록-->
+<div class="container">
+    <h1>comment list</h1>
+    <div th:if="${comments == null }" >
+        작성 글 없음
+    </div>
+    <div th:if="${comments != null}">
+        <div th:each="comment : ${comments}" >
+            <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${comment.post.climbingGym.id}, postId=${comment.post.id})}">
+                <h3 th:text="${comment.post.title}">Post Title</h3>
+            </a>
+            <p th:text="${comment.commentText}">comment text</p>
+        </div>
+
+        <div>
+            <!-- Previous button -->
+            <a th:if="${currentCommentPage > 0}" th:href="@{/userinfo/{param1}(param1 = ${user.id}, commentPage=${currentCommentPage - 1}, postPage = ${currentPostPage})}">Previous</a>
+
+            <!-- Page number display -->
+            <span>Page [[${currentCommentPage + 1}]] of [[${totalCommentPages}]]</span>
+
+            <!-- Next button -->
+            <a th:if="${currentCommentPage < totalCommentPages - 1}" th:href="@{/userinfo/{param1}(param1 = ${user.id},commentPage=${currentCommentPage + 1}, postPage = ${currentPostPage})}">next</a>
+        </div>
+    </div>
 </div>
 
 </body>

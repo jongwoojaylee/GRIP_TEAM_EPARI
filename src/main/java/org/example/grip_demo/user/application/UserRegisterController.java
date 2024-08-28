@@ -28,7 +28,6 @@ public class UserRegisterController {
     public String processRegisterForm(@Valid RegisterUserDTO registerUserDTO,
                                       BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            System.out.println("validation error");
             return "redirect:/registeruserform";
         }
         //userDTO-> user로 변환
