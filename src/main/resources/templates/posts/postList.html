@@ -112,21 +112,7 @@
             overflow: hidden;
         }
 
-        .actions {
-            display: flex;
-            gap: 15px;
-            font-size: 12px;
-        }
 
-        .actions a {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .actions a:hover {
-            color: #0056b3;
-        }
     </style>
     </head>
     <body>
@@ -145,21 +131,9 @@
                 <div class="post-item-content">
                     <a th:href="@{/post/{climbingid}/{postid}(climbingid=${post.climbingGym.id}, postid=${post.id})}" class="post-title" th:text="${post.title}">제목</a>
                     <div class="post-content" th:text="${post.content}">내용</div>
-                    <div class="actions">
-                        <a th:href="@{/updatepostform(postid=${post.id})}">수정</a>
-                        <a href="#" th:onclick="|confirmDeletion(event,'@{/deletepost/{postid}(postid=${post.id})}')|">삭제</a>
-                    </div>
                 </div>
             </li>
         </ul>
     </div>
-    <script>
-        function confirmDeletion(event,url) {
-            event.preventDefault(); // 링크 기본 동작을 막음
-            if (confirm('정말로 삭제하시겠습니까?')) {
-                window.location.href = url; // 확인 시 요청 URL로 이동
-            }
-        }
-    </script>
 </body>
 </html>

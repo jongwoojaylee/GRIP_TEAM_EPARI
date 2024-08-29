@@ -149,6 +149,22 @@
         .comment-buttons .edit-btn:hover {
             background-color: #004d40;
         }
+        .actions {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+        }
+
+        .actions a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .actions a:hover {
+            color: #0056b3;
+        }
+
     </style>
 </head>
 <body>
@@ -169,6 +185,10 @@
         <div class="post-content" th:text="${post.content}">내용</div>
     </div>
     <div th:replace="/like/like.html"></div>
+    <div class="actions" th:if="${stringPostUserId == currentUserId}">
+        <a th:href="@{/updatepostform(postid=${post.id})}">수정</a>
+        <a href="#" th:onclick="|confirmDeletion(event,'@{/deletepost/{postid}(postid=${post.id})}')|">삭제</a>
+    </div>
     <div class="comment-form">
         <h3>댓글 작성</h3>
         <form id="comment-form" action="/api/postcomment" method="post">
@@ -187,6 +207,13 @@
     <a href="/postlist" class="back-button">목록으로 돌아가기</a>
 </div>
 <script>
+    function confirmDeletion(event,url) {
+        event.preventDefault(); // 링크 기본 동작을 막음
+        if (confirm('정말로 삭제하시겠습니까?')) {
+            window.location.href = url; // 확인 시 요청 URL로 이동
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const commentForm = document.getElementById('comment-form');
         const climbingId = document.getElementById('climbingId').value;
