@@ -67,10 +67,10 @@ function loadAllGyms() {
                                 let congestionElement = document.getElementById(`congestion-${gym.id}`);
                                 if (congestionData) {
                                     congestionElement.innerText = `${congestionData.presentCount}`;
-                                    if (congestionData.presentCount/gym.acceptableCount < 0.33) {
+                                    if (congestionData.presentCount/gym.acceptableCount < 0.55) {
                                         congestionElement.innerText = `여유`;
                                         congestionElement.style.color = 'green';
-                                    } else if (congestionData.presentCount/gym.acceptableCount < 0.66) {
+                                    } else if (congestionData.presentCount/gym.acceptableCount < 0.75) {
                                         congestionElement.innerText = `보통`;
                                         congestionElement.style.color = 'orange';
                                     } else {
