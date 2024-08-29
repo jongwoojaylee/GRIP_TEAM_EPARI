@@ -1,41 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <style>
+    /* Global Styles */
     body {
-        font-family: 'Arial', sans-serif;
+        font-family: 'Inter', sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #f8f9fd;
+        background-color: #FFFFFF;
         color: #333;
-    }
-
-    .header {
-        background-color: #fff;
-        padding: 20px 0;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-    }
-
-    .title {
-        margin: 0;
-        font-size: 28px;
-        color: #333;
-        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
     }
 
     .container {
-        max-width: 600px;
-        margin: 40px auto;
+        background: #F1F2F2;
+        width: 100%;
+        max-width: 800px;
+        margin: 30px auto;
         padding: 20px;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .post-form {
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -44,51 +32,75 @@
     .form-group {
         display: flex;
         flex-direction: column;
+        gap: 5px;
+        margin-bottom: 15px; /* Adds space between each form group */
     }
 
     .form-group label {
-        margin-bottom: 5px;
-        color: #666;
-        font-weight: bold;
+        font-size: 20px; /* Reduced font size */
+        font-weight: 600;
+        margin-bottom: 8px; /* Adds space between label and input */
+        color: #000000;
+        text-transform: uppercase;
+        align-self: flex-start; /* Aligns the label to the start of the container */
+        padding-left: 10%; /* Aligns label to match input padding */
     }
 
     .form-group input,
     .form-group textarea {
         padding: 10px;
+        margin: 0 auto;
         border: 1px solid #e0e0e0;
-        border-radius: 5px;
-        font-size: 14px;
+        border-radius: 10px;
+        font-size: 16px;
         transition: border-color 0.3s ease;
+        background: #FFFFFF;
+        width: 80%;
     }
 
     .form-group input:focus,
     .form-group textarea:focus {
-        border-color: #44c767;
+        border-color: #0EDAF5;
         outline: none;
     }
 
     .form-group button {
-        background-color: #44c767;
+        width: 150px; /* Reduced width */
+        height: 50px; /* Reduced height */
+        background-color: #0EDAF5;
         color: white;
         padding: 10px;
         border: none;
-        border-radius: 5px;
-        font-size: 16px;
+        border-radius: 8px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        margin-top: 10px;
+        align-self: center;
+        font-weight: 800;
+        font-size: 18px;
     }
 
     .form-group button:hover {
-        background-color: #5cbf2a;
+        background-color: #0BBBD4;
     }
 
-    .image-preview {
-        max-width: 100%;
-        border-radius: 8px;
-        margin-top: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
 
+        .form-group label {
+            font-size: 18px;
+            padding-left: 5%; /* Reduced padding for smaller screens */
+        }
+
+        .form-group button {
+            width: 100%;
+            height: 50px;
+            font-size: 18px;
+        }
+    }
 </style>
 <head>
     <title>게시글 수정</title>
