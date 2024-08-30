@@ -50,6 +50,8 @@ dependencies {
     //gson
     implementation 'com.google.code.gson:gson'
 
+    //email verifying
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     
 }
 

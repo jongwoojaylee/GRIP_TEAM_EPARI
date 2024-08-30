@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             margin: 0;
             padding: 0;
             justify-content: center;
@@ -14,20 +14,18 @@
             height: 100vh;
         }
         .container {
-            background: #fff;
+            position: relative;
+            background: #F1F2F2;
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
-            position: relative; /* Use absolute positioning */
-            top: 50%; /* Move down from top by 50% of the viewport height */
-            left: 50%; /* Move right from left by 50% of the viewport width */
-            transform: translate(-50%, -50%); /* Center the container */
+            width: 350px;
+            margin: 20px auto;
         }
         h1 {
             margin-bottom: 1rem;
-            color: #333;
+            color: #000000;
+            text-align: center;
         }
         form {
             display: flex;
@@ -50,7 +48,7 @@
             border-radius: 4px;
         }
         button {
-            background-color: #28a745; /* 녹색 버튼 */
+            background-color: #0EDAF5;
             color: #fff;
             border: none;
             padding: 0.75rem;
@@ -59,7 +57,7 @@
             font-size: 1rem;
         }
         button:hover {
-            background-color: #218838; /* 버튼 호버 시 어두운 녹색 */
+            background-color: #0EDAF5;
         }
         .links {
             margin-top: 1rem;
@@ -81,20 +79,21 @@
 <body>
 <header id="header" th:replace="header.html"></header>
 <div class="container">
-    <h1>Login Form</h1>
+    <h1>로그인</h1>
     <form action="/login" method="post">
-        <label for="username">아이디:</label>
+        <label for="username"><strong>아이디:</strong></label>
         <input type="text" id="username" name="username" required>
 
-        <label for="password">비밀번호:</label>
+        <label for="password"><strong>비밀번호:</strong></label>
         <input type="password" id="password" name="password" required>
 
         <button type="submit">로그인</button>
     </form>
     <div class="links">
-        <a href="/registeruserform">Register</a>
-        <a th:href="${link}">Kakao Login</a>
+        <a href="/registeruserform">회원가입</a>
+        <a th:href="${link}">카카오 로그인</a>
     </div>
 </div>
 </body>
+<footer id="footer" th:replace="~{footer.html}"></footer>
 </html>

@@ -5,7 +5,6 @@
     <title>Search Form</title>
     <style>
         .main-content {
-            margin-top: 150px; /* Adjust if header height changes */
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -16,15 +15,10 @@
             min-height: calc(100vh - 60px);
         }
         header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            z-index: 1000;
+        }
+        footer {
+            width: 100%;
         }
         body {
             font-family: Arial, sans-serif;
@@ -71,7 +65,7 @@
         form button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #007bff;
+            background-color: #0EDAF5;
             color: white;
             border: none;
             border-radius: 5px;
@@ -80,7 +74,7 @@
         }
 
         form button:hover {
-            background-color: #0056b3;
+            background-color: #0EDAF5;
         }
 
         .post-item {
@@ -112,14 +106,14 @@
             padding: 10px 15px;
             margin: 0 5px;
             border-radius: 5px;
-            background-color: #007bff;
+            background-color: #0EDAF5;
             color: white;
             text-decoration: none;
             transition: background-color 0.3s;
         }
 
         .pagination a:hover {
-            background-color: #0056b3;
+            background-color: #0EDAF5;
         }
 
         .pagination span {
@@ -132,7 +126,7 @@
         }
 
         mark {
-            background-color: #ffff00;
+            background-color: #0EDAF5;
             color: #000;
         }
         .no-results {
@@ -141,14 +135,13 @@
             margin-top: 20px;
         }
     </style>
-    <link rel="stylesheet" href="main.css">
 </head>
-<body>
 <header id="header" th:replace="header.html"></header>
+<body>
 <div class="main-content">
 <!-- 검색창 -->
     <div class="search-container">
-        <h1>Search Posts</h1>
+        <h1>검색</h1>
         <form action="/search" method="get">
             <input type="text" id="query" name="query" th:value="${query}" />
             <button type="submit">Search</button>
@@ -158,7 +151,7 @@
     <!-- 검색 결과 -->
     <div class="search-results">
         <!-- post 결과 -->
-        <h2>Post Results</h2>
+        <h2>게시글</h2>
         <div th:if="${posts == null }" class="no-results">
             검색 결과가 없습니다.
         </div>
@@ -182,7 +175,7 @@
             </div>
         </div>
         <!-- gym 결과 -->
-        <h2>Climbing Gym Results</h2>
+        <h2>클라이밍짐</h2>
         <div th:if="${climbingGyms == null}" class="no-results">
             검색 결과가 없습니다.
         </div>
@@ -219,4 +212,5 @@
     });
 </script>
 </body>
+<footer id="footer" th:replace="~{footer.html}"></footer>
 </html>

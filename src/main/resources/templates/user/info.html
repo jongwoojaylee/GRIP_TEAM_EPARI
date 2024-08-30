@@ -6,22 +6,16 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             margin: 0;
-            padding: 0;
+            padding: 5px;
             height: 100vh;
             display: flex;
             flex-direction: column;
         }
-
-        header {
-            position: sticky;
-            padding: 34px 0;
-        }
-
         .container {
             position: relative;
-            background: #fff;
+            background: #F1F2F2;
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -59,7 +53,7 @@
 
         .change-photo-button {
             display: inline-block;
-            background-color: #45a050;
+            background-color: #0EDAF5;
             color: white;
             padding: 5px 10px;
             text-align: center;
@@ -69,12 +63,12 @@
         }
 
         .change-photo-button:hover {
-            background-color: #45a050;
+            background-color: #0EDAF5;
         }
 
         .update-button {
             display: inline-block;
-            background-color: #4CAF50;
+            background-color: #0EDAF5;
             color: white;
             padding: 10px 20px;
             text-align: center;
@@ -84,47 +78,115 @@
         }
 
         .update-button:hover {
-            background-color: #45a050;
+            background-color: #0EDAF5;
         }
 
+
+        .comment-box {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .comment-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+
+        .comment-text {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+        }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .post-box {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .post-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+
+        .post-content {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            color: #0EDAF5;
+            text-decoration: none;
+        }
+
+        .pagination span {
+            font-size: 14px;
+            color: #777;
+        }
+
+
+
     </style>
-    <link rel="stylesheet" href="/main.css">
 </head>
-<body>
 <header id="header" th:replace="header.html"></header>
+<body>
 <div class="container">
-    <h1>User Information</h1>
+    <h1 style="text-align: center;">내 정보</h1>
     <div class="user-info">
         <div id="information">
-            <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
-            <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
-            <p><strong>Nickname:</strong> <span th:text="${user.nickName}"></span></p>
-            <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-            <p><strong>Phone number:</strong> <span th:text="${user.phoneNumber}"></span></p>
-            <p><strong>Gender:</strong> <span th:text="${user.gender ? '남자' : '여자'}"></span></p>
+            <p><strong>아이디:</strong> <span th:text="${user.username}"></span></p>
+            <p><strong>이름:</strong> <span th:text="${user.name}"></span></p>
+            <p><strong>닉네임:</strong> <span th:text="${user.nickName}"></span></p>
+            <p><strong>이메일:</strong> <span th:text="${user.email}"></span></p>
+            <p><strong>휴대전:</strong> <span th:text="${user.phoneNumber}"></span></p>
+            <p><strong>성별:</strong> <span th:text="${user.gender ? '남자' : '여자'}"></span></p>
         </div>
         <div id="profile-image">
             <img src="/GripLogo.png" alt="Grip Logo">
-            <a href="#" class="change-photo-button">Change Photo</a>
+            <a href="#" class="change-photo-button">사진 변경</a>
         </div>
     </div>
-    <a th:href="${updateurl}" class="update-button">Update</a>
+    <a th:href="${updateurl}" class="update-button">내 정보 수정하기</a>
 </div>
 <!--내가 작성한 post 목록-->
 <div class="container">
-    <h1>Post list</h1>
-    <div th:if="${posts == null }" >
+    <h1 style="text-align: center;">게시글</h1>
+    <div th:if="${posts == null }">
         작성 글 없음
     </div>
     <div th:if="${posts != null}">
-        <div th:each="post : ${posts}" >
-            <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${post.getClimbingGym().getId()}, postId=${post.getId()})}">
+        <div class="post-box" th:each="post : ${posts}">
+            <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${post.getClimbingGym().getId()}, postId=${post.getId()})}" class="post-title">
                 <h3 th:text="${post.title}">Post Title</h3>
             </a>
-            <p th:text="${post.content}">Post content</p>
+            <p th:text="${post.content}" class="post-content">Post content</p>
         </div>
 
-        <div>
+        <div class="pagination">
             <!-- Previous button -->
             <a th:if="${currentPostPage > 0}" th:href="@{/userinfo/{param1}(param1 = ${user.id}, postPage = ${currentPostPage - 1}, commentPage=${currentCommentPage})}">Previous</a>
 
@@ -132,25 +194,26 @@
             <span>Page [[${currentPostPage + 1}]] of [[${totalPostPages}]]</span>
 
             <!-- Next button -->
-            <a th:if="${currentPostPage < totalPostPages - 1}" th:href="@{/userinfo/{param1}(param1 = ${user.id}, postPage = ${currentPostPage + 1}, commentPage=${currentCommentPage})}">next</a>
+            <a th:if="${currentPostPage < totalPostPages - 1}" th:href="@{/userinfo/{param1}(param1 = ${user.id}, postPage = ${currentPostPage + 1}, commentPage=${currentCommentPage})}">Next</a>
         </div>
     </div>
 </div>
-<!--내가 작성한 댓글 목록-->
+
+<!--내가 작성한 comment 목록-->
 <div class="container">
-    <h1>comment list</h1>
-    <div th:if="${comments == null }" >
-        작성 글 없음
+    <h1 style="text-align: center;">댓글</h1>
+    <div th:if="${comments == null }">
+        작성 댓글 없음
     </div>
     <div th:if="${comments != null}">
-        <div th:each="comment : ${comments}" >
-            <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${comment.post.climbingGym.id}, postId=${comment.post.id})}">
+        <div th:each="comment : ${comments}" class="comment-box">
+            <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${comment.post.climbingGym.id}, postId=${comment.post.id})}" class="comment-title">
                 <h3 th:text="${comment.post.title}">Post Title</h3>
             </a>
-            <p th:text="${comment.commentText}">comment text</p>
+            <p th:text="${comment.commentText}" class="comment-text">comment text</p>
         </div>
 
-        <div>
+        <div class="pagination">
             <!-- Previous button -->
             <a th:if="${currentCommentPage > 0}" th:href="@{/userinfo/{param1}(param1 = ${user.id}, commentPage=${currentCommentPage - 1}, postPage = ${currentPostPage})}">Previous</a>
 
@@ -158,10 +221,11 @@
             <span>Page [[${currentCommentPage + 1}]] of [[${totalCommentPages}]]</span>
 
             <!-- Next button -->
-            <a th:if="${currentCommentPage < totalCommentPages - 1}" th:href="@{/userinfo/{param1}(param1 = ${user.id},commentPage=${currentCommentPage + 1}, postPage = ${currentPostPage})}">next</a>
+            <a th:if="${currentCommentPage < totalCommentPages - 1}" th:href="@{/userinfo/{param1}(param1 = ${user.id},commentPage=${currentCommentPage + 1}, postPage = ${currentPostPage})}">Next</a>
         </div>
     </div>
 </div>
 
 </body>
+<footer id="footer" th:replace="~{footer.html}"></footer>
 </html>
