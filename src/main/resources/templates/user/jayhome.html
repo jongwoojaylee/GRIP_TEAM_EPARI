@@ -1,37 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<header id="header" th:replace="header.html"></header>
 <body>
-<header id="header">
-    <img src="GripLogo.png" alt="Grip Logo" class="logo">
-    <ul>
-        <li id="left-nav">
-            <a href="/main">지도</a>
-        </li>
-        <li><a href="/postlist">게시판</a></li>
-    </ul>
-    <ul class="right-nav">
-        <li>
-            <a href="/searchform">검색</a>
-        </li>
-        <li>
-            <a sec:authorize="isAnonymous()" href="/loginform">로그인</a>
-            <div sec:authorize="isAuthenticated()">
-                <!-- 현재 인증된 사용자 이름을 표시하고, userId를 이용해 링크 설정 -->
-                <a th:href="@{'/userinfo/' + ${#authentication.principal.userId}}"
-                   th:text="${#authentication.principal.username}">name</a>님
-                <a href="/logout">로그아웃</a>
-            </div>
-        </li>
-    </ul>
-</header>
-<h1>hi</h1>
-<a href="/loginform">login</a>
-<a href="/registeruserform">signup</a>
-<a th:href="@{'/userinfo/' + ${userId}}">userinfo</a>
 
 </body>
 </html>

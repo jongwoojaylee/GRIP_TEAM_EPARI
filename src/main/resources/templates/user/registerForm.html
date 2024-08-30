@@ -7,25 +7,26 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             margin: 0;
             padding: 0;
-            display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
         .container {
-            background: #fff;
+            position: relative;
+            background: #F1F2F2;
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
-            text-align: center;
+            width: 500px;
+            margin: 20px auto;
         }
         h1 {
             margin-bottom: 1rem;
             color: #333;
+            text-align: center;
         }
         form {
             display: flex;
@@ -48,8 +49,8 @@
             border-radius: 4px;
         }
         .form-group button {
-            background-color: #28a745; /* 녹색 버튼 */
-            color: #fff;
+            background-color: #0EDAF5; /* 녹색 버튼 */
+            color: #ffffff;
             border: none;
             padding: 0.5rem;
             border-radius: 4px;
@@ -58,7 +59,7 @@
             height: 38px; /* Align button height with input fields */
         }
         .form-group button:hover {
-            background-color: #218838; /* 버튼 호버 시 어두운 녹색 */
+            background-color: #0EDAF5; /* 버튼 호버 시 어두운 녹색 */
         }
         .error {
             color: #dc3545;
@@ -90,69 +91,67 @@
         }
     </style>
 </head>
+<header id="header" th:replace="header.html"></header>
 <body>
 <div class="container">
     <h1>Sign Up</h1>
     <form id="signupForm" th:action="@{/registeruser}" th:object="${userDTO}" method="post">
         <div class="form-group">
-            <label for="username">Username:</label>
+            <label for="username">아이디:</label>
             <input type="text" id="username" th:field="${userDTO.username}" placeholder="특수문자 포함하지 않는 2~10자리" required>
-            <button type="button" id="checkUsernameButton">Check Username</button>
+            <button type="button" id="checkUsernameButton">중복확인</button>
             <span id="usernameFeedback" class="error" style="display: none;"></span>
             <span th:if="${usernameError}" class="error" th:text="${usernameError}"></span>
         </div>
         <div class="form-group">
-            <label for="password">Password:</label>
+            <label for="password">비밀번호:</label>
             <input type="password" id="password" th:field="${userDTO.password}" placeholder="영문 대, 소문자, 숫자와 특수기호 1개이상씩 포함 4~20자리" required>
         </div>
         <div class="form-group">
-            <label for="confirmPassword">Confirm Password:</label>
+            <label for="confirmPassword">비밀번호 확인:</label>
             <input type="password" id="confirmPassword" required>
             <span id="passwordFeedback" class="error" style="display: none;">Passwords do not match</span>
         </div>
         <div class="form-group">
-            <label for="name">Name:</label>
+            <label for="name">이름:</label>
             <input type="text" id="name" th:field="${userDTO.name}" required>
         </div>
         <div class="form-group">
-            <label for="nickName">Nick name:</label>
+            <label for="nickName">닉네임:</label>
             <input type="text" id="nickName" th:field="${userDTO.nickName}" placeholder="특수문자를 포함하지 않는 2~10자리" required>
-            <button type="button" id="checkNickNameButton">Check nick name</button>
+            <button type="button" id="checkNickNameButton">중복확인</button>
             <span id="nickNameFeedback" class="error" style="display: none;"></span>
             <span th:if="${nickNameError}" class="error" th:text="${nickNameError}"></span>
         </div>
         <div class="form-group">
-            <label for="phoneNumber">Phone number:</label>
+            <label for="phoneNumber">휴대전화:</label>
             <input type="text" id="phoneNumber" th:field="${userDTO.phoneNumber}" placeholder="-를 제외한 숫자 9~11자리" required>
         </div>
         <div class="form-group">
-            <label for="address">Address:</label>
+            <label for="address">주소:</label>
             <input type="text" id="address" th:field="${userDTO.address}" required>
         </div>
         <div class="form-group">
-            <label for="gender">Gender:</label>
+            <label for="gender">성별:</label>
             <select id="gender" name="gender" required>
                 <option value="true" th:selected="${userDTO.gender}">Male</option>
                 <option value="false" th:selected="${!userDTO.gender}">Female</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="email">Email:</label>
+            <label for="email">이메일:</label>
             <input type="email" id="email" th:field="${userDTO.email}" required>
-            <button type="button" id="checkEmailButton">Check Email</button>
-            <button type="button" id="sendVerificationCodeButton" style="display: none;">Send Verification Code</button>
+            <button type="button" id="checkEmailButton">중복확인</button>
+            <button type="button" id="sendVerificationCodeButton" style="display: none;">전송</button>
+            <span id="emailFeedback" class="error" style="display: none;"></span>
         </div>
         <div class="form-group">
-            <label id="Code" style="display: none;">Code</label>
+            <label id="Code" style="display: none;">Code:</label>
             <input type="text" id="verificationCode" placeholder="Enter verification code" style="display: none;">
-            <span id="emailFeedback" class="error" style="display: none;"></span>
             <span id="verificationFeedback" class="error" style="display: none;"></span>
         </div>
         <div>
             <button type="submit" id="submitButton" disabled>Sign Up</button>
-        </div>
-        <div class="links">
-            <a href="/loginform">Already have an account? Log In</a>
         </div>
     </form>
 
@@ -183,10 +182,10 @@
                 var username = $('#username').val();
                 $.get('/api/check/username', { username: username }, function(data) {
                     if (data.isAvailable) {
-                        $('#usernameFeedback').removeClass('error').addClass('success').text('Username is available').show();
+                        $('#usernameFeedback').removeClass('error').addClass('success').text('사용가능').show();
                         usernameValid = true;
                     } else {
-                        $('#usernameFeedback').removeClass('success').addClass('error').text('Username already exists').show();
+                        $('#usernameFeedback').removeClass('success').addClass('error').text('이미 존재합니다').show();
                         usernameValid = false;
                     }
                     checkFormValidity();
@@ -198,11 +197,11 @@
                 var email = $('#email').val();
                 $.get('/api/check/email', { email: email }, function(data) {
                     if (data.isAvailable) {
-                        $('#emailFeedback').removeClass('error').addClass('success').text('Email is available').show();
+                        $('#emailFeedback').removeClass('error').addClass('success').text('사용가능').show();
                         emailValid = true;
                         $('#sendVerificationCodeButton').show();
                     } else {
-                        $('#emailFeedback').removeClass('success').addClass('error').text('Email already exists').show();
+                        $('#emailFeedback').removeClass('success').addClass('error').text('이미 존재합니다').show();
                         emailValid = false;
                         $('#sendVerificationCodeButton').hide();
                     }
@@ -243,10 +242,10 @@
                 var nickName = $('#nickName').val();
                 $.get('/api/check/nickname', { nickName: nickName }, function(data) {
                     if (data.isAvailable) {
-                        $('#nickNameFeedback').removeClass('error').addClass('success').text('Nickname is available').show();
+                        $('#nickNameFeedback').removeClass('error').addClass('success').text('사용가능').show();
                         nickNameValid = true;
                     } else {
-                        $('#nickNameFeedback').removeClass('success').addClass('error').text('Nickname already exists').show();
+                        $('#nickNameFeedback').removeClass('success').addClass('error').text('이미 존재합니다').show();
                         nickNameValid = false;
                     }
                     checkFormValidity();
@@ -282,4 +281,5 @@
     </script>
 </div>
 </body>
+<footer id="footer" th:replace="~{footer.html}"></footer>
 </html>
