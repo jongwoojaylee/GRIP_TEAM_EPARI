@@ -69,7 +69,6 @@ public class ClimbingGymController {
             }
         }
         int pageSize = 9;
-        PageRequest pageRequest = PageRequest.of(page, pageSize);
         Page<Post> postsPage = climingGymService.pageClimbingGymPosts(climbingId, page, pageSize);
 
         Optional<ClimbingGym> climbinggym = climingGymService.getClimbingGym(climbingId);

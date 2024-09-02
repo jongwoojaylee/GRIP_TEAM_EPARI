@@ -78,7 +78,7 @@
     /* 새 게시글 작성 버튼 스타일 */
     .new-post-button {
         /*display: inline-block;*/
-        background-color: #44c767;
+        background-color: #0EDAF5;
         color: white;
         padding: 10px 20px;
         text-decoration: none;
@@ -88,7 +88,7 @@
     }
 
     .new-post-button:hover {
-        background-color: #5cbf2a;
+        background-color: #0ecbf5;
         transform: translateY(-2px);
     }
 
@@ -100,7 +100,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
-        gap: 20px;
+        gap: 50px;
     }
 
     .post-item {
@@ -111,7 +111,6 @@
         margin-bottom: 170px;
         box-sizing: border-box;
     }
-
 
     .post-card {
         border: 1px solid #ddd;
@@ -142,7 +141,7 @@
         height: 45px;
         font-size: 20px;
         /*margin-bottom: 10px;*/
-        color: #44c767;
+        color: #0EDAF5;
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -155,8 +154,7 @@
 
     /* 게시글 내용 및 작성일 스타일 */
     .post-content {
-        height: 15px;
-        font-size: 16px;
+        height: 55px;
         color: #555;
         margin-bottom: 10px;
         overflow: hidden;
@@ -189,8 +187,10 @@
     .pagination {
         display: flex;
         list-style-type: none;
-        padding: 0;
-        margin: 0;
+    }
+
+    .pagination li {
+        margin: 0 10px;
     }
 
 </style>
@@ -216,6 +216,7 @@
                 <div class="post-card">
                     <div class="post-image">
                         <img th:if="${post.imageUrl}" th:src="@{${post.imageUrl}}" alt="Post Image"/>
+                        <img th:unless="${post.imageUrl}" th:src="@{/fontlogo.png}" alt="Post Image"/>
                     </div>
                     <h3 class="post-title">
 <!--                        <a th:text="${post.title}" th:href="@{'/post/' + ${climbinggym.id} + '/' + ${post.id}}">게시글 제목</a>-->
