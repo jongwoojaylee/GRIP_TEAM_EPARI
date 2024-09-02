@@ -276,9 +276,7 @@
 
     </head>
 <body>
-<header class="header">
-    <h1 class="title">게시물 상세보기</h1>
-</header>
+<header id="header" th:replace="~{header.html}"></header>
 <div class="container">
     <div class="post-details">
         <h2 th:text="${post.title}">제목</h2>
