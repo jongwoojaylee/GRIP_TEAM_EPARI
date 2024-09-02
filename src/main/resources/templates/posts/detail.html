@@ -41,9 +41,9 @@
             }
 
             .container {
-                width: 60%;
-                max-width: 972px;
-                max-height: 90vh; /* Limits the height of the container */
+                width: 80%; /* Increased width for desktop */
+                max-width: 1200px; /* Maximum width for larger screens */
+                max-height: 95vh; /* Limits the height of the container */
                 background: #F1F2F2;
                 backdrop-filter: blur(2px); /* Adds blur effect */
                 border-radius: 20px;
@@ -140,11 +140,13 @@
                 border: 1px solid #ccc;
                 font-size: 16px;
                 resize: none;
+                min-height: 60px; /* Set a minimum height to the textarea */
+                overflow-y: auto; /* Allows scrolling when content exceeds */
             }
 
             .submit-button {
                 width: 100%;
-                padding: 12px;
+                padding: 8px; /* Reduces padding to make button smaller */
                 background-color: #0EDAF5;
                 color: #FFF;
                 border: none;
@@ -165,8 +167,10 @@
                 border-radius: 20px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 margin-bottom: 20px;
-                max-height: 300px;
-                overflow-y: auto;
+                flex-grow: 1; /* Expands the comment section to take up remaining space */
+                overflow-y: auto; /* Enables scrolling within the comments section */
+                max-height: 50vh; /* Sets a maximum height for the comment box for better visibility */
+                min-height: 200px; /* Ensures the comment section has a minimum height */
             }
 
             .comment {
@@ -184,6 +188,7 @@
             .comment p {
                 margin: 5px 0;
                 color: #333;
+                font-size: 16px; /* Increased font size for readability */
             }
 
             .comment-buttons {
@@ -268,6 +273,7 @@
                 }
             }
         </style>
+
     </head>
 <body>
 <header class="header">

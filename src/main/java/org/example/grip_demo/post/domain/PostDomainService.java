@@ -1,6 +1,10 @@
 package org.example.grip_demo.post.domain;
 
+import org.example.grip_demo.post.interfaces.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +33,10 @@ public class PostDomainService {
 
     public Post updatePost(Post post) {
         return postRepository.save(post);
+    }
+
+    public Page<Post> getAllPostsPageable(Pageable pageable){
+        return postRepository.findAll(pageable);
     }
 
 

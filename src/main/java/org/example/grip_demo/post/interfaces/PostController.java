@@ -12,6 +12,7 @@ import org.example.grip_demo.post.application.PostService;
 import org.example.grip_demo.post.domain.Post;
 import org.example.grip_demo.user.domain.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +41,9 @@ public class PostController {
     private Long gymId;
 
     @GetMapping("/postlist")
-    public String getPostList(Model model) {
-        List<Post> posts = postService.getAllPosts();
-        model.addAttribute("posts", posts);
+    public String getPostList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Post> paging = postService.getListPost(page);
+        model.addAttribute("paging", paging);
         return "posts/postlist";
     }
 
