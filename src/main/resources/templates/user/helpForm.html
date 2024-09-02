@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 5px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            position: relative;
+            background: #F1F2F2;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<header id="header" th:replace="header.html"></header>
+<body>
+<div class="container">
+    <h1 style="text-align: center;">이메일 인증</h1>
+    <form action="/" method="post">
+        <label for="username"><strong>이메일:</strong></label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">이메일 확인</button>
+    </form>
+
+</div>
+
+</body>
+<footer id="footer" th:replace="~{footer.html}"></footer>
+
+</html>

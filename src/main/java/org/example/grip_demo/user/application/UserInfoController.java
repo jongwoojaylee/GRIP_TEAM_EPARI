@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class UserInfoController {
@@ -50,6 +52,10 @@ public class UserInfoController {
         model.addAttribute("comments", comments);
         model.addAttribute("totalCommentPages", comments.getTotalPages());
         model.addAttribute("currentCommentPage", commentPage);
+
+        List<Post> likedPosts = userService.getLikedPostsByUserId(userId);
+
+        model.addAttribute("likedPosts", likedPosts);
 
         return "user/info";
     }
