@@ -123,4 +123,9 @@ public class UserLoginController {
         response.sendRedirect("/main");
 
     }
+
+    @GetMapping("/login/help2")
+    public String showHelp(){
+        return "user/helpForm";
+    }
 }

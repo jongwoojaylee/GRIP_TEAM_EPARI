@@ -36,8 +36,11 @@ public class EmailService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-        javaMailSender.send(message);
-
+        try {
+            javaMailSender.send(message);
+        } catch (Exception e){
+            return false;
+        }
         System.out.println("인증번호는"+verificationCodes+"입니다.");
         return true;
     }
