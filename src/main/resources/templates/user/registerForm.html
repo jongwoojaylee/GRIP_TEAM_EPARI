@@ -228,10 +228,10 @@
                 var email = $('#email').val();
                 $.get('/api/verifyCode', { email: email, code: code }, function(data) {
                     if (data.isVerified) {
-                        $('#verificationFeedback').removeClass('error').addClass('success').text('Email verified successfully').show();
+                        $('#verificationFeedback').removeClass('error').addClass('success').text('인증완료').show();
                         emailVerified = true;
                     } else {
-                        $('#verificationFeedback').removeClass('success').addClass('error').text('Invalid verification code').show();
+                        $('#verificationFeedback').removeClass('success').addClass('error').text('인증번호 불일치').show();
                         emailVerified = false;
                     }
                     checkFormValidity();
