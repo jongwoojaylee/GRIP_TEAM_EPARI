@@ -54,7 +54,7 @@ public class Post {
     @JoinColumn(name = "CLIMBING_GYM_ID", nullable = true)
     private ClimbingGym climbingGym;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @OrderBy("createdAt")
     private List<Comment> comments;
 

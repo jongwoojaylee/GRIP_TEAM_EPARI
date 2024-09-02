@@ -13,6 +13,14 @@
             color: #333;
         }
 
+        h2 {
+            font-size: 28px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
         .header {
             background-color: #fff;
             padding: 20px 0;
@@ -42,7 +50,7 @@
         }
 
         .new-post a {
-            background-color: #44c767;
+            background-color: #0BBBD4;
             color: white;
             padding: 10px 20px;
             text-decoration: none;
@@ -51,7 +59,7 @@
         }
 
         .new-post a:hover {
-            background-color: #5cbf2a;
+            background-color: #44c767;
         }
 
         .post-list {
@@ -113,18 +121,54 @@
         }
 
 
+        .pagination {
+            display: flex; /* Flexbox layout */
+            justify-content: center; /* Centers the pagination horizontally */
+            align-items: center; /* Centers the items vertically */
+            gap: 10px; /* Adds space between pagination items */
+            padding: 10px 0; /* Adds padding for better spacing */
+            list-style: none; /* Removes default bullet points from list */
+            margin: 0; /* Removes default margin */
+        }
+
+        .pagination .page-item {
+            margin: 0 5px; /* Adds margin around each page item */
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #ccc; /* Disabled state color */
+            pointer-events: none; /* Disable click for disabled items */
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #0EDAF5; /* Active page background color */
+            color: white; /* Active page text color */
+            border-radius: 5px; /* Adds rounded corners to active page */
+        }
+
+        .pagination .page-link {
+            color: #0EDAF5; /* Default color for page links */
+            padding: 8px 12px; /* Adds padding to page links */
+            border: none; /* Removes border */
+            border-radius: 5px; /* Rounded corners for page links */
+            text-decoration: none; /* Removes underline from links */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        .pagination .page-link:hover {
+            background-color: #0BBBD4; /* Hover background color */
+            color: white; /* Hover text color */
+        }
     </style>
     </head>
     <body>
-    <header class="header">
-        <h1 class="title">전체 게시글 리스트</h1>
-    </header>
+    <h2>전체 게시글</h2>
     <div class="container">
         <div class="new-post">
             <a href="/postform">새 게시글 작성</a>
         </div>
         <ul class="post-list">
-            <li class="post-item" th:each="post : ${posts}">
+            <li class="post-item" th:each="post : ${paging}">
                 <div>
                     <img th:if="${post.imageUrl}" th:src="@{${post.imageUrl}}" alt="Post Image"/>
                 </div>
@@ -133,6 +177,29 @@
                     <div class="post-content" th:text="${post.content}">내용</div>
                 </div>
             </li>
+        </ul>
+    </div>
+
+<!--    페이징처리-->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{|?page=${paging.number-1}|}">
+                                <span>이전</span>
+                            </a>
+                        </li>
+                        <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                             th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                             th:classappend="${page == paging.number} ? 'active'"
+                             class="page-item">
+                            <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                            <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                                <span>다음</span>
+        </a>
+        </li>
         </ul>
     </div>
 </body>
