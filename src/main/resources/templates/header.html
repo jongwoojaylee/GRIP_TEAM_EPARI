@@ -8,7 +8,7 @@
 <body>
 <header id="header">
     <a href="/main"class="logo-box">
-        <img src="/GripLogo.png" alt="Grip Logo" class="logo">
+        <img src="/fontlogo.png" alt="Grip Logo" class="logo">
     </a>
     <ul>
 <!--        <li id="left-nav">-->
@@ -22,11 +22,11 @@
     <ul class="right-nav">
         <li>
             <!--            <a th:if="${username == null}" href="/loginform">로그인</a>-->
-            <a sec:authorize="isAnonymous()" href="/loginform">로그인</a>
+            <a class="login" sec:authorize="isAnonymous()" href="/loginform">로그인</a>
             <!--            <div th:if="${username != null}">-->
             <div sec:authorize="isAuthenticated()">
                 <a sec:authentication="principal.username" th:href="@{'/userinfo/' + ${#authentication.principal.userId}}">name</a>님
-                <a href="/logout">로그아웃</a>
+                <a class="logout" href="/logout">로그아웃</a>
             </div>
         </li>
     </ul>
