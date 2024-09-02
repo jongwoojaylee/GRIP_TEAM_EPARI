@@ -1,113 +1,141 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f8f9fd;
-        color: #333;
-    }
-
-    .header {
-        background-color: #fff;
-        padding: 20px 0;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .title {
-        margin: 0;
-        font-size: 24px;
-        color: #444;
-    }
-
-    .container {
-        max-width: 600px;
-        margin: 40px auto;
-        padding: 0 20px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-    }
-
-    .post-form {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .form-group label {
-        margin-bottom: 5px;
-        color: #666;
-    }
-
-    .form-group input,
-    .form-group textarea {
-        padding: 10px;
-        border: 1px solid #e0e0e0;
-        border-radius: 5px;
-        transition: border-color 0.3s ease;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-        border-color: #44c767;
-        outline: none;
-    }
-
-    .form-group button {
-        background-color: #44c767;
-        color: white;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .form-group button:hover {
-        background-color: #5cbf2a;
-    }
-
-</style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 작성</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFFFFF;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: #F1F2F2;
+            width: 100%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 15px; /* Adds space between each form group */
+        }
+
+        .form-group label {
+            font-size: 20px; /* Reduced font size */
+            font-weight: 600;
+            margin-bottom: 8px; /* Adds space between label and input */
+            color: #000000;
+            text-transform: uppercase;
+            align-self: flex-start; /* Aligns the label to the start of the container */
+            padding-left: 10%; /* Aligns label to match input padding */
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 10px;
+            margin: 0 auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background: #FFFFFF;
+            width: 80%;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #0EDAF5;
+            outline: none;
+        }
+
+        .form-group button {
+            width: 150px; /* Reduced width */
+            height: 50px; /* Reduced height */
+            background-color: #0EDAF5;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            align-self: center;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .form-group button:hover {
+            background-color: #0BBBD4;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+
+            .container {
+                padding: 15px;
+            }
+
+            .form-group label {
+                font-size: 18px;
+                padding-left: 5%; /* Reduced padding for smaller screens */
+            }
+
+            .form-group button {
+                width: 100%;
+                height: 50px;
+                font-size: 18px;
+            }
+        }
+
+    </style>
 </head>
 <body>
-<header class="header">
-    <h1 class="title">게시글 작성</h1>
-</header>
+<header id="header" th:replace="~{header.html}"></header>
 <div class="container">
     <form action="/post" method="post" class="post-form" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="title">제목:</label>
+            <label for="title">제목</label>
             <input type="text" id="title" name="title" required />
         </div>
         <input type="hidden" id="climbingid" name="climbingid" th:value="${climbingGymId}" />
         <div class="form-group">
-            <label for="name">사용자 이름:</label>
+            <label for="name">닉네임</label>
             <input type="text" id="name" name="name" th:value="${name}" required readonly />
         </div>
         <input type="hidden" id="userId" name="userId" th:value="${userId}" />
         <div class="form-group">
-            <label for="content">내용:</label>
-            <textarea id="content" name="content" required></textarea>
+            <label for="content">내용</label>
+            <textarea id="content" name="content" rows="5" required></textarea>
         </div>
         <div class="form-group">
-            <label for="image">이미지 업로드:</label>
+            <label for="image">이미지 업로드</label>
             <input type="file" id="image" name="image" accept="image/*">
         </div>
         <div class="form-group">
-            <button type="submit">작성</button>
+            <button type="submit">작성 완료</button>
         </div>
     </form>
 </div>

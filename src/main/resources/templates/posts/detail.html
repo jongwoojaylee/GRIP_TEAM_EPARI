@@ -2,171 +2,279 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>게시물 상세보기</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>게시물 상세보기</title>
+        <style>
+            /* Global Reset and Box Model */
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
 
-        .header {
-            background-color: #e0f2f1;
-            color: #004d40;
-            padding: 1em;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #ffffff;
+                color: #333;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100vh;
+                overflow: hidden; /* Prevents body scrolling */
+            }
 
-        .container {
-            width: 60%;
-            margin: 2em auto;
-            background-color: #fff;
-            padding: 2em;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+            .header {
+                position: absolute;
+                top: 20px; /* Adjust the space from the top */
+                width: 100%;
+                text-align: center;
+            }
 
-        .post-details {
-            margin-bottom: 2em;
-        }
+            .title {
+                font-size: 32px;
+                font-weight: bold;
+                color: #333;
+            }
 
-        .post-details h2 {
-            margin-top: 0;
-        }
+            .container {
+                width: 80%; /* Increased width for desktop */
+                max-width: 1200px; /* Maximum width for larger screens */
+                max-height: 95vh; /* Limits the height of the container */
+                background: #F1F2F2;
+                backdrop-filter: blur(2px); /* Adds blur effect */
+                border-radius: 20px;
+                padding: 30px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                margin: 60px auto 0 auto; /* Centers the box horizontally and adds space from the top */
+                overflow-y: auto; /* Allows vertical scrolling */
+            }
 
-        .post-details .post-meta {
-            color: #666;
-            margin-bottom: 1em;
-        }
+            .post-details {
+                background-color: #FFFFFF;
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
 
-        .post-details .post-content {
-            white-space: pre-wrap;
-        }
+            .post-details h2 {
+                font-size: 28px;
+                font-weight: bold;
+                color: #000;
+                margin-bottom: 10px;
+            }
 
-        .post-image img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
+            .post-meta {
+                font-size: 16px;
+                color: #666;
+                margin-bottom: 20px;
+            }
 
-        .back-button {
-            display: inline-block;
-            padding: 0.5em 1em;
-            background-color: #004d40;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-        }
+            .post-meta span {
+                margin-right: 10px;
+            }
 
-        .back-button:hover {
-            background-color: #00332e;
-        }
+            .post-image img {
+                max-width: 100%;
+                border-radius: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
 
-        .comment-form {
-            margin-top: 2em;
-            padding: 1em;
-            border-top: 1px solid #ddd;
-            background-color: #e0f2f1;
-            border-radius: 8px;
-        }
+            .post-content {
+                font-size: 18px;
+                line-height: 1.6;
+                color: #333;
+                margin-bottom: 20px;
+            }
 
-        .comment-form h3 {
-            margin-top: 0;
-        }
+            .actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
 
-        .comment-form .form-group {
-            margin-bottom: 1em;
-        }
+            .actions a {
+                font-size: 16px;
+                text-decoration: none;
+                color: #0EDAF5;
+                font-weight: bold;
+            }
 
-        .comment-form label {
-            display: block;
-            margin-bottom: 0.5em;
-            font-weight: bold;
-        }
+            .comment-form {
+                background-color: #FFFFFF;
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
 
-        .comment-form textarea {
-            width: 100%;
-            padding: 0.5em;
-            border: 1px solid #004d40;
-            border-radius: 4px;
-            resize: vertical;
-        }
+            .comment-form h3 {
+                font-size: 22px;
+                margin-bottom: 15px;
+                color: #000;
+            }
 
-        .submit-button {
-            display: inline-block;
-            padding: 0.5em 1em;
-            background-color: #004d40;
-            color: #fff;
-            text-decoration: none;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+            .form-group {
+                margin-bottom: 15px;
+            }
 
-        .submit-button:hover {
-            background-color: #00332e;
-        }
+            .form-group label {
+                font-size: 16px;
+                margin-bottom: 5px;
+                color: #333;
+            }
 
-        .comments {
-            margin-top: 2em;
-        }
+            .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                font-size: 16px;
+                resize: none;
+                min-height: 60px; /* Set a minimum height to the textarea */
+                overflow-y: auto; /* Allows scrolling when content exceeds */
+            }
 
-        .comment {
-            display: flex;
-            flex-direction: column;
-            border-top: 1px solid #ddd;
-            padding: 1em 0;
-        }
+            .submit-button {
+                width: 100%;
+                padding: 8px; /* Reduces padding to make button smaller */
+                background-color: #0EDAF5;
+                color: #FFF;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
 
-        .comment p {
-            margin: 0;
-        }
+            .submit-button:hover {
+                background-color: #0BBBD4;
+            }
 
-        .comment-buttons {
-            display: flex;
-            gap: 0.5em;
-        }
+            .comments {
+                background-color: #FFFFFF;
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+                flex-grow: 1; /* Expands the comment section to take up remaining space */
+                overflow-y: auto; /* Enables scrolling within the comments section */
+                max-height: 50vh; /* Sets a maximum height for the comment box for better visibility */
+                min-height: 200px; /* Ensures the comment section has a minimum height */
+            }
 
-        .comment-buttons button {
-            padding: 0.5em 1em;
-            background-color: #004d40;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+            .comment {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 15px;
+                border-bottom: 1px solid #e0e0e0;
+                padding-bottom: 10px;
+            }
 
-        .comment-buttons button:hover {
-            background-color: #00332e;
-        }
+            .comment:last-child {
+                border-bottom: none;
+            }
 
-        .comment-buttons .edit-btn {
-            background-color: #00796b;
-        }
+            .comment p {
+                margin: 5px 0;
+                color: #333;
+                font-size: 16px; /* Increased font size for readability */
+            }
 
-        .comment-buttons .edit-btn:hover {
-            background-color: #004d40;
-        }
-        .actions {
-            display: flex;
-            gap: 15px;
-            font-size: 12px;
-        }
+            .comment-buttons {
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                margin-top: 5px;
+            }
 
-        .actions a {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
+            .comment-buttons button {
+                background-color: #0EDAF5;
+                color: #FFF;
+                border: none;
+                border-radius: 8px;
+                padding: 6px 12px;
+                font-size: 14px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
 
-        .actions a:hover {
-            color: #0056b3;
-        }
+            .comment-buttons button:hover {
+                background-color: #0BBBD4;
+            }
 
-    </style>
-</head>
+            .edit-form {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .edit-form textarea {
+                width: 100%;
+                padding: 8px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                font-size: 14px;
+                resize: none;
+            }
+
+            .edit-form button {
+                background-color: #0EDAF5;
+                color: #FFF;
+                border: none;
+                border-radius: 8px;
+                padding: 6px 12px;
+                font-size: 14px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
+
+            .edit-form button:hover {
+                background-color: #0BBBD4;
+            }
+
+            .back-button {
+                display: block;
+                text-align: center;
+                background-color: #0EDAF5;
+                color: #FFFFFF;
+                text-decoration: none;
+                padding: 12px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                margin-top: 10px;
+                transition: background-color 0.3s ease;
+            }
+
+            .back-button:hover {
+                background-color: #0BBBD4;
+            }
+
+            /* Media Queries for Responsiveness */
+            @media (max-width: 1024px) {
+                .container {
+                    width: 90%;
+                    height: auto;
+                    margin: 60px auto 0 auto; /* Adjust margin for mobile */
+                }
+            }
+        </style>
+
+    </head>
 <body>
 <header class="header">
     <h1 class="title">게시물 상세보기</h1>
