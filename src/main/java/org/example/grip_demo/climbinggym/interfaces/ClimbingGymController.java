@@ -9,8 +9,8 @@ import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.post.application.PostService;
 import org.example.grip_demo.post.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -25,6 +26,9 @@ public class ClimbingGymController {
     private final ClimingGymService climingGymService;
     private final PostService postService;
     private final JwtTokenizer jwtTokenizer;
+
+    @Value("${count.gym.id}")
+    private Long gymId;
 
     @Autowired
     public ClimbingGymController(ClimingGymService climingGymService, PostService postService, JwtTokenizer jwtTokenizer) {
@@ -78,6 +82,9 @@ public class ClimbingGymController {
         model.addAttribute("postsPage", postsPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", postsPage.getTotalPages());
+        if (Objects.equals(climbingId, gymId)) {
+            return "redirect:/postlist";
+        }
         return "climbinggyms/climbinggym";
     }
 }
