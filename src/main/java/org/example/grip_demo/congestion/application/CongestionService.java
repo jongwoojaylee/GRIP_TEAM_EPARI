@@ -34,7 +34,7 @@ public class CongestionService {
         //적정 인원수 100으로 설정
         ClimbingGym climbingGym = climbingGymRepository.findById(gymId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid gym ID: " + gymId));
-                //-> Optional의 인자가 null일 경우 예외처리
+                // Optional의 인자가 null일 경우 예외처리
         int acceptableCount = climbingGym.getAcceptableCount();
         int presentCount = presentCounts.get(presentCounts.size()-1);//마지막값. 마지막 시간
         double ratio = ((double) presentCount / acceptableCount) * 100;

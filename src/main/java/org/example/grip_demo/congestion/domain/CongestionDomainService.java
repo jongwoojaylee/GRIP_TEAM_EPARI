@@ -31,7 +31,6 @@ public class CongestionDomainService {
         for (Congestion congestion : congestionList) {
             presentCounts.add(congestion.getPresentCount());
         }
-
         return presentCounts;
     }
 

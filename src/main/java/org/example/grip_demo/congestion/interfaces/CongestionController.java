@@ -12,9 +12,4 @@ public class CongestionController {
     public String bargraph() {
         return "bargraph";
     }
-
-    @GetMapping("/level")
-    public String level() {
-        return "level";
-    }
 }

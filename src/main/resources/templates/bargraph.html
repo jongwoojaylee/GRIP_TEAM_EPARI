@@ -88,7 +88,7 @@
                 const time = parseInt(key.replace("time ", ""));
                 timeZones.push(time); // x축: 시간대
                 occupancies.push(item[key]); // y축
-                if (time >= currentTime) {
+                if (time > currentTime) {
                     //현재 시간 이상인 데이터는 무조건 회색
                     backgroundColors.push('rgba(201, 203, 207, 0.2)');
                     borderColors.push('rgba(201, 203, 207, 1)');
