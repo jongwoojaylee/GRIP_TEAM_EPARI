@@ -224,7 +224,7 @@
                     </h3>
                     <p class="post-user" th:text="${post.user.nickName}">작성자 닉네임</p>
                     <p class="post-content" th:text="${post.content}">게시글 내용</p>
-                    <p class="post-date" th:text="${post.createdAt}">작성일</p>
+                    <p class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy년 MM월 dd일 HH:mm')}">작성일</p>
                 </div>
             </a>
         </li>
