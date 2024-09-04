@@ -48,11 +48,11 @@
                 backdrop-filter: blur(2px); /* Adds blur effect */
                 border-radius: 20px;
                 padding: 30px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
+                /*display: flex;*/
+                /*flex-direction: column;*/
+                /*!*justify-content: space-between;*!*/
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                margin: 60px auto 0 auto; /* Centers the box horizontally and adds space from the top */
+                margin: 60px auto 20px auto; /* Centers the box horizontally and adds space from the top */
                 overflow-y: auto; /* Allows vertical scrolling */
             }
 
@@ -93,6 +93,7 @@
                 line-height: 1.6;
                 color: #333;
                 margin-bottom: 20px;
+                word-break: break-all;
             }
 
             .actions {
@@ -142,6 +143,7 @@
                 resize: none;
                 min-height: 60px; /* Set a minimum height to the textarea */
                 overflow-y: auto; /* Allows scrolling when content exceeds */
+                word-break: break-all;
             }
 
             .submit-button {
@@ -166,7 +168,7 @@
                 padding: 20px;
                 border-radius: 20px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                margin-bottom: 20px;
+                margin-bottom: 40px;
                 flex-grow: 1; /* Expands the comment section to take up remaining space */
                 overflow-y: auto; /* Enables scrolling within the comments section */
                 max-height: 50vh; /* Sets a maximum height for the comment box for better visibility */
@@ -282,8 +284,8 @@
         <h2 th:text="${post.title}">제목</h2>
         <div class="post-meta">
             <span th:text="'작성자: ' + ${name}">작성자 이름</span> |
-            <span th:text="'작성일: ' + ${post.CreatedAt}">작성일</span>
-            <span th:text="'클라이밍장 아이디: '+${gymId}">클라이밍장 아이디</span>
+            <span th:text="${#temporals.format(post.createdAt, 'yyyy년 MM월 dd일 HH:mm')}">작성일</span>
+            <span th:text="'클라이밍장 아이디: '+${gymName}">클라이밍장 아이디</span>
         </div>
         <div class="post-image" th:if="${post.imageUrl}!= null">
             <img th:src="@{${post.imageUrl}}" alt="Post Image">

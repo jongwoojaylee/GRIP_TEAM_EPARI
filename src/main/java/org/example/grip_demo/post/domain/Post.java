@@ -39,7 +39,7 @@ public class Post {
     private int likeCount;
 
     @Column(name="image_url",nullable=true)
-    private String imageUrl; // 이미지 URL을 저장할 필드 추가
+    private String imageUrl;
 
     public String getImageUrl() {
         return imageUrl;
@@ -58,8 +58,8 @@ public class Post {
     @OrderBy("createdAt")
     private List<Comment> comments;
 
-//    @OneToMany(mappedBy = "post")
-//    private Set<Like> likes;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<Like> likes;
 
 
     public void setTitle(String title) {
