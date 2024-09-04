@@ -6,13 +6,12 @@ import com.google.gson.JsonParser;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.example.grip_demo.climbinggym.domain.ClimbingGymRepository;
 import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.demo.Oauth2Util;
-import org.example.grip_demo.user.domain.RefreshToken;
+import org.example.grip_demo.user.domain.RedisRefreshToken;
 import org.example.grip_demo.user.domain.Role;
 import org.example.grip_demo.user.domain.User;
-import org.example.grip_demo.user.infrastructure.RefreshTokenRepository;
+import org.example.grip_demo.user.infrastructure.RedisRefreshTokenRepository;
 import org.example.grip_demo.user.interfaces.EmailService;
 import org.example.grip_demo.user.interfaces.UserService;
 import org.springframework.http.HttpStatus;
@@ -34,7 +33,7 @@ public class UserRestController {
     private final UserService userService;
     private final Oauth2Util oauth2Util;
     private final JwtTokenizer jwtTokenizer;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisRefreshTokenRepository redisRefreshTokenRepository;
     private final EmailService emailService;
 
     @GetMapping("/login/oauth2/code/kakao")
@@ -49,7 +48,7 @@ public class UserRestController {
         String name = jsonObject.getAsJsonObject("properties").get("nickname").getAsString();
         // 결과 출력 test
 
-        User user = userService.findUserByUsername("kakao_"+username).orElse(null);
+        User user = userService.findUserByUsername("kakao"+username).orElse(null);
 
         if(user != null){
             //회원 정보가 있을 경우 토큰 전달
@@ -75,14 +74,7 @@ public class UserRestController {
             response.addCookie(accessTokenCookie);
             response.addCookie(refreshTokenCookie);
 
-
-            RefreshToken KakaoRefreshToken = new RefreshToken();
-            KakaoRefreshToken.setUser(user);
-            KakaoRefreshToken.setValue(refreshToken);
-
-
-
-            refreshTokenRepository.save(KakaoRefreshToken);
+            redisRefreshTokenRepository.save(new RedisRefreshToken(user.getId(), refreshToken));
 
             response.sendRedirect("/main");
             return null;

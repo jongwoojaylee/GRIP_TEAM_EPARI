@@ -5,11 +5,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.user.domain.RedisRefreshToken;
-import org.example.grip_demo.user.domain.RefreshToken;
 import org.example.grip_demo.user.domain.Role;
 import org.example.grip_demo.user.domain.User;
 import org.example.grip_demo.user.infrastructure.RedisRefreshTokenRepository;
-import org.example.grip_demo.user.infrastructure.RefreshTokenRepository;
 import org.example.grip_demo.user.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +26,6 @@ public class UserLoginController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenizer jwtTokenizer;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final RedisRefreshTokenRepository redisRefreshTokenRepository;
 
     @Value("${kakao.client_id}")
@@ -50,7 +47,7 @@ public class UserLoginController {
                                HttpServletResponse response,
                                Model model){
         //kakao user의 일반 로그인 방지
-        if(username.startsWith("kakao_")) {
+        if(username.startsWith("kakao")) {
             model.addAttribute("error", "로그인에 실패하였습니다");
             return "redirect:/loginform";
         }
@@ -87,16 +84,10 @@ public class UserLoginController {
         response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
 
-        RefreshToken token = new RefreshToken();
-        token.setUser(user);
-        token.setValue(refreshToken);
 
         //redis refresh token 저장
         redisRefreshTokenRepository.save(new RedisRefreshToken(user.getId(), refreshToken));
 
-
-
-        refreshTokenRepository.save(token);
 
 
 
@@ -124,7 +115,7 @@ public class UserLoginController {
 
     }
 
-    @GetMapping("/login/help2")
+    @GetMapping("/login/help")
     public String showHelp(){
         return "user/helpForm";
     }
