@@ -77,8 +77,6 @@ public class ClimbingGymController {
 
         Optional<ClimbingGym> climbinggym = climingGymService.getClimbingGym(climbingId);
         model.addAttribute("climbinggym", climbinggym.get());
-//        List<Post> posts = climbinggym.get().getPosts();
-//        model.addAttribute("posts", posts);
         model.addAttribute("postsPage", postsPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", postsPage.getTotalPages());
