@@ -5,7 +5,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.grip_demo.climbinggym.application.ClimingGymService;
 import org.example.grip_demo.climbinggym.domain.ClimbingGym;
+import org.example.grip_demo.climbinggym.interfaces.ClimbingGymDto;
 import org.example.grip_demo.comment.domain.Comment;
 import org.example.grip_demo.demo.JwtTokenizer;
 import org.example.grip_demo.post.application.PostService;
@@ -36,6 +38,8 @@ public class PostController {
     private final JwtTokenizer jwtTokenizer;
 
     private final PostService postService;
+
+    private final ClimingGymService climingGymService;
 
     @Value("${count.gym.id}")
     private Long gymId;
@@ -74,10 +78,8 @@ public class PostController {
 
 
             Claims claims=jwtTokenizer.parseAccessToken(token);
-            log.info("claims 생성까진 된다? 부럽지?"+claims.toString());
 
             String name = (String)claims.get("name");
-            log.info("이름 뭔데에에엥ㄷ: "+name);
 
             String userId = claims.get("userId").toString();
             Long longuserId=Long.parseLong(userId);
@@ -105,10 +107,8 @@ public class PostController {
             PostDto postDto = new PostDto();
             postDto.setTitle(title);
             postDto.setContent(content);
-            log.info("Image ??" +image.toString());
             if (!image.isEmpty()) {
                 String imageUrl = saveImage(image);
-                log.info("이미지 Url몬뎅 : "+imageUrl);
                 postDto.setImageUrl(imageUrl);
             }
 
@@ -188,7 +188,8 @@ public class PostController {
                              Model model,RedirectAttributes redirectAttributes){
         Post post= postService.getPostById(postid).get();
         String name= post.getUser().getName();
-        String gymId = climbingid.toString();
+        ClimbingGym climbingGym = climingGymService.getClimbingGym(climbingid).get();
+        String gymName = climbingGym.getName();
         Long postUserId = post.getUser().getId();
         String stringPostUserId = postUserId.toString();
 
@@ -212,7 +213,7 @@ public class PostController {
 
         model.addAttribute("post", post);
         model.addAttribute("name",name);
-        model.addAttribute("gymId",gymId);
+        model.addAttribute("gymName",gymName);
         model.addAttribute("currentUserId",currentUserId);
         model.addAttribute("postUserId",postUserId);
         model.addAttribute("stringPostUserId",stringPostUserId);

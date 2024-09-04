@@ -56,8 +56,6 @@ public class CommentController {
                 savedComment.getCreatedAt(), savedComment.getUpdatedAt(),savedComment.getUser().getName(),
                 savedComment.getUser().getId(),savedComment.getPost().getId());
 
-        log.info(commentDTO.toString());
-
         return ResponseEntity.ok(commentDTO);
 
     }
@@ -79,7 +77,6 @@ public class CommentController {
             return commentDTO;
         }).collect(Collectors.toList());
 
-        log.info("CommentDTOs: " + commentDTOs.toString());
 
         return ResponseEntity.ok(commentDTOs);
 
