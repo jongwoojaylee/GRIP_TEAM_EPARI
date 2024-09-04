@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시물 상세보기</title>
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>게시물 상세보기</title>
+        <style>
+            /* Global Reset and Box Model */
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #ffffff;
+                color: #333;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                /*align-items: center;*/
+                width: 100%;
+                height: 100vh;
+                overflow: hidden; /* Prevents body scrolling */
+            }
+
+            .header {
+                position: absolute;
+                top: 20px; /* Adjust the space from the top */
+                width: 100%;
+                text-align: center;
+            }
+
+            .title {
+                font-size: 32px;
+                font-weight: bold;
+                color: #333;
+            }
+
+            .container {
+                width: 80%; /* Increased width for desktop */
+                max-width: 1200px; /* Maximum width for larger screens */
+                max-height: 95vh; /* Limits the height of the container */
+                background: #F1F2F2;
+                backdrop-filter: blur(2px); /* Adds blur effect */
+                border-radius: 20px;
+                padding: 30px;
+                /*display: flex;*/
+                /*flex-direction: column;*/
+                /*!*justify-content: space-between;*!*/
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                margin: 60px auto 20px auto; /* Centers the box horizontally and adds space from the top */
+                overflow-y: auto; /* Allows vertical scrolling */
+            }
+
+            .post-details {
+                background-color: #FFFFFF;
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
+
+            .post-details h2 {
+                font-size: 28px;
+                font-weight: bold;
+                color: #000;
+                margin-bottom: 10px;
+            }
+
+            .post-meta {
+                font-size: 16px;
+                color: #666;
+                margin-bottom: 20px;
+            }
+
+            .post-meta span {
+                margin-right: 10px;
+            }
+
+            .post-image img {
+                max-width: 100%;
+                border-radius: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
+
+            .post-content {
+                font-size: 18px;
+                line-height: 1.6;
+                color: #333;
+                margin-bottom: 20px;
+                word-break: break-all;
+            }
+
+            .actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+
+            .actions a {
+                font-size: 16px;
+                text-decoration: none;
+                color: #0EDAF5;
+                font-weight: bold;
+            }
+
+            .comment-form {
+                background-color: #FFFFFF;
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
+
+            .comment-form h3 {
+                font-size: 22px;
+                margin-bottom: 15px;
+                color: #000;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-group label {
+                font-size: 16px;
+                margin-bottom: 5px;
+                color: #333;
+            }
+
+            .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                font-size: 16px;
+                resize: none;
+                min-height: 60px; /* Set a minimum height to the textarea */
+                overflow-y: auto; /* Allows scrolling when content exceeds */
+                word-break: break-all;
+            }
+
+            .submit-button {
+                width: 100%;
+                padding: 8px; /* Reduces padding to make button smaller */
+                background-color: #0EDAF5;
+                color: #FFF;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
+
+            .submit-button:hover {
+                background-color: #0BBBD4;
+            }
+
+            .comments {
+                background-color: #FFFFFF;
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 40px;
+                flex-grow: 1; /* Expands the comment section to take up remaining space */
+                overflow-y: auto; /* Enables scrolling within the comments section */
+                max-height: 50vh; /* Sets a maximum height for the comment box for better visibility */
+                min-height: 200px; /* Ensures the comment section has a minimum height */
+            }
+
+            .comment {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 15px;
+                border-bottom: 1px solid #e0e0e0;
+                padding-bottom: 10px;
+            }
+
+            .comment:last-child {
+                border-bottom: none;
+            }
+
+            .comment p {
+                margin: 5px 0;
+                color: #333;
+                font-size: 16px; /* Increased font size for readability */
+            }
+
+            .comment-buttons {
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                margin-top: 5px;
+            }
+
+            .comment-buttons button {
+                background-color: #0EDAF5;
+                color: #FFF;
+                border: none;
+                border-radius: 8px;
+                padding: 6px 12px;
+                font-size: 14px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
+
+            .comment-buttons button:hover {
+                background-color: #0BBBD4;
+            }
+
+            .edit-form {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .edit-form textarea {
+                width: 100%;
+                padding: 8px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                font-size: 14px;
+                resize: none;
+            }
+
+            .edit-form button {
+                background-color: #0EDAF5;
+                color: #FFF;
+                border: none;
+                border-radius: 8px;
+                padding: 6px 12px;
+                font-size: 14px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
+
+            .edit-form button:hover {
+                background-color: #0BBBD4;
+            }
+
+            .back-button {
+                display: block;
+                text-align: center;
+                background-color: #0EDAF5;
+                color: #FFFFFF;
+                text-decoration: none;
+                padding: 12px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                margin-top: 10px;
+                transition: background-color 0.3s ease;
+            }
+
+            .back-button:hover {
+                background-color: #0BBBD4;
+            }
+
+            /* Media Queries for Responsiveness */
+            @media (max-width: 1024px) {
+                .container {
+                    width: 90%;
+                    height: auto;
+                    margin: 60px auto 0 auto; /* Adjust margin for mobile */
+                }
+            }
+        </style>
+
+    </head>
+<body>
+<header id="header" th:replace="~{header.html}"></header>
+<div class="container">
+    <div class="post-details">
+        <h2 th:text="${post.title}">제목</h2>
+        <div class="post-meta">
+            <span th:text="'작성자: ' + ${name}">작성자 이름</span> |
+            <span th:text="${#temporals.format(post.createdAt, 'yyyy년 MM월 dd일 HH:mm')}">작성일</span>
+            <span th:text="'클라이밍장 아이디: '+${gymName}">클라이밍장 아이디</span>
+        </div>
+        <div class="post-image" th:if="${post.imageUrl}!= null">
+            <img th:src="@{${post.imageUrl}}" alt="Post Image">
+        </div>
+        <div class="post-content" th:text="${post.content}">내용</div>
+    </div>
+    <div th:replace="like/like.html"></div>
+    <div class="actions" th:if="${stringPostUserId == currentUserId}">
+        <a th:href="@{/updatepostform(postid=${post.id})}">수정</a>
+        <a href="#" th:onclick="|confirmDeletion(event,'@{/deletepost/{postid}(postid=${post.id})}')|">삭제</a>
+    </div>
+    <div class="comment-form">
+        <h3>댓글 작성</h3>
+        <form id="comment-form" action="/api/postcomment" method="post">
+            <input type="hidden" id="postId" name="postId" th:value="${post.id}">
+            <input type="hidden" name="userId" id="currentUserId" th:value="${currentUserId}">
+            <input type="hidden" id="climbingId" th:value="${post.getClimbingGym().getId()}">
+            <div class="form-group">
+                <label for="commentText">댓글 내용:</label>
+                <textarea id="commentText" name="commentText" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="submit-button">댓글 작성</button>
+        </form>
+    </div>
+    <div class="comments" id="comments-list">
+    </div>
+    <a href="/postlist" class="back-button">목록으로 돌아가기</a>
+</div>
+<script>
+    function confirmDeletion(event,url) {
+        event.preventDefault(); // 링크 기본 동작을 막음
+        if (confirm('정말로 삭제하시겠습니까?')) {
+            window.location.href = url; // 확인 시 요청 URL로 이동
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const commentForm = document.getElementById('comment-form');
+        const climbingId = document.getElementById('climbingId').value;
+        const postId= document.getElementById('postId').value;
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // 기본 제출 방지
+            const formData = new FormData(commentForm);
+
+            fetch('/api/postcomment', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('댓글 작성에 실패했습니다.');
+                    }
+                    return response.json(); // 댓글 작성 결과를 JSON으로 반환
+                })
+                .then(data => {
+                    addCommentToList(data); // 댓글을 목록에 추가
+                    commentForm.reset(); // 폼 초기화
+                    window.location.href = `/post/${climbingId}/${postId}`;
+                })
+                .catch(error => console.error('댓글 작성 중 오류 발생:', error));
+        });
+
+        fetch(`/api/getcomments?postId=${document.querySelector('input[name="postId"]').value}`)
+            .then(response => response.json())
+            .then(comments => {
+                console.log("댓글 목록:", comments); // 디버깅용
+                comments.forEach(comment => {
+                    addCommentToList(comment);
+                    console.log(comment);
+                });
+                console.log("댓글 로딩 성공");
+            })
+            .catch(error => console.error('댓글 로딩 중 오류 발생:', error));
+    });
+
+
+    function addCommentToList(comment) {
+        console.log('Adding comment:', comment);
+        const currentUserId = document.getElementById('currentUserId').value;
+        let commentsList = document.getElementById('comments-list');
+
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment';
+        commentElement.id = 'comment-' + comment.id;
+
+
+        const isOwnComment = comment.userId === Number(currentUserId);
+        commentElement.innerHTML = `
+            <p><strong>${comment.name}</strong>: <span>${comment.commentText}</span></p>
+            ${isOwnComment ? `
+                <div class="comment-buttons">
+                    <button class="edit-btn" onclick="editComment(${comment.id})">수정</button>
+                    <button onclick="deleteComment(${comment.id})">삭제</button>
+                </div>
+                <div class="edit-form" id="edit-form-${comment.id}" style="display: none;">
+                    <textarea id="edit-text-${comment.id}" rows="4">${comment.commentText}</textarea>
+                    <button onclick="saveEdit(${comment.id})">저장</button>
+                    <button onclick="cancelEdit(${comment.id})">취소</button>
+                </div>
+            ` : ''}
+        `;
+
+        commentsList.appendChild(commentElement);
+    }
+
+    function editComment(commentId) {
+        const editForm = document.getElementById(`edit-form-${commentId}`);
+        editForm.style.display = 'block';
+
+    }
+
+    function cancelEdit(commentId) {
+        const editForm = document.getElementById(`edit-form-${commentId}`);
+        editForm.style.display = 'none';
+    }
+
+    function saveEdit(commentId) {
+        const newContent = document.getElementById(`edit-text-${commentId}`).value;
+
+        fetch(`/api/updatecomment/${commentId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ commentText: newContent })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(`comment-${commentId}`).querySelector('span').textContent = newContent;
+                cancelEdit(commentId); // 수정 폼 닫기
+            })
+            .catch(error => console.error('댓글 수정 중 오류 발생:', error));
+    }
+
+    function deleteComment(commentId) {
+        if (!confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+            return;
+        }
+
+        fetch(`/api/deletecomment/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('서버 응답이 실패했습니다');
+                }
+                document.getElementById('comment-' + commentId).remove();
+            })
+            .catch(error => console.error('댓글 삭제 중 오류 발생:', error));
+    }
+</script>
+<footer id="footer" th:replace="~{footer.html}"></footer>
+</body>
+</html>

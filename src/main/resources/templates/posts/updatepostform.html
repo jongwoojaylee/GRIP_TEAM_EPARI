@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+    /* Global Styles */
+    body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #FFFFFF;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        /*align-items: center;*/
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .container {
+        background: #F1F2F2;
+        width: 100%;
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 15px; /* Adds space between each form group */
+    }
+
+    .form-group label {
+        font-size: 20px; /* Reduced font size */
+        font-weight: 600;
+        margin-bottom: 8px; /* Adds space between label and input */
+        color: #000000;
+        text-transform: uppercase;
+        align-self: flex-start; /* Aligns the label to the start of the container */
+        padding-left: 10%; /* Aligns label to match input padding */
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 10px;
+        margin: 0 auto;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+        background: #FFFFFF;
+        width: 80%;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #0EDAF5;
+        outline: none;
+    }
+
+    .form-group button {
+        width: 150px; /* Reduced width */
+        height: 50px; /* Reduced height */
+        background-color: #0EDAF5;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+        align-self: center;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .form-group button:hover {
+        background-color: #0BBBD4;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        .form-group label {
+            font-size: 18px;
+            padding-left: 5%; /* Reduced padding for smaller screens */
+        }
+
+        .form-group button {
+            width: 100%;
+            height: 50px;
+            font-size: 18px;
+        }
+    }
+</style>
+<head>
+    <title>게시글 수정</title>
+</head>
+<body>
+<header id="header" th:replace="~{header.html}"></header>
+<div class="container">
+    <form th:action="@{/updatepost/{postId}(postId=${postId})}" method="post" class="post-form" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="title" th:value="${post.title}" required />
+        </div>
+        <div class="form-group">
+            <label for="name">사용자 이름:</label>
+            <input type="text" id="name" name="name" th:value="${name}" required readonly />
+        </div>
+        <input type="hidden" id="userId" name="userId" th:value="${userId}" />
+        <div class="form-group">
+            <label for="content">내용:</label>
+            <input type="text" id="content" name="content" th:value="${post.content}" required></input>
+        </div>
+        <div class="form-group">
+            <label for="image">변경할 이미지:</label>
+            <input type="file" id="image" name="image" accept="image/*">
+
+<!--            이미지 미리보기-->
+            <label for="image">현재 이미지:</label>
+            <div th:if="${imageUrl}">
+                <img th:src="@{${imageUrl}}" alt="imageUrl" class="image-preview" style="max-width: 100%; margin-top: 10px;"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">수정</button>
+        </div>
+    </form>
+</div>
+<footer id="footer" th:replace="~{footer.html}"></footer>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update User Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            position: relative;
+            background: #F1F2F2;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            margin: 20px auto;
+        }
+        h1 {
+            margin-bottom: 1rem;
+            color: #333;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .form-group label {
+            flex-basis: 30%;
+            text-align: left;
+        }
+        .form-group input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group button {
+            background-color: #0EDAF5;
+            color: #ffffff;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            height: 38px; /* Align button height with input fields */
+        }
+        .form-group button:hover {
+            background-color: #0EDAF5; /* 버튼 호버 시 어두운 녹색 */
+        }
+        .error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            display: block;
+            margin-top: 0.5rem;
+        }
+        .success {
+            color: #28a745;
+            font-size: 0.875rem;
+            display: block;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<header id="header" th:replace="header.html"></header>
+<body>
+<div class="container">
+    <h1>정보 변경</h1>
+    <form id="updateForm" th:action="@{/updateuser}" th:object="${user}" method="post">
+        <input type="hidden" th:field="${user.id}" />
+        <input type="hidden" th:field="${user.username}" />
+        <input type="hidden" th:field="${user.nickName}" />
+        <input type="hidden" th:field="${user.email}" />
+        <input type="hidden" th:field="${user.gender}" />
+        <input type="hidden" th:if="${#strings.startsWith(user.username, 'kakao')}" th:field="${user.password}" />
+
+        <div class="form-group">
+            <label for="name">이름:</label>
+            <input type="text" id="name" th:field="${user.name}" th:value="${user.name}" />
+        </div>
+        <div th:if="${not #strings.startsWith(user.username, 'kakao')}" class="form-group" >
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" th:field="${user.password}" placeholder="문자와 숫자, 특수기호 1개이상씩 포함 4~20자리" required>
+        </div>
+        <div th:if="${not #strings.startsWith(user.username, 'kakao')}" class="form-group">
+            <label for="confirmPassword">비밀번호 확인:</label>
+            <input type="password" id="confirmPassword" required>
+            <span id="passwordFeedback" class="error" style="display: none;">Passwords do not match</span>
+        </div>
+        <div class="form-group">
+            <label for="phone">휴대전화:</label>
+            <input type="text" id="phone" th:field="${user.phoneNumber}" th:value="${user.phoneNumber}" required/>
+        </div>
+        <div class="form-group">
+            <label for="address">주소:</label>
+            <input type="text" id="address" th:field="${user.address}" th:value="${user.address}" required/>
+        </div>
+
+        <div>
+            <button type="submit" id="submitButton" >update</button>
+        </div>
+    </form>
+</div>
+
+</body>
+<footer id="footer" th:replace="~{footer.html}"></footer>
+</html>

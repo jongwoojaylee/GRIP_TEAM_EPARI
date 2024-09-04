@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 리스트</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fd;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header {
+            background-color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .title {
+            margin: 0;
+            font-size: 28px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .new-post {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .new-post a {
+            background-color: #0BBBD4;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .new-post a:hover {
+            background-color: #44c767;
+        }
+
+        .post-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .post-item {
+            display: flex;
+            align-items: flex-start;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-item:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .post-item img {
+            margin-right: 20px;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .post-item-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        .post-title {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .post-content {
+            margin: 10px 0 15px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-all;
+        }
+
+
+        .pagination {
+            display: flex; /* Flexbox layout */
+            justify-content: center; /* Centers the pagination horizontally */
+            align-items: center; /* Centers the items vertically */
+            gap: 10px; /* Adds space between pagination items */
+            padding: 10px 0; /* Adds padding for better spacing */
+            list-style: none; /* Removes default bullet points from list */
+            margin: 0; /* Removes default margin */
+        }
+
+        .pagination .page-item {
+            margin: 0 5px; /* Adds margin around each page item */
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #ccc; /* Disabled state color */
+            pointer-events: none; /* Disable click for disabled items */
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #0EDAF5; /* Active page background color */
+            color: white; /* Active page text color */
+            border-radius: 5px; /* Adds rounded corners to active page */
+        }
+
+        .pagination .page-link {
+            color: #0EDAF5; /* Default color for page links */
+            padding: 8px 12px; /* Adds padding to page links */
+            border: none; /* Removes border */
+            border-radius: 5px; /* Rounded corners for page links */
+            text-decoration: none; /* Removes underline from links */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        .pagination .page-link:hover {
+            background-color: #0BBBD4; /* Hover background color */
+            color: white; /* Hover text color */
+        }
+    </style>
+    </head>
+    <body>
+    <header id="header" th:replace="~{header.html}"></header>
+    <div class="container">
+        <div class="new-post">
+            <a href="/postform">새 게시글 작성</a>
+        </div>
+        <ul class="post-list">
+            <li class="post-item" th:each="post : ${paging}">
+                <div>
+                    <img th:if="${post.imageUrl}" th:src="@{${post.imageUrl}}" alt="Post Image"/>
+                </div>
+                <div class="post-item-content">
+                    <a th:href="@{/post/{climbingid}/{postid}(climbingid=${post.climbingGym.id}, postid=${post.id})}" class="post-title" th:text="${post.title}">제목</a>
+                    <div class="post-content" th:text="${post.content}">내용</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+<!--    페이징처리-->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{|?page=${paging.number-1}|}">
+                                <span>이전</span>
+                            </a>
+                        </li>
+                        <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                             th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                             th:classappend="${page == paging.number} ? 'active'"
+                             class="page-item">
+                            <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                            <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                                <span>다음</span>
+        </a>
+        </li>
+        </ul>
+    </div>
+    <footer id="footer" th:replace="~{footer.html}"></footer>
+</body>
+</html>

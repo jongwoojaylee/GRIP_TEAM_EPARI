@@ -1,0 +1,16 @@
+/* 푸터 스타일 */
+#footer {
+    background-color: #ffffff;
+    color: #848383;
+    border-top: #848383 2px solid;
+    padding: 20px;
+    font-size: 0.9em;
+    display: flex;
+    flex-direction: column; /* 요소들을 세로로 배치 */
+    align-items: center;
+    justify-content: center;
+}
+
+#footer p {
+    margin: 5px 0;
+}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Form</title>
+    <style>
+        .main-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+            /* Center content vertically if height is more than viewport */
+            min-height: calc(100vh - 60px);
+        }
+        header {
+            width: 100%;
+        }
+        footer {
+            width: 100%;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            word-break: break-all;
+        }
+
+        .search-container, .search-results {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        form input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0EDAF5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #0EDAF5;
+        }
+
+        .post-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .post-item h3 {
+            margin: 0 0 10px;
+            color: #007bff;
+        }
+
+        .post-item p {
+            margin: 0;
+            color: #666;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 5px;
+            background-color: #0EDAF5;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #0EDAF5;
+        }
+
+        .pagination span {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 5px;
+            background-color: #eee;
+            color: #333;
+        }
+
+        mark {
+            background-color: #0EDAF5;
+            color: #000;
+        }
+        .no-results {
+            color: #888;
+            font-style: italic;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<header id="header" th:replace="header.html"></header>
+<body>
+<div class="main-content">
+<!-- 검색창 -->
+    <div class="search-container">
+        <h1>검색</h1>
+        <form action="/search" method="get">
+            <input type="text" id="query" name="query" th:value="${query}" />
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- 검색 결과 -->
+    <div class="search-results">
+        <!-- post 결과 -->
+        <h2>게시글</h2>
+        <div th:if="${posts == null }" class="no-results">
+            검색 결과가 없습니다.
+        </div>
+        <div th:if="${posts != null}">
+            <div th:each="post : ${posts}" class="post-item">
+                <a th:href="@{/post/{climbingGymId}/{postId}(climbingGymId=${post.getClimbingGym().getId()}, postId=${post.getId()})}">
+                    <h3 th:text="${post.title}">Post Title</h3>
+                </a>
+                <p th:text="${post.content}">Post content</p>
+            </div>
+
+            <div class="pagination">
+                <!-- Previous button -->
+                <a th:if="${currentPostPage > 0}" th:href="@{/search(query=${query}, postPage=${currentPostPage - 1}, climbingGymPage=${currentClimbingGymsPage})}">Previous</a>
+
+                <!-- Page number display -->
+                <span>Page [[${currentPostPage + 1}]] of [[${totalPostPages}]]</span>
+
+                <!-- Next button -->
+                <a th:if="${currentPostPage < totalPostPages - 1}" th:href="@{/search(query=${query}, postPage=${currentPostPage + 1}, climbingGymPage=${currentClimbingGymsPage})}">Next</a>
+            </div>
+        </div>
+        <!-- gym 결과 -->
+        <h2>클라이밍짐</h2>
+        <div th:if="${climbingGyms == null}" class="no-results">
+            검색 결과가 없습니다.
+        </div>
+        <div th:if="${climbingGyms != null}">
+            <div th:each="gym : ${climbingGyms}" class="post-item">
+                <a th:href="@{/climbinggym(climbingid=${gym.id})}">
+                    <h3 th:text="${gym.name}">Climbing Gym Name</h3>
+                </a>
+            </div>
+
+            <div class="pagination">
+                <!-- Previous button -->
+                <a th:if="${currentClimbingGymsPage > 0}" th:href="@{/search(query=${query}, postPage=${currentPostPage}, climbingGymPage=${currentClimbingGymsPage - 1})}">Previous</a>
+
+                <!-- Page number display -->
+                <span>Page [[${currentClimbingGymsPage + 1}]] of [[${totalClimbingGymsPages}]]</span>
+
+                <!-- Next button -->
+                <a th:if="${currentClimbingGymsPage < totalClimbingGymsPages - 1}" th:href="@{/search(query=${query}, postPage=${currentPostPage}, climbingGymPage=${currentClimbingGymsPage + 1})}">Next</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const query = new URLSearchParams(window.location.search).get('query');
+        if (query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            document.querySelectorAll('.post-item p, .post-item h3').forEach(element => {
+                element.innerHTML = element.innerHTML.replace(regex, '<mark>$1</mark>');
+            });
+        }
+    });
+</script>
+</body>
+<footer id="footer" th:replace="~{footer.html}"></footer>
+</html>

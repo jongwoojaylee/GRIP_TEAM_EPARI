@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* 버튼의 기본 스타일 */
+        #like-btn {
+            width: 30px;
+            height: 30px;
+            background-color: inherit;
+            background-size: cover;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<button type="button" id="like-btn" onclick="like()"></button>
+<p id="likeCount">0</p>
+<script th:inline="javascript">
+    const postId = /*[[${post.id}]]*/ 0;
+    $(document).ready(function() {
+        checkLikeStatus();
+        likeCount();
+    });
+    function like() {
+        fetch('/api/like?postId=' + postId, { method: 'POST' })  // postId 전달
+            .then(response => response.json())
+            .then(isLiked => {
+                let likeButton = document.getElementById('like-btn');
+                if (isLiked) {
+                    likeButton.style.backgroundImage = 'url(/like.png)';
+
+                } else {
+                    likeButton.style.backgroundImage = 'url(/unlike.png)';
+                }
+                likeCount();
+            })
+            .catch(error => console.error('좋아요 상태 변경 중 오류 발생:', error));
+    }
+    function checkLikeStatus() {
+        fetch('/api/isLike?postId=' + postId)  // postId를 서버에 맞게 동적으로 전달
+            .then(response => response.json())
+            .then(isLiked => {
+                let likeButton = document.getElementById('like-btn');
+                if (isLiked) {
+                    likeButton.style.backgroundImage = 'url(/like.png)';
+                } else {
+                    likeButton.style.backgroundImage = 'url(/unlike.png)';
+                }
+                likeCount();
+            })
+            .catch(error => console.error('좋아요 상태 확인 중 오류 발생:', error));
+    }
+    function likeCount() {
+        fetch('/api/likecount?postId=' + postId)
+            .then(response => response.json())
+            .then(count => {
+                let likeCount = document.getElementById('likeCount');
+                likeCount.innerText = count;
+            })
+    }
+</script>
+</body>
+</html>
