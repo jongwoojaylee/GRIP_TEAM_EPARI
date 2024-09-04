@@ -1,8 +1,9 @@
-package org.example.grip_demo.user.domain;
+package org.example.grip_demo.profileimage;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.grip_demo.user.domain.User;
 
 
 @Entity
@@ -16,6 +17,7 @@ public class ProfileImage {
     @Column(name = "PATH", length = 512, nullable = false)
     private String path;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 }

@@ -30,20 +30,20 @@ public class TestController {
         return "user/jayhome";
     }
 
-    @GetMapping("/getUserInfo")
-    @ResponseBody
-    public ResponseEntity<RedisRefreshToken> token(HttpServletRequest request){
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("refreshToken".equals(cookie.getName())) {
-                    System.out.println(cookie.getValue());
-                    RedisRefreshToken test = redisRefreshTokenRepository.findById(1L).orElse(null);
-                    System.out.println(test.getRefreshToken());
-                }
-            }
-        }
-
-
-        return new ResponseEntity<>(null, HttpStatus.OK);    }
+//    @GetMapping("/getUserInfo")
+//    @ResponseBody
+//    public ResponseEntity<RedisRefreshToken> token(HttpServletRequest request){
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                if ("refreshToken".equals(cookie.getName())) {
+//                    System.out.println(cookie.getValue());
+//                    RedisRefreshToken test = redisRefreshTokenRepository.findById(1L).orElse(null);
+//                    System.out.println(test.getRefreshToken());
+//                }
+//            }
+//        }
+//
+//
+//        return new ResponseEntity<>(null, HttpStatus.OK);    }
 }

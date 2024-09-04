@@ -2,7 +2,6 @@ package org.example.grip_demo.demo;
 
 import lombok.RequiredArgsConstructor;
 import org.example.grip_demo.user.infrastructure.RedisRefreshTokenRepository;
-import org.example.grip_demo.user.infrastructure.RefreshTokenRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,7 +22,6 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final JwtTokenizer jwtTokenizer;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final RedisRefreshTokenRepository redisRefreshTokenRepository;
 
     @Bean

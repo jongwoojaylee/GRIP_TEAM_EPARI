@@ -21,6 +21,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             width: 500px;
             margin: 20px auto;
+            word-break: break-all;
         }
 
         .user-info {
@@ -34,48 +35,8 @@
             width: 60%;
         }
 
-        #profile-image {
-            text-align: center;
-            width: 35%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
 
-        #profile-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 50%; /* 이미지를 원형으로 만들기 위한 설정 */
-            object-fit: cover; /* 이미지의 비율을 유지하면서 원형으로 자르기 */
-            margin-bottom: 10px; /* 이미지와 버튼 사이의 간격을 추가 */
-        }
 
-        .change-photo-button {
-            display: inline-block;
-            background-color: #0EDAF5;
-            color: white;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .change-photo-button:hover {
-            background-color: #0EDAF5;
-        }
-
-        .update-button {
-            display: inline-block;
-            background-color: #0EDAF5;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
 
         .update-button:hover {
             background-color: #0EDAF5;
@@ -147,6 +108,47 @@
             font-size: 14px;
             color: #777;
         }
+        .hidden-file-input {
+            display: none;
+        }
+        .update-button {
+            display: inline-block;
+            background-color: #0EDAF5;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #profile-image {
+            text-align: center;
+            width: 35%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #profile-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 50%; /* 이미지를 원형으로 만들기 위한 설정 */
+            object-fit: cover; /* 이미지의 비율을 유지하면서 원형으로 자르기 */
+            margin-bottom: 10px; /* 이미지와 버튼 사이의 간격을 추가 */
+        }
+
+        .change-photo-button {
+            display: inline-block;
+            background-color: #0EDAF5;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
 
 
 
@@ -166,8 +168,19 @@
             <p><strong>성별:</strong> <span th:text="${user.gender ? '남자' : '여자'}"></span></p>
         </div>
         <div id="profile-image">
-            <img src="/GripLogo.png" alt="Grip Logo">
+            <div class="img-box">
+                <!-- imagePath가 존재할 때 -->
+                <img th:if="${imagePath != null}" th:src="@{${imagePath}}" >
+
+                <!-- imagePath가 없을 때 -->
+                <img th:if="${imagePath == null}" src="/fontlogo.png" >
+            </div>
             <a href="#" class="change-photo-button">사진 변경</a>
+            <form id="uploadForm" enctype="multipart/form-data" method="POST" action="/upload">
+                <input type="hidden" id="nickName" name="nickName" th:value="${user.nickName}">
+                <input type="hidden" id="id" name="id" th:value="${user.id}">
+                <input type="file" id="fileInput" name="file" class="hidden-file-input" accept="image/*">
+            </form>
         </div>
     </div>
     <a th:href="${updateurl}" class="update-button">내 정보 수정하기</a>
@@ -240,7 +253,18 @@
         </div>
     </div>
 </div>
-
 </body>
 <footer id="footer" th:replace="~{footer.html}"></footer>
+<script>
+    // '사진 변경' 버튼을 클릭하면 파일 선택 창을 엽니다.
+    document.querySelector('.change-photo-button').addEventListener('click', function(event) {
+        event.preventDefault();  // 링크의 기본 동작 방지
+        document.getElementById('fileInput').click();  // 파일 입력 클릭 트리거
+    });
+
+    // 파일 선택이 완료되면 자동으로 폼을 제출합니다.
+    document.getElementById('fileInput').addEventListener('change', function() {
+        document.getElementById('uploadForm').submit();  // 폼 제출
+    });
+</script>
 </html>

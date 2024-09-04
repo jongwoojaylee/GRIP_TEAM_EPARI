@@ -49,7 +49,7 @@
             border-radius: 4px;
         }
         .form-group button {
-            background-color: #0EDAF5; /* 녹색 버튼 */
+            background-color: #0EDAF5;
             color: #ffffff;
             border: none;
             padding: 0.5rem;
@@ -105,7 +105,7 @@
         </div>
         <div class="form-group">
             <label for="password">비밀번호:</label>
-            <input type="password" id="password" th:field="${userDTO.password}" placeholder="영문 대, 소문자, 숫자와 특수기호 1개이상씩 포함 4~20자리" required>
+            <input type="password" id="password" th:field="${userDTO.password}" placeholder="문자와 숫자, 특수기호 1개이상씩 포함 4~20자리" required>
         </div>
         <div class="form-group">
             <label for="confirmPassword">비밀번호 확인:</label>

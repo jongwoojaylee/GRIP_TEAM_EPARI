@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -40,11 +39,12 @@ public class UserRegisterController {
     public String showKakaoRegisterForm(Model model,
                                         @RequestParam String username,
                                         @RequestParam String name) {
-        User user = new User();
-        user.setUsername("kakao_"+username);
-        user.setName(name);
-        user.setPassword(username+name);
-        model.addAttribute("user", user);
+
+        RegisterUserDTO userDTO = new RegisterUserDTO();
+        userDTO.setUsername("kakao"+username);
+        userDTO.setName(name);
+        userDTO.setPassword("Kakao@"+username);
+        model.addAttribute("user", userDTO);
         return "user/kakaoRegisterForm";
     }
 
