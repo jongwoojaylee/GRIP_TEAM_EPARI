@@ -58,6 +58,9 @@ public class Post {
     @OrderBy("createdAt")
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private Set<Like> likes;
+
 
     public void setTitle(String title) {
         this.title = title;
