@@ -5,18 +5,14 @@ import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.grip_demo.climbinggym.application.ClimingGymService;
-import org.example.grip_demo.climbinggym.domain.ClimbingGym;
 import org.example.grip_demo.climbinggym.domain.ClimbingGymDomainService;
 import org.example.grip_demo.climbinggym.infrastructure.ClimbingGymRepositoryImpl;
 import org.example.grip_demo.congestion.application.CongestionService;
-import org.example.grip_demo.congestion.domain.Congestion;
 import org.example.grip_demo.congestion.domain.CongestionDomainService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
