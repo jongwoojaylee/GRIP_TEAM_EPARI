@@ -46,6 +46,13 @@
 - 메인 페이지에 위치한 지도
   - 지도를 메인페이지에 위치하게 함으로써, 직관적으로 클라이밍장의 위치를 확인할 수 있도록 돕습니다.
 
+## 데이터구조
+- ERD Cloud : 
+
+## 설계 구조도
+- 이벤트 스토밍 활용
+
+
 ## API
 - API 명세서 : https://docs.google.com/document/d/1JbEcocoiVqVlVAi9Su-9-3h0fa011mTc6FnlMPfs26c/edit?usp=sharing
 
