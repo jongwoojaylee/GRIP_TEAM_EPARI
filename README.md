@@ -47,11 +47,12 @@
   - 지도를 메인페이지에 위치하게 함으로써, 직관적으로 클라이밍장의 위치를 확인할 수 있도록 돕습니다.
 
 ## 데이터구조
-- ERD Cloud : 
+- ERD Cloud :
+  https://github.com/xeulbn/GRIP_TEAM_EPARI/blob/develop/src/main/resources/static/ClimbingERD.png
 
 ## 설계 구조도
 - 이벤트 스토밍 활용
-
+  https://github.com/xeulbn/GRIP_TEAM_EPARI/blob/develop/src/main/resources/static/%EC%9D%B4%EB%B2%A4%ED%8A%B8%20%EC%8A%A4%ED%86%A0%EB%B0%8D.jpg
 
 ## API
 - API 명세서 : https://docs.google.com/document/d/1JbEcocoiVqVlVAi9Su-9-3h0fa011mTc6FnlMPfs26c/edit?usp=sharing
