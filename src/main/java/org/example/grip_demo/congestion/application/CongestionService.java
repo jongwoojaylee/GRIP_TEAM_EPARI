@@ -39,9 +39,6 @@ public class CongestionService {
         int presentCount = presentCounts.get(presentCounts.size()-1);//마지막값. 마지막 시간
         double ratio = ((double) presentCount / acceptableCount) * 100;
 
-        //확인 -- 완료
-        System.out.println("ratio: " + ratio);
-
         String conLevel;
         if(ratio < 55.0){
             conLevel = "여유";

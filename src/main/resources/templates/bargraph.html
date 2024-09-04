@@ -110,12 +110,12 @@
             x: time, //x축 : 시간대, "09:00" 등의 문자열
             y: occupancies[index] // y축 값 %
         }));
-        congestionChart.data.labels = timeZones; // 레이블 업데이트
-        congestionChart.data.datasets[0].data = updatedData; // 데이터 업데이트
+        congestionChart.data.labels = timeZones;
+        congestionChart.data.datasets[0].data = updatedData;
         congestionChart.data.datasets[0].backgroundColor = backgroundColors;
         congestionChart.data.datasets[0].borderColor = borderColors;
         congestionChart.data.datasets[0].borderWidth = borderWidths;
-        congestionChart.update(); // 차트 업데이트
+        congestionChart.update();
     }
 
     function getDataByGymId(gymId) {

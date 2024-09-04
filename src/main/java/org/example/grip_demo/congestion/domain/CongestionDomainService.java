@@ -17,7 +17,6 @@ public class CongestionDomainService {
         return repository.findByTimeZoneAndClimbingGym_Id(hour, gymId);
     }
 
-    //데이터 불러옴
     private final CongestionRepository congestionRepository;
 
     //먼저 혼잡도id로 혼잡도 데이터 가져오기
